@@ -1,0 +1,44 @@
+{
+  "status": "運作中",
+  "statusColor": "green",
+  
+  "tokenSession": 110000,
+  "tokenToday": 125000,
+  "tokenMonth": 850000,
+  "tokenLimit": 10000000,
+  "tokenPercent": 8.5,
+  
+  "costToday": 1.25,
+  "costMonth": 8.50,
+  "costEstimate": 12.75,
+  "costHistory": [0.8, 1.2, 0.95, 1.1, 1.3, 1.15, 1.25],
+  
+  "model": "opus-4-5",
+  "context": "110K/200K",
+  "compaction": "2 次",
+  "lastActivity": "剛剛",
+  
+  "tasks": [
+    {
+      "name": "每日市場簡報",
+      "icon": "📊",
+      "schedule": "每天 08:00 (Asia/Taipei)",
+      "next": "明天 08:00"
+    },
+    {
+      "name": "每週記憶整理",
+      "icon": "🧹",
+      "schedule": "每週日 23:00 (Asia/Taipei)",
+      "next": "週日 23:00"
+    }
+  ],
+  
+  "memoryMain": "1.0 KB",
+  "memoryDaily": "387 B",
+  "memoryFiles": "2 個",
+  "memoryTotal": "1.4 KB",
+  "memoryMainPercent": 5,
+  "memoryDailyPercent": 2,
+  
+  "updatedAt": "2026-02-07T01:15:00+08:00"
+}
