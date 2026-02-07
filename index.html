@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shadow Performance Electronics | 影摩科技</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            min-height: 100vh;
+        }
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        }
+        .logo {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #ff6b00;
+            letter-spacing: 0.2em;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(255, 107, 0, 0.5);
+        }
+        .tagline {
+            font-size: 1.5rem;
+            color: #888;
+            margin-bottom: 3rem;
+            letter-spacing: 0.3em;
+        }
+        .tagline-zh {
+            font-size: 1.2rem;
+            color: #666;
+            margin-top: -2rem;
+            margin-bottom: 3rem;
+        }
+        .features {
+            display: flex;
+            gap: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+        .feature {
+            text-align: center;
+            max-width: 200px;
+        }
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .feature-title {
+            color: #ff6b00;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        .feature-desc {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .btn {
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        .btn-primary {
+            background: #ff6b00;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #ff8533;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 107, 0, 0.3);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: #ff6b00;
+            border: 2px solid #ff6b00;
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 107, 0, 0.1);
+        }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        footer a {
+            color: #ff6b00;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <h1 class="logo">SHADOW</h1>
+        <p class="tagline">PERFORMANCE ELECTRONICS</p>
+        <p class="tagline-zh">影摩科技 · 台灣製造</p>
+        
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🏎️</div>
+                <h3 class="feature-title">Racing Gauges</h3>
+                <p class="feature-desc">專業賽車儀表<br>精準監控每一刻</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📊</div>
+                <h3 class="feature-title">OBD2 Display</h3>
+                <p class="feature-desc">即插即用<br>車輛數據一目瞭然</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-title">Controllers</h3>
+                <p class="feature-desc">油門 · 增壓 · 排氣閥<br>完全掌控</p>
+            </div>
+        </div>
+        
+        <div class="cta-buttons">
+            <a href="https://www.shadowmotor.com.tw" class="btn btn-primary">瀏覽產品</a>
+            <a href="https://www.alibaba.com/company/shadow-motor" class="btn btn-secondary">B2B 採購</a>
+        </div>
+    </section>
+    
+    <footer>
+        <p>© 2026 AUTO JAW CO., LTD. | <a href="https://www.shadowmotor.com.tw">shadowmotor.com.tw</a></p>
+    </footer>
+</body>
+</html>
