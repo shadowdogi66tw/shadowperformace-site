@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dogi66 儀表板</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'SF Mono', 'Menlo', monospace;
+      background: #0a0a0a;
+      color: #e0e0e0;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #333;
+    }
+    
+    .header h1 {
+      color: #FF6B00;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .header .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #4ade80;
+      font-size: 14px;
+    }
+    
+    .header .status::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: #4ade80;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+    
+    .card {
+      background: #121212;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 16px;
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .card-title {
+      color: #FF6B00;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .card-icon {
+      font-size: 18px;
+    }
+    
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #222;
+    }
+    
+    .stat-row:last-child {
+      border-bottom: none;
+    }
+    
+    .stat-label {
+      color: #888;
+      font-size: 13px;
+    }
+    
+    .stat-value {
+      color: #fff;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    
+    .stat-value.success { color: #4ade80; }
+    .stat-value.warning { color: #facc15; }
+    .stat-value.error { color: #f87171; }
+    .stat-value.highlight { color: #FF6B00; }
+    
+    .big-stat {
+      text-align: center;
+      padding: 16px 0;
+    }
+    
+    .big-stat .value {
+      font-size: 36px;
+      font-weight: bold;
+      color: #FF6B00;
+    }
+    
+    .big-stat .label {
+      font-size: 12px;
+      color: #666;
+      margin-top: 4px;
+    }
+    
+    .progress-bar {
+      height: 6px;
+      background: #333;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    
+    .progress-bar .fill {
+      height: 100%;
+      background: linear-gradient(90deg, #FF6B00, #FFAA00);
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+    
+    .project-item {
+      padding: 12px;
+      background: #1a1a1a;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+    
+    .project-item:last-child {
+      margin-bottom: 0;
+    }
+    
+    .project-name {
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    
+    .project-status {
+      font-size: 12px;
+      color: #888;
+    }
+    
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      margin-right: 4px;
+    }
+    
+    .tag.active { background: #166534; color: #4ade80; }
+    .tag.pending { background: #854d0e; color: #facc15; }
+    .tag.blocked { background: #991b1b; color: #f87171; }
+    
+    .skill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      border: 1px solid;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .skill-badge:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(255, 107, 0, 0.3);
+    }
+    
+    .skill-badge.system {
+      background: #1a1a2e;
+      border-color: #3b82f6;
+      color: #60a5fa;
+    }
+    
+    .skill-badge.system:hover {
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+    }
+    
+    .skill-badge.custom {
+      background: #1a1a1a;
+      border-color: #FF6B00;
+      color: #FFAA00;
+    }
+    
+    .skill-count {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: bold;
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal.active {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: #121212;
+      border: 1px solid #FF6B00;
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #333;
+    }
+    
+    .modal-title {
+      color: #FF6B00;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-close:hover {
+      color: #FF6B00;
+    }
+    
+    .modal-section {
+      margin-bottom: 16px;
+    }
+    
+    .modal-section-title {
+      color: #888;
+      font-size: 12px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    
+    .modal-section-content {
+      color: #e0e0e0;
+      line-height: 1.6;
+    }
+    
+    .activity-item {
+      padding: 8px 0;
+      border-bottom: 1px solid #222;
+      font-size: 13px;
+    }
+    
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+    
+    .activity-time {
+      color: #666;
+      font-size: 11px;
+    }
+    
+    .security-score {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+    
+    .score-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 4px solid #FF6B00;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: #FF6B00;
+    }
+    
+    .score-details {
+      text-align: left;
+    }
+    
+    .score-details div {
+      font-size: 12px;
+      padding: 2px 0;
+    }
+    
+    .timestamp {
+      text-align: center;
+      color: #444;
+      font-size: 11px;
+      margin-top: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🦞 Dogi66 儀表板</h1>
+    <div class="status">線上運行中</div>
+  </div>
+  
+  <div class="grid">
+    <!-- 系統狀態 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">系統狀態</span>
+        <span class="card-icon">⚡</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">OpenClaw 版本</span>
+        <span class="stat-value">2026.2.3-1</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">運行狀態</span>
+        <span class="stat-value success">● 正常</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Telegram Bot</span>
+        <span class="stat-value success">@dogi66_bot</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">心跳間隔</span>
+        <span class="stat-value">1 小時</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">防火牆</span>
+        <span class="stat-value success">✓ 已開啟</span>
+      </div>
+    </div>
+    
+    <!-- Token 使用 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Context 使用量</span>
+        <span class="card-icon">📊</span>
+      </div>
+      <div class="big-stat">
+        <div class="value">48%</div>
+        <div class="label">95k / 200k tokens</div>
+      </div>
+      <div class="progress-bar">
+        <div class="fill" style="width: 48%"></div>
+      </div>
+      <div class="stat-row" style="margin-top: 12px">
+        <span class="stat-label">當前模型</span>
+        <span class="stat-value highlight">Claude Opus 4.5</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Compactions</span>
+        <span class="stat-value">12 次</span>
+      </div>
+    </div>
+    
+    <!-- 通訊統計 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">通訊統計（7天）</span>
+        <span class="card-icon">📧</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Email 數量</span>
+        <span class="stat-value">~40 封</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">主要聯絡人</span>
+        <span class="stat-value">RD6@autojaw.com</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Telegram 對話</span>
+        <span class="stat-value success">活躍中</span>
+      </div>
+    </div>
+    
+    <!-- 安全評分 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">安全評分</span>
+        <span class="card-icon">🔒</span>
+      </div>
+      <div class="security-score">
+        <div class="score-circle">8.5</div>
+        <div class="score-details">
+          <div>✓ FileVault 加密</div>
+          <div>✓ 防火牆已開啟</div>
+          <div>✓ 本地綁定</div>
+          <div class="stat-value warning">⚠ 有更新可用</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 進行中專案 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">進行中專案</span>
+        <span class="card-icon">🚀</span>
+      </div>
+      <div class="project-item">
+        <div class="project-name">Shadow OBD2 App</div>
+        <div class="project-status">
+          <span class="tag active">v2.6</span>
+          <span class="tag pending">BLE 測試中</span>
+        </div>
+      </div>
+      <div class="project-item">
+        <div class="project-name">iOS TestFlight</div>
+        <div class="project-status">
+          <span class="tag active">IPA 已打包</span>
+          <span class="tag pending">待上傳</span>
+        </div>
+      </div>
+      <div class="project-item">
+        <div class="project-name">RD6 BLE 調試</div>
+        <div class="project-status">
+          <span class="tag active">進行中</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Skills 工具 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">可用 Skills</span>
+        <span class="card-icon">🛠️</span>
+      </div>
+      <div style="margin-bottom: 12px;">
+        <div style="color: #888; font-size: 11px; margin-bottom: 8px;">系統 Skills</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <span class="skill-badge system" onclick="showSkillDetail('coding-agent', 'system', 0)">
+            coding-agent
+            <span class="skill-count">0</span>
+          </span>
+          <span class="skill-badge system" onclick="showSkillDetail('gemini', 'system', 3)">
+            gemini
+            <span class="skill-count">3</span>
+          </span>
+          <span class="skill-badge system" onclick="showSkillDetail('github', 'system', 2)">
+            github
+            <span class="skill-count">2</span>
+          </span>
+          <span class="skill-badge system" onclick="showSkillDetail('gog', 'system', 15)">
+            gog
+            <span class="skill-count">15</span>
+          </span>
+          <span class="skill-badge system" onclick="showSkillDetail('healthcheck', 'system', 1)">
+            healthcheck
+            <span class="skill-count">1</span>
+          </span>
+          <span class="skill-badge system" onclick="showSkillDetail('weather', 'system', 0)">
+            weather
+            <span class="skill-count">0</span>
+          </span>
+          <span class="skill-badge system" onclick="showSkillDetail('video-frames', 'system', 0)">
+            video-frames
+            <span class="skill-count">0</span>
+          </span>
+        </div>
+      </div>
+      <div>
+        <div style="color: #888; font-size: 11px; margin-bottom: 8px;">專案 Skills</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <span class="skill-badge custom" onclick="showSkillDetail('obd2-protocol', 'custom', 8)">
+            obd2-protocol
+            <span class="skill-count">8</span>
+          </span>
+          <span class="skill-badge custom" onclick="showSkillDetail('ble-debugging', 'custom', 5)">
+            ble-debugging
+            <span class="skill-count">5</span>
+          </span>
+          <span class="skill-badge custom" onclick="showSkillDetail('elm327-commands', 'custom', 3)">
+            elm327-commands
+            <span class="skill-count">3</span>
+          </span>
+          <span class="skill-badge custom" onclick="showSkillDetail('app-store-publishing', 'custom', 1)">
+            app-store-publishing
+            <span class="skill-count">1</span>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 最近活動 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">最近活動</span>
+        <span class="card-icon">📝</span>
+      </div>
+      <div class="activity-item">
+        <div>🌐 儀表板上線（內網）</div>
+        <div class="activity-time">18:18</div>
+      </div>
+      <div class="activity-item">
+        <div>⏰ Email 監控改為 20 分鐘</div>
+        <div class="activity-time">18:16</div>
+      </div>
+      <div class="activity-item">
+        <div>🔍 自我審核完成</div>
+        <div class="activity-time">18:14</div>
+      </div>
+      <div class="activity-item">
+        <div>📦 發布 Shadow OBD2 v2.9</div>
+        <div class="activity-time">16:00</div>
+      </div>
+      <div class="activity-item">
+        <div>📱 iOS IPA 打包成功</div>
+        <div class="activity-time">09:35</div>
+      </div>
+    </div>
+    
+    <!-- Cron 任務 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Cron 任務</span>
+        <span class="card-icon">⏰</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Email 監控</span>
+        <span class="stat-value success">每 20 分鐘</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">每日記憶整理</span>
+        <span class="stat-value">23:00</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">市場簡報</span>
+        <span class="stat-value">08:00</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">世界新聞</span>
+        <span class="stat-value">08:30</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">衝突檢查</span>
+        <span class="stat-value">08:00</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">週一帳號報告</span>
+        <span class="stat-value">週一 08:00</span>
+      </div>
+    </div>
+    
+    <!-- 待辦事項 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">待辦事項</span>
+        <span class="card-icon">📋</span>
+      </div>
+      <div class="project-item">
+        <div class="project-name">iOS TestFlight 上傳</div>
+        <div class="project-status">
+          <span class="tag pending">IPA 已準備</span>
+        </div>
+      </div>
+      <div class="project-item">
+        <div class="project-name">RD6 新需求</div>
+        <div class="project-status">
+          <span class="tag pending">4 項功能</span>
+        </div>
+      </div>
+      <div class="project-item">
+        <div class="project-name">App Icon 更換</div>
+        <div class="project-status">
+          <span class="tag pending">待處理</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 異常狀態 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">異常狀態</span>
+        <span class="card-icon">⚠️</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">系統運行</span>
+        <span class="stat-value success">● 正常</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Cron 任務</span>
+        <span class="stat-value success">6/6 運行中</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">異常項目</span>
+        <span class="stat-value success">0 項</span>
+      </div>
+    </div>
+  </div>
+  
+  <div class="timestamp">
+    最後更新：2026-02-10 12:19 · Shadow Performance Electronics
+  </div>
+  
+  <!-- Skill 詳細資訊模態框 -->
+  <div id="skillModal" class="modal" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title" id="modalTitle"></div>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">使用次數</div>
+        <div class="modal-section-content" id="modalUsage"></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">說明</div>
+        <div class="modal-section-content" id="modalDescription"></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">位置</div>
+        <div class="modal-section-content" id="modalLocation"></div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    const skillInfo = {
+      'coding-agent': {
+        description: 'Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process for programmatic control.',
+        location: '/usr/local/lib/node_modules/openclaw/skills/coding-agent/SKILL.md'
+      },
+      'gemini': {
+        description: 'Gemini CLI for one-shot Q&A, summaries, and generation.',
+        location: '/usr/local/lib/node_modules/openclaw/skills/gemini/SKILL.md'
+      },
+      'github': {
+        description: 'Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.',
+        location: '/usr/local/lib/node_modules/openclaw/skills/github/SKILL.md'
+      },
+      'gog': {
+        description: 'Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.',
+        location: '~/.openclaw/workspace/skills/gog/SKILL.md'
+      },
+      'healthcheck': {
+        description: 'Host security hardening and risk-tolerance configuration for OpenClaw deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, OpenClaw cron scheduling for periodic checks, or version status checks on a machine running OpenClaw (laptop, workstation, Pi, VPS).',
+        location: '/usr/local/lib/node_modules/openclaw/skills/healthcheck/SKILL.md'
+      },
+      'weather': {
+        description: 'Get current weather and forecasts (no API key required).',
+        location: '/usr/local/lib/node_modules/openclaw/skills/weather/SKILL.md'
+      },
+      'video-frames': {
+        description: 'Extract frames or short clips from videos using ffmpeg.',
+        location: '/usr/local/lib/node_modules/openclaw/skills/video-frames/SKILL.md'
+      },
+      'obd2-protocol': {
+        description: 'OBD2 車輛診斷協議知識庫。包含 PID 參數定義、DTC 故障碼、通訊協議（CAN/ISO/KWP）。當需要讀取車輛數據、解析故障碼、或開發 OBD2 相關應用時使用。',
+        location: '~/.openclaw/workspace/skills/obd2-protocol/SKILL.md'
+      },
+      'ble-debugging': {
+        description: 'BLE 藍牙低功耗調試指南。包含連接問題排除、GATT 服務探索、常見 OBD 適配器相容性。當需要調試藍牙連接或處理 BLE 通訊問題時使用。',
+        location: '~/.openclaw/workspace/skills/ble-debugging/SKILL.md'
+      },
+      'elm327-commands': {
+        description: 'ELM327 OBD 適配器指令集。包含 AT 指令、OBD 指令格式、初始化流程。當需要與 ELM327 設備通訊或調試連接問題時使用。',
+        location: '~/.openclaw/workspace/skills/elm327-commands/SKILL.md'
+      },
+      'app-store-publishing': {
+        description: 'iOS App Store 和 Google Play 上架指南。包含發布流程、審核要求、截圖規格、隱私政策。當需要準備 App 上架或處理審核問題時使用。',
+        location: '~/.openclaw/workspace/skills/app-store-publishing/SKILL.md'
+      }
+    };
+    
+    function showSkillDetail(skillName, type, usageCount) {
+      const info = skillInfo[skillName];
+      if (!info) return;
+      
+      document.getElementById('modalTitle').textContent = skillName;
+      document.getElementById('modalUsage').textContent = `已使用 ${usageCount} 次`;
+      document.getElementById('modalDescription').textContent = info.description;
+      document.getElementById('modalLocation').textContent = info.location;
+      
+      document.getElementById('skillModal').classList.add('active');
+    }
+    
+    function closeModal(event) {
+      if (!event || event.target.id === 'skillModal') {
+        document.getElementById('skillModal').classList.remove('active');
+      }
+    }
+    
+    // ESC 鍵關閉模態框
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>
