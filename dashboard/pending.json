@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "lastUpdated": "2026-02-10T14:08:42Z",
+  "pending": [
+    {
+      "id": 1770732522,
+      "type": "test",
+      "title": "測試待確認事項",
+      "description": "這是一個測試項目",
+      "priority": "high",
+      "createdAt": "2026-02-10T14:08:42Z"
+    }
+  ],
+  "autoApproved": [
+    {
+      "type": "email_rd6",
+      "description": "發信給 RD6 報告進度",
+      "approvedAt": null
+    }
+  ],
+  "history": []
+}

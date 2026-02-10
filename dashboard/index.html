@@ -355,6 +355,19 @@
   </div>
   
   <div class="grid">
+    <!-- 待確認事項 -->
+    <div class="card" id="pending-card" style="grid-column: 1 / -1; border-color: #FF6B00;">
+      <div class="card-header">
+        <span class="card-title">⚠️ 待確認事項</span>
+        <span class="card-icon">📋</span>
+      </div>
+      <div id="pending-list">
+        <div style="text-align: center; padding: 20px; color: #666;">
+          載入中...
+        </div>
+      </div>
+    </div>
+    
     <!-- 系統狀態 -->
     <div class="card">
       <div class="card-header">
@@ -738,6 +751,136 @@
         closeModal();
       }
     });
+    
+    // ========== 待確認事項系統 ==========
+    const TELEGRAM_BOT = 'dogi66_bot';
+    
+    async function loadPendingItems() {
+      const container = document.getElementById('pending-list');
+      const card = document.getElementById('pending-card');
+      
+      try {
+        const response = await fetch('pending.json?t=' + Date.now());
+        const data = await response.json();
+        
+        if (data.pending.length === 0) {
+          container.innerHTML = `
+            <div style="text-align: center; padding: 20px; color: #4ade80;">
+              ✅ 沒有待確認事項
+            </div>
+          `;
+          card.style.borderColor = '#333';
+          return;
+        }
+        
+        card.style.borderColor = '#FF6B00';
+        
+        let html = '';
+        data.pending.forEach((item, index) => {
+          const priorityColor = item.priority === 'high' ? '#f87171' : 
+                               item.priority === 'medium' ? '#facc15' : '#4ade80';
+          const priorityIcon = item.priority === 'high' ? '🔴' : 
+                              item.priority === 'medium' ? '🟡' : '🟢';
+          
+          html += `
+            <div class="pending-item" style="
+              padding: 12px;
+              margin-bottom: 8px;
+              background: #1a1a1a;
+              border-left: 3px solid ${priorityColor};
+              border-radius: 4px;
+            ">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                  <div style="font-weight: bold; color: #fff; margin-bottom: 4px;">
+                    ${priorityIcon} ${item.title}
+                  </div>
+                  <div style="font-size: 12px; color: #888;">
+                    ${item.description || ''}
+                  </div>
+                  <div style="font-size: 10px; color: #555; margin-top: 4px;">
+                    ${new Date(item.createdAt).toLocaleString('zh-TW')}
+                  </div>
+                </div>
+                <div style="display: flex; gap: 8px; flex-shrink: 0;">
+                  <button onclick="handleAction(${item.id}, 'confirm')" style="
+                    background: #4ade80;
+                    color: #000;
+                    border: none;
+                    padding: 6px 12px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 12px;
+                  ">確認</button>
+                  <button onclick="handleAction(${item.id}, 'cancel')" style="
+                    background: #f87171;
+                    color: #000;
+                    border: none;
+                    padding: 6px 12px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 12px;
+                  ">取消</button>
+                  <label style="
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                    color: #888;
+                    font-size: 11px;
+                    cursor: pointer;
+                  ">
+                    <input type="checkbox" 
+                           onchange="handleAction(${item.id}, 'auto', this.checked)"
+                           ${data.autoApproved.some(a => a.type === item.type) ? 'checked' : ''}
+                           style="cursor: pointer;">
+                    自動
+                  </label>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        
+        container.innerHTML = html;
+        
+      } catch (error) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 20px; color: #4ade80;">
+            ✅ 沒有待確認事項
+          </div>
+        `;
+        card.style.borderColor = '#333';
+      }
+    }
+    
+    function handleAction(id, action, checked) {
+      let message = '';
+      
+      switch(action) {
+        case 'confirm':
+          message = `確認 ${id}`;
+          break;
+        case 'cancel':
+          message = `取消 ${id}`;
+          break;
+        case 'auto':
+          message = checked ? `設為自動 ${id}` : `取消自動 ${id}`;
+          break;
+      }
+      
+      // 開啟 Telegram 發送訊息
+      const telegramUrl = `https://t.me/${TELEGRAM_BOT}?text=${encodeURIComponent(message)}`;
+      window.open(telegramUrl, '_blank');
+      
+      // 顯示提示
+      alert(`指令「${message}」已準備好，請在 Telegram 發送`);
+    }
+    
+    // 頁面載入時載入待確認事項
+    document.addEventListener('DOMContentLoaded', loadPendingItems);
+    
+    // 每 30 秒刷新一次
+    setInterval(loadPendingItems, 30000);
   </script>
 </body>
 </html>
