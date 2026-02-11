@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>活動日誌 - Dogi66</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'SF Mono', 'Menlo', monospace;
+      background: #0a0a0a;
+      color: #e0e0e0;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #333;
+    }
+    
+    .header h1 {
+      color: #FF6B00;
+      font-size: 24px;
+    }
+    
+    .header .nav a {
+      color: #888;
+      text-decoration: none;
+      font-size: 12px;
+      padding: 4px 10px;
+      border: 1px solid #333;
+      border-radius: 4px;
+    }
+    
+    .header .nav a:hover { border-color: #FF6B00; color: #FF6B00; }
+    
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .filter-btn {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      color: #888;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .filter-btn:hover, .filter-btn.active {
+      border-color: #FF6B00;
+      color: #FF6B00;
+    }
+    
+    .log-container {
+      background: #121212;
+      border: 1px solid #333;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .log-day {
+      border-bottom: 1px solid #333;
+    }
+    
+    .log-day:last-child { border-bottom: none; }
+    
+    .log-day-header {
+      background: #1a1a1a;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #FF6B00;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .log-day-header:hover { background: #222; }
+    
+    .log-day-content {
+      padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    
+    .log-day.open .log-day-content {
+      max-height: 2000px;
+      padding: 16px;
+    }
+    
+    .log-entry {
+      display: flex;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #1a1a1a;
+      font-size: 13px;
+    }
+    
+    .log-entry:last-child { border-bottom: none; }
+    
+    .log-time {
+      color: #666;
+      min-width: 50px;
+      font-size: 11px;
+    }
+    
+    .log-icon {
+      min-width: 24px;
+      text-align: center;
+    }
+    
+    .log-content {
+      flex: 1;
+    }
+    
+    .log-title {
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    
+    .log-detail {
+      color: #666;
+      font-size: 11px;
+    }
+    
+    .log-tag {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 10px;
+      margin-left: 8px;
+    }
+    
+    .log-tag.cron { background: #7c3aed33; color: #a78bfa; }
+    .log-tag.task { background: #FF6B0033; color: #FF6B00; }
+    .log-tag.system { background: #0ea5e933; color: #22d3ee; }
+    .log-tag.user { background: #4ade8033; color: #4ade80; }
+    
+    .timestamp {
+      text-align: center;
+      color: #444;
+      font-size: 11px;
+      margin-top: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>📜 活動日誌</h1>
+    <div class="nav">
+      <a href="index.html">← 返回儀表板</a>
+    </div>
+  </div>
+  
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterLogs('all')">全部</button>
+    <button class="filter-btn" onclick="filterLogs('task')">🔧 任務</button>
+    <button class="filter-btn" onclick="filterLogs('cron')">⏰ Cron</button>
+    <button class="filter-btn" onclick="filterLogs('system')">⚙️ 系統</button>
+    <button class="filter-btn" onclick="filterLogs('user')">👤 使用者</button>
+  </div>
+  
+  <div class="log-container">
+    
+    <!-- 2026-02-11 -->
+    <div class="log-day open">
+      <div class="log-day-header" onclick="toggleDay(this)">
+        <span>📅 2026-02-11（今天）</span>
+        <span>▼</span>
+      </div>
+      <div class="log-day-content">
+        
+        <div class="log-entry" data-type="system">
+          <div class="log-time">14:16</div>
+          <div class="log-icon">🧹</div>
+          <div class="log-content">
+            <div class="log-title">系統清理完成 <span class="log-tag system">系統</span></div>
+            <div class="log-detail">刪除 9 個重複/舊檔案，釋放 ~50MB</div>
+          </div>
+        </div>
+        
+        <div class="log-entry" data-type="task">
+          <div class="log-time">13:30</div>
+          <div class="log-icon">🧠</div>
+          <div class="log-content">
+            <div class="log-title">記憶系統整理 <span class="log-tag task">任務</span></div>
+            <div class="log-detail">更新 dogi/MEMORY.md、shared/COMPANY.md、shared/CONTACTS.md、yorda/MEMORY.md</div>
+          </div>
+        </div>
+        
+        <div class="log-entry" data-type="task">
+          <div class="log-time">12:36</div>
+          <div class="log-icon">📊</div>
+          <div class="log-content">
+            <div class="log-title">部門儀表板上線 <span class="log-tag task">任務</span></div>
+            <div class="log-detail">管理部 yorda.html 完成，研發部/業務部框架建立，推送到 GitHub Pages</div>
+          </div>
+        </div>
+        
+        <div class="log-entry" data-type="task">
+          <div class="log-time">12:15</div>
+          <div class="log-icon">📂</div>
+          <div class="log-content">
+            <div class="log-title">Google Drive 結構建立 <span class="log-tag task">任務</span></div>
+            <div class="log-detail">6 主資料夾 + 7 子資料夾（公司共用、管理部、研發部、業務部、廠務部、歸檔區）</div>
+          </div>
+        </div>
+        
+        <div class="log-entry" data-type="task">
+          <div class="log-time">12:07</div>
+          <div class="log-icon">📝</div>
+          <div class="log-content">
+            <div class="log-title">Notion 結構建立 <span class="log-tag task">任務</span></div>
+            <div class="log-detail">公司中樞 + 4 部門，共 19 頁面</div>
+          </div>
+        </div>
+        
+        <div class="log-entry" data-type="task">
+          <div class="log-time">10:43</div>
+          <div class="log-icon">📁</div>
+          <div class="log-content">
+            <div class="log-title">記憶位置整理 <span class="log-tag task">任務</span></div>
+            <div class="log-detail">公司資訊→shared/COMPANY.md、聯絡人→shared/CONTACTS.md、專案→projects/</div>
+          </div>
+        </div>
+        
+        <div class="log-entry" data-type="task">
+          <div class="log-time">10:39</div>
+          <div class="log-icon">🐥</div>
+          <div class="log-content">
+            <div class="log-title">Piyo鴨鴨 人設建立 <span class="log-tag task">任務</span></div>
+            <div class="log-detail">yorda/PERSONA.md + yorda/RULES.md 完成</div>
+          </div>
+        </div>
+        
+        <div class="log-entry" data-type="task">
+          <div class="log-time">10:37</div>
+          <div class="log-icon">🏗️</div>
+          <div class="log-content">
+            <div class="log-title">Workspace 多使用者結構 <span class="log-tag task">任務</span></div>
+            <div class="log-detail">建立 dogi/、yorda/、shared/、projects/、system/ 資料夾</div>
+          </div>
+        </div>
+        
+        <div class="log-entry" data-type="cron">
+          <div class="log-time">08:30</div>
+          <div class="log-icon">🌍</div>
+          <div class="log-content">
+            <div class="log-title">每日世界新聞簡報 <span class="log-tag cron">Cron</span></div>
+            <div class="log-detail">自動執行，發送到 Telegram</div>
+          </div>
+        </div>
+        
+        <div class="log-entry" data-type="user">
+          <div class="log-time">08:11</div>
+          <div class="log-icon">📧</div>
+          <div class="log-content">
+            <div class="log-title">市場簡報轉發 Yorda <span class="log-tag user">使用者</span></div>
+            <div class="log-detail">發送到 Yordalin@gmail.com</div>
+          </div>
+        </div>
+        
+        <div class="log-entry" data-type="cron">
+          <div class="log-time">08:02</div>
+          <div class="log-icon">📊</div>
+          <div class="log-content">
+            <div class="log-title">每日市場簡報 <span class="log-tag cron">Cron</span></div>
+            <div class="log-detail">自動執行，發送 Email + Telegram</div>
+          </div>
+        </div>
+        
+        <div class="log-entry" data-type="system">
+          <div class="log-time">00:45</div>
+          <div class="log-icon">💾</div>
+          <div class="log-content">
+            <div class="log-title">系統備份 <span class="log-tag system">系統</span></div>
+            <div class="log-detail">685MB 備份上傳到 Google Drive</div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    
+    <!-- 2026-02-10 -->
+    <div class="log-day">
+      <div class="log-day-header" onclick="toggleDay(this)">
+        <span>📅 2026-02-10（昨天）</span>
+        <span>▶</span>
+      </div>
+      <div class="log-day-content">
+        
+        <div class="log-entry" data-type="task">
+          <div class="log-time">22:08</div>
+          <div class="log-icon">📊</div>
+          <div class="log-content">
+            <div class="log-title">儀表板 v1 上線 <span class="log-tag task">任務</span></div>
+            <div class="log-detail">GitHub Pages: shadowdogi66tw.github.io/shadowperformace-site/dashboard/</div>
+          </div>
+        </div>
+        
+        <div class="log-entry" data-type="task">
+          <div class="log-time">18:17</div>
+          <div class="log-icon">📱</div>
+          <div class="log-content">
+            <div class="log-title">Shadow OBD v2.10 發布 <span class="log-tag task">任務</span></div>
+            <div class="log-detail">新增自動重連、斷線按鈕、動態 UUID</div>
+          </div>
+        </div>
+        
+        <div class="log-entry" data-type="system">
+          <div class="log-time">15:30</div>
+          <div class="log-icon">⬆️</div>
+          <div class="log-content">
+            <div class="log-title">OpenClaw 更新 <span class="log-tag system">系統</span></div>
+            <div class="log-detail">升級到 2026.2.9</div>
+          </div>
+        </div>
+        
+        <div class="log-entry" data-type="user">
+          <div class="log-time">01:20</div>
+          <div class="log-icon">🏗️</div>
+          <div class="log-content">
+            <div class="log-title">多使用者架構決策 <span class="log-tag user">使用者</span></div>
+            <div class="log-detail">決定：單實例多角色 + 部門分散記憶</div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    
+  </div>
+  
+  <div class="timestamp">
+    最後更新：2026-02-11 14:31 · Dogi66
+  </div>
+  
+  <script>
+    function toggleDay(header) {
+      const day = header.parentElement;
+      const arrow = header.querySelector('span:last-child');
+      day.classList.toggle('open');
+      arrow.textContent = day.classList.contains('open') ? '▼' : '▶';
+    }
+    
+    function filterLogs(type) {
+      const btns = document.querySelectorAll('.filter-btn');
+      btns.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      const entries = document.querySelectorAll('.log-entry');
+      entries.forEach(entry => {
+        if (type === 'all' || entry.dataset.type === type) {
+          entry.style.display = 'flex';
+        } else {
+          entry.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>
