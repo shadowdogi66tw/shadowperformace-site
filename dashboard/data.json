@@ -1,0 +1,58 @@
+{
+  "timestamp": "2026-02-10T13:28:13Z",
+  "timestampLocal": "2026-02-10 21:28",
+  "system": {
+    "openclawVersion": "",
+    "status": "online",
+    "telegramBot": "@dogi66_bot",
+    "heartbeatInterval": "1 hour"
+  },
+  "context": {
+    "used": 0,
+    "total": 200000,
+    "percent": 0,
+    "compactions": 0,
+    "model": "Claude Opus 4.5"
+  },
+  "cron": {
+    "total": 7,
+    "enabled": 7,
+    "jobs": [
+      {"name": "Email 監控", "schedule": "每 20 分鐘"},
+      {"name": "每日記憶整理", "schedule": "23:00"},
+      {"name": "市場簡報", "schedule": "08:00"},
+      {"name": "世界新聞", "schedule": "08:30"},
+      {"name": "衝突檢查", "schedule": "08:00"},
+      {"name": "週一帳號報告", "schedule": "週一 08:00"}
+    ]
+  },
+  "security": {
+    "score": 7.0,
+    "firewall": false,
+    "filevault": true
+  },
+  "projects": [
+    {
+      "name": "Shadow OBD2 App",
+      "status": "active",
+      "version": "v2.9",
+      "tags": ["active", "pending"]
+    },
+    {
+      "name": "iOS TestFlight",
+      "status": "pending",
+      "tags": ["pending"]
+    },
+    {
+      "name": "RD6 BLE 調試",
+      "status": "active",
+      "tags": ["active"]
+    }
+  ],
+  "todos": [
+    {"name": "iOS TestFlight 上傳", "status": "pending"},
+    {"name": "RD6 新需求", "status": "pending", "count": 4},
+    {"name": "App Icon 更換", "status": "pending"}
+  ],
+  "alerts": []
+}

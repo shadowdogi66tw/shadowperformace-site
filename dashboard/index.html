@@ -176,6 +176,7 @@
     .tag.active { background: #166534; color: #4ade80; }
     .tag.pending { background: #854d0e; color: #facc15; }
     .tag.blocked { background: #991b1b; color: #f87171; }
+    .tag.done { background: #1e40af; color: #60a5fa; }
     
     .skill-badge {
       display: inline-flex;
@@ -351,19 +352,57 @@
 <body>
   <div class="header">
     <h1>🦞 Dogi66 儀表板</h1>
-    <div class="status">線上運行中</div>
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <div class="nav" style="display: flex; gap: 8px;">
+        <a href="index.html" style="color: #FF6B00; text-decoration: none; font-size: 12px; padding: 4px 10px; border: 1px solid #FF6B00; border-radius: 4px; background: #FF6B0022;">總部</a>
+        <a href="departments/yorda.html" style="color: #60a5fa; text-decoration: none; font-size: 12px; padding: 4px 10px; border: 1px solid #333; border-radius: 4px;">管理部</a>
+        <a href="departments/rd6.html" style="color: #4ade80; text-decoration: none; font-size: 12px; padding: 4px 10px; border: 1px solid #333; border-radius: 4px;">研發部</a>
+        <a href="departments/sales.html" style="color: #facc15; text-decoration: none; font-size: 12px; padding: 4px 10px; border: 1px solid #333; border-radius: 4px;">業務部</a>
+      </div>
+      <div class="status">線上運行中</div>
+    </div>
   </div>
   
   <div class="grid">
-    <!-- 待確認事項 -->
-    <div class="card" id="pending-card" style="grid-column: 1 / -1; border-color: #FF6B00;">
+    <!-- 今日完成工作 -->
+    <div class="card" style="grid-column: 1 / -1; border-color: #4ade80;">
       <div class="card-header">
-        <span class="card-title">⚠️ 待確認事項</span>
-        <span class="card-icon">📋</span>
+        <span class="card-title">✅ 今日完成工作 (2026-02-11)</span>
+        <span class="card-icon">🎯</span>
       </div>
-      <div id="pending-list">
-        <div style="text-align: center; padding: 20px; color: #666;">
-          載入中...
+      <div class="project-item">
+        <div class="project-name">📁 Workspace 多使用者結構</div>
+        <div class="project-status">
+          <span class="tag done">已完成</span>
+          dogi/ yorda/ shared/ projects/ system/
+        </div>
+      </div>
+      <div class="project-item">
+        <div class="project-name">📝 ROUTING.md 路由規則</div>
+        <div class="project-status">
+          <span class="tag done">已完成</span>
+          Steven L3 / Yorda L2 權限分離
+        </div>
+      </div>
+      <div class="project-item">
+        <div class="project-name">📄 Notion 公司結構</div>
+        <div class="project-status">
+          <span class="tag done">已完成</span>
+          4 部門 + 公司層級頁面（共 19 頁）
+        </div>
+      </div>
+      <div class="project-item">
+        <div class="project-name">📂 Google Drive 資料夾</div>
+        <div class="project-status">
+          <span class="tag done">已完成</span>
+          6 主資料夾 + 7 子資料夾
+        </div>
+      </div>
+      <div class="project-item">
+        <div class="project-name">🦆 Piyo鴨鴨 人設</div>
+        <div class="project-status">
+          <span class="tag done">已完成</span>
+          yorda/PERSONA.md + yorda/RULES.md
         </div>
       </div>
     </div>
@@ -376,7 +415,7 @@
       </div>
       <div class="stat-row">
         <span class="stat-label">OpenClaw 版本</span>
-        <span class="stat-value">2026.2.3-1</span>
+        <span class="stat-value">2026.2.9</span>
       </div>
       <div class="stat-row">
         <span class="stat-label">運行狀態</span>
@@ -387,72 +426,104 @@
         <span class="stat-value success">@dogi66_bot</span>
       </div>
       <div class="stat-row">
-        <span class="stat-label">心跳間隔</span>
-        <span class="stat-value">1 小時</span>
+        <span class="stat-label">使用者</span>
+        <span class="stat-value">Steven (L3)</span>
       </div>
       <div class="stat-row">
-        <span class="stat-label">防火牆</span>
-        <span class="stat-value success">✓ 已開啟</span>
+        <span class="stat-label">待啟用</span>
+        <span class="stat-value warning">Yorda (L2)</span>
       </div>
     </div>
     
-    <!-- Token 使用 -->
+    <!-- 多使用者架構 -->
     <div class="card">
       <div class="card-header">
-        <span class="card-title">Context 使用量</span>
-        <span class="card-icon">📊</span>
-      </div>
-      <div class="big-stat">
-        <div class="value">48%</div>
-        <div class="label">95k / 200k tokens</div>
-      </div>
-      <div class="progress-bar">
-        <div class="fill" style="width: 48%"></div>
-      </div>
-      <div class="stat-row" style="margin-top: 12px">
-        <span class="stat-label">當前模型</span>
-        <span class="stat-value highlight">Claude Opus 4.5</span>
+        <span class="card-title">多使用者架構</span>
+        <span class="card-icon">👥</span>
       </div>
       <div class="stat-row">
-        <span class="stat-label">Compactions</span>
-        <span class="stat-value">12 次</span>
+        <span class="stat-label">Workspace 結構</span>
+        <span class="stat-value success">✓ 已建立</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">ROUTING.md</span>
+        <span class="stat-value success">✓ 已建立</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">dogi/ (Steven)</span>
+        <span class="stat-value success">✓ 啟用</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">yorda/ (Yorda)</span>
+        <span class="stat-value warning">⏳ 待啟用</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">shared/</span>
+        <span class="stat-value success">✓ 已建立</span>
       </div>
     </div>
     
-    <!-- 通訊統計 -->
+    <!-- Notion 結構 -->
     <div class="card">
       <div class="card-header">
-        <span class="card-title">通訊統計（7天）</span>
-        <span class="card-icon">📧</span>
+        <span class="card-title">Notion 結構</span>
+        <span class="card-icon">📝</span>
       </div>
       <div class="stat-row">
-        <span class="stat-label">Email 數量</span>
-        <span class="stat-value">~40 封</span>
+        <span class="stat-label">公司中樞</span>
+        <span class="stat-value success">✓ 已建立</span>
       </div>
       <div class="stat-row">
-        <span class="stat-label">主要聯絡人</span>
-        <span class="stat-value">RD6@autojaw.com</span>
+        <span class="stat-label">公司層級頁面</span>
+        <span class="stat-value">4 個</span>
       </div>
       <div class="stat-row">
-        <span class="stat-label">Telegram 對話</span>
-        <span class="stat-value success">活躍中</span>
+        <span class="stat-label">管理部</span>
+        <span class="stat-value success">4 個子頁面</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">研發部</span>
+        <span class="stat-value">3 個子頁面</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">業務部</span>
+        <span class="stat-value">3 個子頁面</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">廠務部</span>
+        <span class="stat-value">框架已建</span>
       </div>
     </div>
     
-    <!-- 安全評分 -->
+    <!-- Google Drive 結構 -->
     <div class="card">
       <div class="card-header">
-        <span class="card-title">安全評分</span>
-        <span class="card-icon">🔒</span>
+        <span class="card-title">Google Drive 結構</span>
+        <span class="card-icon">📂</span>
       </div>
-      <div class="security-score">
-        <div class="score-circle">8.5</div>
-        <div class="score-details">
-          <div>✓ FileVault 加密</div>
-          <div>✓ 防火牆已開啟</div>
-          <div>✓ 本地綁定</div>
-          <div class="stat-value warning">⚠ 有更新可用</div>
-        </div>
+      <div class="stat-row">
+        <span class="stat-label">公司共用/</span>
+        <span class="stat-value success">3 子資料夾</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">管理部/</span>
+        <span class="stat-value success">4 子資料夾</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">研發部/</span>
+        <span class="stat-value">空資料夾</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">業務部/</span>
+        <span class="stat-value">空資料夾</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">廠務部/</span>
+        <span class="stat-value">空資料夾</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">歸檔區/</span>
+        <span class="stat-value">空資料夾</span>
       </div>
     </div>
     
@@ -465,7 +536,7 @@
       <div class="project-item">
         <div class="project-name">Shadow OBD2 App</div>
         <div class="project-status">
-          <span class="tag active">v2.6</span>
+          <span class="tag active">v2.10</span>
           <span class="tag pending">BLE 測試中</span>
         </div>
       </div>
@@ -477,100 +548,10 @@
         </div>
       </div>
       <div class="project-item">
-        <div class="project-name">RD6 BLE 調試</div>
+        <div class="project-name">Yorda Bot 啟用</div>
         <div class="project-status">
-          <span class="tag active">進行中</span>
+          <span class="tag pending">待設定 Telegram ID</span>
         </div>
-      </div>
-    </div>
-    
-    <!-- Skills 工具 -->
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">可用 Skills</span>
-        <span class="card-icon">🛠️</span>
-      </div>
-      <div style="margin-bottom: 12px;">
-        <div style="color: #888; font-size: 11px; margin-bottom: 8px;">系統 Skills</div>
-        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
-          <span class="skill-badge system" onclick="showSkillDetail('coding-agent', 'system', 0)">
-            coding-agent
-            <span class="skill-count">0</span>
-          </span>
-          <span class="skill-badge system" onclick="showSkillDetail('gemini', 'system', 3)">
-            gemini
-            <span class="skill-count">3</span>
-          </span>
-          <span class="skill-badge system" onclick="showSkillDetail('github', 'system', 2)">
-            github
-            <span class="skill-count">2</span>
-          </span>
-          <span class="skill-badge system" onclick="showSkillDetail('gog', 'system', 15)">
-            gog
-            <span class="skill-count">15</span>
-          </span>
-          <span class="skill-badge system" onclick="showSkillDetail('healthcheck', 'system', 1)">
-            healthcheck
-            <span class="skill-count">1</span>
-          </span>
-          <span class="skill-badge system" onclick="showSkillDetail('weather', 'system', 0)">
-            weather
-            <span class="skill-count">0</span>
-          </span>
-          <span class="skill-badge system" onclick="showSkillDetail('video-frames', 'system', 0)">
-            video-frames
-            <span class="skill-count">0</span>
-          </span>
-        </div>
-      </div>
-      <div>
-        <div style="color: #888; font-size: 11px; margin-bottom: 8px;">專案 Skills</div>
-        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
-          <span class="skill-badge custom" onclick="showSkillDetail('obd2-protocol', 'custom', 8)">
-            obd2-protocol
-            <span class="skill-count">8</span>
-          </span>
-          <span class="skill-badge custom" onclick="showSkillDetail('ble-debugging', 'custom', 5)">
-            ble-debugging
-            <span class="skill-count">5</span>
-          </span>
-          <span class="skill-badge custom" onclick="showSkillDetail('elm327-commands', 'custom', 3)">
-            elm327-commands
-            <span class="skill-count">3</span>
-          </span>
-          <span class="skill-badge custom" onclick="showSkillDetail('app-store-publishing', 'custom', 1)">
-            app-store-publishing
-            <span class="skill-count">1</span>
-          </span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- 最近活動 -->
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">最近活動</span>
-        <span class="card-icon">📝</span>
-      </div>
-      <div class="activity-item">
-        <div>🌐 儀表板上線（內網）</div>
-        <div class="activity-time">18:18</div>
-      </div>
-      <div class="activity-item">
-        <div>⏰ Email 監控改為 20 分鐘</div>
-        <div class="activity-time">18:16</div>
-      </div>
-      <div class="activity-item">
-        <div>🔍 自我審核完成</div>
-        <div class="activity-time">18:14</div>
-      </div>
-      <div class="activity-item">
-        <div>📦 發布 Shadow OBD2 v2.9</div>
-        <div class="activity-time">16:00</div>
-      </div>
-      <div class="activity-item">
-        <div>📱 iOS IPA 打包成功</div>
-        <div class="activity-time">09:35</div>
       </div>
     </div>
     
@@ -606,6 +587,34 @@
       </div>
     </div>
     
+    <!-- 最近活動 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">最近活動</span>
+        <span class="card-icon">📝</span>
+      </div>
+      <div class="activity-item">
+        <div>📂 Google Drive 結構建立</div>
+        <div class="activity-time">12:15</div>
+      </div>
+      <div class="activity-item">
+        <div>📝 Notion 公司結構建立</div>
+        <div class="activity-time">12:07</div>
+      </div>
+      <div class="activity-item">
+        <div>📁 Workspace 多使用者結構</div>
+        <div class="activity-time">10:37</div>
+      </div>
+      <div class="activity-item">
+        <div>📊 系統現狀報告</div>
+        <div class="activity-time">10:11</div>
+      </div>
+      <div class="activity-item">
+        <div>📧 市場簡報轉發 Yorda</div>
+        <div class="activity-time">08:11</div>
+      </div>
+    </div>
+    
     <!-- 待辦事項 -->
     <div class="card">
       <div class="card-header">
@@ -613,15 +622,15 @@
         <span class="card-icon">📋</span>
       </div>
       <div class="project-item">
-        <div class="project-name">iOS TestFlight 上傳</div>
+        <div class="project-name">設定 Yorda Telegram ID</div>
         <div class="project-status">
-          <span class="tag pending">IPA 已準備</span>
+          <span class="tag pending">待 Steven 提供</span>
         </div>
       </div>
       <div class="project-item">
-        <div class="project-name">RD6 新需求</div>
+        <div class="project-name">iOS TestFlight 上傳</div>
         <div class="project-status">
-          <span class="tag pending">4 項功能</span>
+          <span class="tag pending">待手動操作</span>
         </div>
       </div>
       <div class="project-item">
@@ -630,257 +639,17 @@
           <span class="tag pending">待處理</span>
         </div>
       </div>
-    </div>
-    
-    <!-- 異常狀態 -->
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">異常狀態</span>
-        <span class="card-icon">⚠️</span>
-      </div>
-      <div class="stat-row">
-        <span class="stat-label">系統運行</span>
-        <span class="stat-value success">● 正常</span>
-      </div>
-      <div class="stat-row">
-        <span class="stat-label">Cron 任務</span>
-        <span class="stat-value success">6/6 運行中</span>
-      </div>
-      <div class="stat-row">
-        <span class="stat-label">異常項目</span>
-        <span class="stat-value success">0 項</span>
+      <div class="project-item">
+        <div class="project-name">Notion 轉 Database</div>
+        <div class="project-status">
+          <span class="tag pending">可選</span>
+        </div>
       </div>
     </div>
   </div>
   
   <div class="timestamp">
-    最後更新：2026-02-10 12:19 · Shadow Performance Electronics
+    最後更新：2026-02-11 12:24 · Shadow Performance Electronics
   </div>
-  
-  <!-- Skill 詳細資訊模態框 -->
-  <div id="skillModal" class="modal" onclick="closeModal(event)">
-    <div class="modal-content" onclick="event.stopPropagation()">
-      <div class="modal-header">
-        <div class="modal-title" id="modalTitle"></div>
-        <button class="modal-close" onclick="closeModal()">×</button>
-      </div>
-      <div class="modal-section">
-        <div class="modal-section-title">使用次數</div>
-        <div class="modal-section-content" id="modalUsage"></div>
-      </div>
-      <div class="modal-section">
-        <div class="modal-section-title">說明</div>
-        <div class="modal-section-content" id="modalDescription"></div>
-      </div>
-      <div class="modal-section">
-        <div class="modal-section-title">位置</div>
-        <div class="modal-section-content" id="modalLocation"></div>
-      </div>
-    </div>
-  </div>
-  
-  <script>
-    const skillInfo = {
-      'coding-agent': {
-        description: 'Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process for programmatic control.',
-        location: '/usr/local/lib/node_modules/openclaw/skills/coding-agent/SKILL.md'
-      },
-      'gemini': {
-        description: 'Gemini CLI for one-shot Q&A, summaries, and generation.',
-        location: '/usr/local/lib/node_modules/openclaw/skills/gemini/SKILL.md'
-      },
-      'github': {
-        description: 'Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.',
-        location: '/usr/local/lib/node_modules/openclaw/skills/github/SKILL.md'
-      },
-      'gog': {
-        description: 'Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.',
-        location: '~/.openclaw/workspace/skills/gog/SKILL.md'
-      },
-      'healthcheck': {
-        description: 'Host security hardening and risk-tolerance configuration for OpenClaw deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, OpenClaw cron scheduling for periodic checks, or version status checks on a machine running OpenClaw (laptop, workstation, Pi, VPS).',
-        location: '/usr/local/lib/node_modules/openclaw/skills/healthcheck/SKILL.md'
-      },
-      'weather': {
-        description: 'Get current weather and forecasts (no API key required).',
-        location: '/usr/local/lib/node_modules/openclaw/skills/weather/SKILL.md'
-      },
-      'video-frames': {
-        description: 'Extract frames or short clips from videos using ffmpeg.',
-        location: '/usr/local/lib/node_modules/openclaw/skills/video-frames/SKILL.md'
-      },
-      'obd2-protocol': {
-        description: 'OBD2 車輛診斷協議知識庫。包含 PID 參數定義、DTC 故障碼、通訊協議（CAN/ISO/KWP）。當需要讀取車輛數據、解析故障碼、或開發 OBD2 相關應用時使用。',
-        location: '~/.openclaw/workspace/skills/obd2-protocol/SKILL.md'
-      },
-      'ble-debugging': {
-        description: 'BLE 藍牙低功耗調試指南。包含連接問題排除、GATT 服務探索、常見 OBD 適配器相容性。當需要調試藍牙連接或處理 BLE 通訊問題時使用。',
-        location: '~/.openclaw/workspace/skills/ble-debugging/SKILL.md'
-      },
-      'elm327-commands': {
-        description: 'ELM327 OBD 適配器指令集。包含 AT 指令、OBD 指令格式、初始化流程。當需要與 ELM327 設備通訊或調試連接問題時使用。',
-        location: '~/.openclaw/workspace/skills/elm327-commands/SKILL.md'
-      },
-      'app-store-publishing': {
-        description: 'iOS App Store 和 Google Play 上架指南。包含發布流程、審核要求、截圖規格、隱私政策。當需要準備 App 上架或處理審核問題時使用。',
-        location: '~/.openclaw/workspace/skills/app-store-publishing/SKILL.md'
-      }
-    };
-    
-    function showSkillDetail(skillName, type, usageCount) {
-      const info = skillInfo[skillName];
-      if (!info) return;
-      
-      document.getElementById('modalTitle').textContent = skillName;
-      document.getElementById('modalUsage').textContent = `已使用 ${usageCount} 次`;
-      document.getElementById('modalDescription').textContent = info.description;
-      document.getElementById('modalLocation').textContent = info.location;
-      
-      document.getElementById('skillModal').classList.add('active');
-    }
-    
-    function closeModal(event) {
-      if (!event || event.target.id === 'skillModal') {
-        document.getElementById('skillModal').classList.remove('active');
-      }
-    }
-    
-    // ESC 鍵關閉模態框
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        closeModal();
-      }
-    });
-    
-    // ========== 待確認事項系統 ==========
-    const TELEGRAM_BOT = 'dogi66_bot';
-    
-    async function loadPendingItems() {
-      const container = document.getElementById('pending-list');
-      const card = document.getElementById('pending-card');
-      
-      try {
-        const response = await fetch('pending.json?t=' + Date.now());
-        const data = await response.json();
-        
-        if (data.pending.length === 0) {
-          container.innerHTML = `
-            <div style="text-align: center; padding: 20px; color: #4ade80;">
-              ✅ 沒有待確認事項
-            </div>
-          `;
-          card.style.borderColor = '#333';
-          return;
-        }
-        
-        card.style.borderColor = '#FF6B00';
-        
-        let html = '';
-        data.pending.forEach((item, index) => {
-          const priorityColor = item.priority === 'high' ? '#f87171' : 
-                               item.priority === 'medium' ? '#facc15' : '#4ade80';
-          const priorityIcon = item.priority === 'high' ? '🔴' : 
-                              item.priority === 'medium' ? '🟡' : '🟢';
-          
-          html += `
-            <div class="pending-item" style="
-              padding: 12px;
-              margin-bottom: 8px;
-              background: #1a1a1a;
-              border-left: 3px solid ${priorityColor};
-              border-radius: 4px;
-            ">
-              <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div>
-                  <div style="font-weight: bold; color: #fff; margin-bottom: 4px;">
-                    ${priorityIcon} ${item.title}
-                  </div>
-                  <div style="font-size: 12px; color: #888;">
-                    ${item.description || ''}
-                  </div>
-                  <div style="font-size: 10px; color: #555; margin-top: 4px;">
-                    ${new Date(item.createdAt).toLocaleString('zh-TW')}
-                  </div>
-                </div>
-                <div style="display: flex; gap: 8px; flex-shrink: 0;">
-                  <button onclick="handleAction(${item.id}, 'confirm')" style="
-                    background: #4ade80;
-                    color: #000;
-                    border: none;
-                    padding: 6px 12px;
-                    border-radius: 4px;
-                    cursor: pointer;
-                    font-size: 12px;
-                  ">確認</button>
-                  <button onclick="handleAction(${item.id}, 'cancel')" style="
-                    background: #f87171;
-                    color: #000;
-                    border: none;
-                    padding: 6px 12px;
-                    border-radius: 4px;
-                    cursor: pointer;
-                    font-size: 12px;
-                  ">取消</button>
-                  <label style="
-                    display: flex;
-                    align-items: center;
-                    gap: 4px;
-                    color: #888;
-                    font-size: 11px;
-                    cursor: pointer;
-                  ">
-                    <input type="checkbox" 
-                           onchange="handleAction(${item.id}, 'auto', this.checked)"
-                           ${data.autoApproved.some(a => a.type === item.type) ? 'checked' : ''}
-                           style="cursor: pointer;">
-                    自動
-                  </label>
-                </div>
-              </div>
-            </div>
-          `;
-        });
-        
-        container.innerHTML = html;
-        
-      } catch (error) {
-        container.innerHTML = `
-          <div style="text-align: center; padding: 20px; color: #4ade80;">
-            ✅ 沒有待確認事項
-          </div>
-        `;
-        card.style.borderColor = '#333';
-      }
-    }
-    
-    function handleAction(id, action, checked) {
-      let message = '';
-      
-      switch(action) {
-        case 'confirm':
-          message = `確認 ${id}`;
-          break;
-        case 'cancel':
-          message = `取消 ${id}`;
-          break;
-        case 'auto':
-          message = checked ? `設為自動 ${id}` : `取消自動 ${id}`;
-          break;
-      }
-      
-      // 開啟 Telegram 發送訊息
-      const telegramUrl = `https://t.me/${TELEGRAM_BOT}?text=${encodeURIComponent(message)}`;
-      window.open(telegramUrl, '_blank');
-      
-      // 顯示提示
-      alert(`指令「${message}」已準備好，請在 Telegram 發送`);
-    }
-    
-    // 頁面載入時載入待確認事項
-    document.addEventListener('DOMContentLoaded', loadPendingItems);
-    
-    // 每 30 秒刷新一次
-    setInterval(loadPendingItems, 30000);
-  </script>
 </body>
 </html>

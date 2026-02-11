@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>研發部儀表板</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'SF Mono', 'Menlo', monospace;
+      background: #0a0a0a;
+      color: #e0e0e0;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #333;
+    }
+    .header h1 {
+      color: #4ade80;
+      font-size: 24px;
+    }
+    .header .nav {
+      display: flex;
+      gap: 12px;
+    }
+    .header .nav a {
+      color: #888;
+      text-decoration: none;
+      font-size: 13px;
+      padding: 6px 12px;
+      border: 1px solid #333;
+      border-radius: 4px;
+    }
+    .header .nav a:hover { border-color: #4ade80; color: #4ade80; }
+    .header .nav a.active { background: #4ade80; color: #000; border-color: #4ade80; }
+    .placeholder {
+      text-align: center;
+      padding: 100px 20px;
+      color: #666;
+    }
+    .placeholder h2 { color: #4ade80; margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🔬 研發部儀表板</h1>
+    <div class="nav">
+      <a href="../index.html">總部</a>
+      <a href="yorda.html">管理部</a>
+      <a href="rd6.html" class="active">研發部</a>
+      <a href="sales.html">業務部</a>
+    </div>
+  </div>
+  <div class="placeholder">
+    <h2>🚧 建置中</h2>
+    <p>研發部儀表板即將上線</p>
+    <p style="margin-top: 12px; font-size: 13px;">負責人：RD6（明隆）</p>
+  </div>
+</body>
+</html>
