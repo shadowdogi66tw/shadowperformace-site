@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-02-10T13:28:13Z",
-  "timestampLocal": "2026-02-10 21:28",
+  "timestamp": "2026-02-11T09:14:26Z",
+  "timestampLocal": "2026-02-11 17:14",
   "system": {
     "openclawVersion": "",
     "status": "online",
@@ -15,8 +15,8 @@
     "model": "Claude Opus 4.5"
   },
   "cron": {
-    "total": 7,
-    "enabled": 7,
+    "total": 6,
+    "enabled": 6,
     "jobs": [
       {"name": "Email 監控", "schedule": "每 20 分鐘"},
       {"name": "每日記憶整理", "schedule": "23:00"},
