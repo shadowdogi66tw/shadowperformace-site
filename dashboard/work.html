@@ -2,162 +2,682 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dogi66 — 工作互動</title>
-<style>:root {
-  --bg: #0a0a0f;
-  --surface: #12121a;
-  --surface2: #1a1a25;
-  --border: #2a2a3a;
-  --accent: #FF6B00;
-  --text: #e0e0e8;
-  --text-dim: #808090;
+<style>
+/* ================================================
+   DOGI66 HUD DASHBOARD — Sci-Fi Tactical Interface
+   ================================================ */
+:root {
+  --bg: #000000;
+  --surface: #060608;
+  --surface2: #0a0a0f;
+  --accent: #EA5504;
+  --accent2: #E8720C;
+  --accent-dim: rgba(255,107,0,0.3);
+  --accent-subtle: rgba(255,107,0,0.12);
+  --accent-glow: rgba(255,107,0,0.08);
+  --text: #e8e8ec;
+  --text-dim: #888898;
+  --text-muted: #555566;
+  --line: rgba(255,107,0,0.2);
+  --line-dim: rgba(255,107,0,0.08);
   --green: #00e676;
   --yellow: #ffd740;
   --red: #ff5252;
   --blue: #448aff;
 }
+
 * { margin:0; padding:0; box-sizing:border-box; }
+
+/* 5. Grid background */
 body {
-  background: var(--bg);
+  background: #000000;
   color: var(--text);
-  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
-  font-size: 12px;
-  line-height: 1.3;
+  font-family: 'Courier New', 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 15px;
+  line-height: 1.4;
+  background-image:
+    linear-gradient(rgba(255,107,0,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,107,0,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
 }
+
+/* Scanline overlay */
+body::after {
+  content: '';
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ===== HEADER ===== */
 .header {
-  background: linear-gradient(135deg, #12121a 0%, #1a1020 100%);
-  border-bottom: 1px solid var(--accent);
-  padding: 10px 24px;
+  background: #060608;
+  border-bottom: 3px solid var(--accent);
+  padding: 16px 28px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  z-index: 1;
 }
-.header h1 { font-size: 16px; color: var(--accent); font-weight: 600; letter-spacing: 2px; }
-.header .meta { color: var(--text-dim); font-size: 11px; }
-.nav {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 0 24px;
+/* 7. Scanning line animation */
+.header::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 120px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  animation: header-scan 4s linear infinite;
+}
+@keyframes header-scan {
+  0% { left: -120px; }
+  100% { left: 100%; }
+}
+/* 3. Title: monospace + uppercase + letter-spacing */
+.header h1 {
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-size: 20px;
+  color: var(--accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-shadow: 0 0 12px rgba(255,107,0,0.3);
+}
+.header .meta {
+  color: var(--text-dim);
+  font-size: 14px;
   display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ===== TICKER ===== */
+.ticker {
+  background: rgba(255,107,0,0.03);
+  border-bottom: 2px solid rgba(255,107,0,0.08);
+  padding: 3px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 13px;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+}
+.ticker-inner {
+  display: inline-block;
+  animation: ticker 35s linear infinite;
+}
+@keyframes ticker {
+  0% { transform: translateX(100vw); }
+  100% { transform: translateX(-100%); }
+}
+
+/* ===== NAV ===== */
+.nav {
+  background: #060608;
+  border-bottom: 2px solid rgba(255,107,0,0.2);
+  padding: 0 28px;
+  display: flex;
+  position: relative;
+  z-index: 1;
 }
 .nav a {
-  color: var(--text-dim);
+  color: var(--text-muted);
   text-decoration: none;
-  padding: 8px 16px;
+  padding: 10px 20px;
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
   border-bottom: 2px solid transparent;
   transition: all 0.2s;
-  font-size: 12px;
 }
 .nav a:hover { color: var(--text); }
-.nav a.active { color: var(--accent); border-bottom-color: var(--accent); }
+.nav a.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  text-shadow: 0 0 8px rgba(255,107,0,0.4);
+}
+
+/* ===== CONTAINER ===== */
 .container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 12px 24px;
+  padding: 18px 28px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 16px;
+  position: relative;
+  z-index: 1;
 }
+
+/* ===== HUD CARD =====
+   1. Cut corners via clip-path
+   2. L-bracket corner decorations
+   4. Orange glow box-shadow
+*/
 .card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  overflow: hidden;
+  background: #060608;
+  position: relative;
+  /* 1. Cut corners */
+  clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px);
+  /* 4. Glow — applied via wrapper since clip-path clips box-shadow */
+  padding: 1px;
+}
+/* Glow wrapper — we use an outer border simulation */
+.card-inner {
+  background: #060608;
+  clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px);
+}
+
+/* Since clip-path clips ::before/::after, we add corner brackets inside card-header and card-body */
+.card-header {
+  background: linear-gradient(90deg, rgba(255,107,0,0.08), transparent 60%);
+  padding: 10px 18px;
+  border-bottom: 2px solid rgba(255,107,0,0.15);
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  position: relative;
+}
+/* Tick mark beside header title */
+.card-header::before {
+  content: '▍';
+  margin-right: 8px;
+  font-size: 14px;
+  color: var(--accent);
+}
+/* Dot array decoration */
+.card-header::after {
+  content: '· · · ·';
+  position: absolute;
+  right: 18px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: rgba(255,107,0,0.25);
+  letter-spacing: 3px;
+}
+
+.card-body {
+  padding: 14px 18px;
+  position: relative;
+}
+
+/* 2. L-bracket corners inside card-body */
+.card-body::before {
+  content: '';
+  position: absolute;
+  top: 6px; left: 6px;
+  width: 14px; height: 14px;
+  border-top: 3px solid var(--accent);
+  border-left: 3px solid var(--accent);
+  pointer-events: none;
+}
+.card-body::after {
+  content: '';
+  position: absolute;
+  bottom: 6px; right: 6px;
+  width: 14px; height: 14px;
+  border-bottom: 3px solid var(--accent);
+  border-right: 3px solid var(--accent);
+  pointer-events: none;
+}
+
+.card-full { grid-column: 1 / -1; }
+
+/* ===== BORDER GLOW (since clip-path clips box-shadow) ===== */
+/* We add a background gradient to simulate glow */
+.card {
+  background: linear-gradient(135deg, rgba(255,107,0,0.15), rgba(255,107,0,0.05) 30%, rgba(255,107,0,0.05) 70%, rgba(255,107,0,0.15));
+}
+.card > .card-header,
+.card > .card-body {
+  background: #060608;
 }
 .card-header {
-  background: var(--surface2);
-  padding: 6px 12px;
-  border-bottom: 1px solid var(--border);
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--accent);
-  letter-spacing: 1px;
+  background: linear-gradient(90deg, rgba(255,107,0,0.08), #060608 60%);
 }
-.card-body { padding: 10px 12px; }
-.card-full { grid-column: 1 / -1; }
-.status-ok { color: var(--green); }
-.status-warn { color: var(--yellow); }
-.status-error { color: var(--red); }
-.status-waiting { color: var(--text-dim); font-style: italic; }
+
+/* ===== STATUS COLORS ===== */
+.status-ok { color: var(--green); text-shadow: 0 0 6px rgba(0,230,118,0.3); }
+.status-warn { color: var(--yellow); text-shadow: 0 0 6px rgba(255,215,64,0.3); }
+.status-error { color: var(--red); text-shadow: 0 0 6px rgba(255,82,82,0.3); }
+.status-waiting { color: var(--text-muted); font-style: italic; }
+
+/* ===== CRON TABLE ===== */
 .cron-table { width: 100%; border-collapse: collapse; }
 .cron-table th {
-  text-align: left; padding: 4px 8px; color: var(--text-dim);
-  font-weight: 500; font-size: 10px; text-transform: uppercase;
-  letter-spacing: 1px; border-bottom: 1px solid var(--border);
+  text-align: left; padding: 6px 8px;
+  color: var(--accent);
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-bottom: 2px solid var(--accent-dim);
 }
-.cron-table td { padding: 4px 8px; border-bottom: 1px solid #1a1a25; font-size: 11px; }
-.cron-table tr:hover { background: var(--surface2); }
+.cron-table td {
+  padding: 5px 8px;
+  border-bottom: 2px solid rgba(255,107,0,0.06);
+  font-size: 15px;
+}
+.cron-table tr:hover { background: rgba(255,107,0,0.03); }
+
+/* ===== BADGES ===== */
 .badge {
-  display: inline-block; padding: 2px 8px; border-radius: 4px;
-  font-size: 11px; font-weight: 600;
+  display: inline-block;
+  padding: 2px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border: 2px solid;
+  clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
 }
-.badge-on { background: rgba(0,230,118,0.15); color: var(--green); }
-.badge-off { background: rgba(255,82,82,0.15); color: var(--red); }
-.badge-ok { background: rgba(0,230,118,0.1); color: var(--green); }
-.badge-idle { background: rgba(68,138,255,0.1); color: var(--blue); }
-.badge-error { background: rgba(255,82,82,0.15); color: var(--red); }
+.badge-on { background: rgba(0,230,118,0.1); color: var(--green); border-color: rgba(0,230,118,0.3); }
+.badge-off { background: rgba(255,82,82,0.1); color: var(--red); border-color: rgba(255,82,82,0.3); }
+.badge-ok { background: rgba(0,230,118,0.08); color: var(--green); border-color: rgba(0,230,118,0.2); }
+.badge-idle { background: rgba(68,138,255,0.08); color: var(--blue); border-color: rgba(68,138,255,0.2); }
+.badge-error { background: rgba(255,82,82,0.1); color: var(--red); border-color: rgba(255,82,82,0.3); }
+
+/* 6. Status pulse animation for OK badges */
+.badge-on, .badge-ok {
+  animation: status-pulse 2.5s ease-in-out infinite;
+}
+@keyframes status-pulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(0,230,118,0.3); }
+  50% { box-shadow: 0 0 10px rgba(0,230,118,0.6); }
+}
+
+/* ===== AGENT ROW ===== */
 .agent-row {
-  display: flex; align-items: center; gap: 8px;
-  padding: 6px 0; border-bottom: 1px solid #1a1a25;
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px; margin: 4px 0;
+  border: 2px solid rgba(255,107,0,0.12);
+  background: rgba(255,107,0,0.02);
+  position: relative;
+  box-shadow: 0 0 8px rgba(255,107,0,0.06), inset 0 0 8px rgba(255,107,0,0.03);
 }
-.agent-row:last-child { border-bottom: none; }
-.agent-emoji { font-size: 18px; }
+/* Corner brackets on agent rows */
+.agent-row::before {
+  content: '';
+  position: absolute; top: 3px; left: 3px;
+  width: 10px; height: 10px;
+  border-top: 3px solid var(--accent);
+  border-left: 3px solid var(--accent);
+}
+.agent-row::after {
+  content: '';
+  position: absolute; bottom: 3px; right: 3px;
+  width: 10px; height: 10px;
+  border-bottom: 3px solid var(--accent);
+  border-right: 3px solid var(--accent);
+}
+.agent-emoji { font-size: 22px; }
 .agent-info { flex: 1; }
-.agent-name { font-weight: 600; }
-.agent-detail { font-size: 11px; color: var(--text-dim); }
-.symlink-ok { color: var(--green); padding: 4px 0; }
-.symlink-broken { color: var(--red); padding: 4px 0; }
-.review-content, .error-log, .log-content {
-  background: #0d0d12; border: 1px solid #1a1a25; border-radius: 4px;
-  padding: 8px; font-size: 11px; color: var(--text-dim);
-  max-height: 180px; overflow-y: auto; white-space: pre-wrap; word-break: break-all;
+.agent-name {
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-weight: 700; font-size: 17px; letter-spacing: 1px;
 }
-.todo-item { padding: 3px 0; border-bottom: 1px solid #1a1a25; font-size: 11px; }
+.agent-detail { font-size: 14px; color: var(--text-dim); margin-top: 2px; }
+
+/* ===== SYMLINKS ===== */
+.symlink-ok { color: var(--green); padding: 4px 0; font-size: 14px; }
+.symlink-broken { color: var(--red); padding: 4px 0; }
+
+/* ===== LOG / REVIEW PANELS ===== */
+.review-content, .error-log, .log-content {
+  background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,107,0,0.15);
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--text-dim);
+  max-height: 400px;
+  overflow-y: auto;
+  white-space: normal;
+  word-break: break-word;
+  position: relative;
+  box-shadow: inset 0 0 12px rgba(255,107,0,0.04);
+}
+.error-log { white-space: pre-wrap; word-break: break-all; }
+/* Corner bracket in log panels */
+.review-content::before, .error-log::before {
+  content: '';
+  position: absolute; top: 3px; left: 3px;
+  width: 8px; height: 8px;
+  border-top: 2px solid var(--accent);
+  border-left: 1px solid var(--accent);
+}
+
+/* ===== REVIEW STRUCTURED ITEMS ===== */
+.review-heading {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 10px 0 4px;
+  margin-top: 6px;
+  border-bottom: 1px solid rgba(255,107,0,0.12);
+}
+.review-heading:first-child { padding-top: 0; margin-top: 0; }
+.review-item {
+  padding: 3px 0 3px 6px;
+  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+.review-item .ri-check { flex-shrink: 0; font-size: 12px; }
+.review-item .ri-bullet { flex-shrink: 0; color: var(--accent); font-size: 11px; margin-top: 1px; }
+.review-done { color: var(--green); opacity: 0.7; }
+.review-pending { color: var(--yellow); }
+.review-summary {
+  padding: 6px 0 4px;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.review-summary strong { color: var(--accent); }
+.review-sep {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,107,0,0.2), transparent);
+  margin: 10px 0;
+}
+.review-line {
+  padding: 2px 0;
+  line-height: 1.5;
+}
+
+/* ===== TODO ITEMS ===== */
+.todo-item {
+  padding: 5px 0 5px 10px;
+  border-bottom: 2px solid rgba(255,107,0,0.06);
+  border-left: 2px solid transparent;
+  font-size: 15px;
+  transition: all 0.15s;
+}
+.todo-item:hover {
+  border-left-color: var(--accent);
+  background: rgba(255,107,0,0.02);
+}
 .todo-item:last-child { border-bottom: none; }
-.todo-checkbox { color: var(--yellow); margin-right: 6px; }
-.section-label { color: var(--accent); font-weight: 600; margin: 8px 0 4px; font-size: 11px; }
-.ws-summary { padding: 3px 0; font-size: 11px; }
-.ws-change { color: var(--yellow); font-size: 11px; margin-left: 8px; }
-.ws-stable { color: var(--text-dim); font-size: 11px; margin-left: 8px; }
+.todo-checkbox { color: var(--accent); margin-right: 6px; font-size: 12px; }
+
+/* ===== SECTION LABELS ===== */
+.section-label {
+  color: var(--accent);
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 12px 0 6px;
+  padding-left: 10px;
+  border-left: 3px solid var(--accent);
+}
+
+/* ===== WORKSPACE SUMMARY ===== */
+.ws-summary { padding: 4px 0; font-size: 14px; }
+.ws-change { color: var(--yellow); font-size: 14px; margin-left: 8px; }
+.ws-stable { color: var(--text-muted); font-size: 14px; margin-left: 8px; }
+
+/* ===== TOOLS ===== */
 .tool-section { margin-bottom: 12px; }
-.tool-item { padding: 2px 0; font-size: 11px; }
+.tool-item { padding: 3px 0; font-size: 14px; }
+
+/* ===== PROJECT ROW ===== */
+.project-row {
+  padding: 6px 10px; margin: 2px 0;
+  border-bottom: 2px solid rgba(255,107,0,0.06);
+}
+.project-row:hover { background: rgba(255,107,0,0.02); }
+.project-row:last-child { border-bottom: none; }
+.project-name {
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-weight: 700; color: var(--text); font-size: 15px; letter-spacing: 0.5px;
+}
+.project-detail { font-size: 13px; color: var(--text-dim); margin-top: 2px; }
+
+/* ===== ALERT BOX ===== */
+.alert-box {
+  background: rgba(255,215,64,0.04);
+  border: 2px solid rgba(255,215,64,0.25);
+  padding: 12px; margin-bottom: 12px;
+}
+.alert-box .alert-title {
+  color: var(--yellow); font-weight: 700;
+  font-size: 11px; letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* ===== REFRESH BUTTON ===== */
+.refresh-btn {
+  background: transparent;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  padding: 5px 18px;
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-size: 13px; font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 6px;
+  clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
+}
+.refresh-btn:hover {
+  background: var(--accent); color: #000;
+  box-shadow: 0 0 12px rgba(255,107,0,0.5);
+}
+.refresh-btn:active { transform: scale(0.96); }
+.refresh-btn.loading { opacity: 0.5; pointer-events: none; }
+.refresh-btn .spin { display: inline-block; animation: spin 1s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* ===== PULSE DOT (6. breathing animation) ===== */
+.pulse-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 4px var(--green), 0 0 10px rgba(0,230,118,0.4);
+  animation: pulse-glow 2s ease-in-out infinite;
+  display: inline-block;
+}
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; box-shadow: 0 0 4px var(--green), 0 0 10px rgba(0,230,118,0.4); }
+  50% { opacity: 0.3; box-shadow: 0 0 2px var(--green); }
+}
+
+/* ===== HUD DIVIDER ===== */
+.hud-divider {
+  grid-column: 1 / -1;
+  height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.hud-divider::before {
+  content: '';
+  position: absolute; top: 50%; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%, rgba(255,107,0,0.15) 10%,
+    rgba(255,107,0,0.3) 30%, var(--accent) 48%,
+    transparent 50%,
+    var(--accent) 52%, rgba(255,107,0,0.3) 70%,
+    rgba(255,107,0,0.15) 90%, transparent 100%);
+}
+.hud-divider::after {
+  content: '◆';
+  color: var(--accent); font-size: 6px;
+  background: #000; padding: 0 16px;
+  position: relative; z-index: 1;
+}
+
+/* ===== HUD CIRCUIT BACKGROUND SVG ===== */
+.hud-circuit {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 0; overflow: hidden;
+}
+
+/* ===== FOOTER ===== */
+.footer-circuit {
+  text-align: center; padding: 20px 28px;
+  position: relative; z-index: 1;
+  color: var(--text-muted);
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 2px; text-transform: uppercase;
+}
+.footer-circuit::before {
+  content: '';
+  display: block; margin: 0 auto 14px;
+  width: 50%; height: 1px;
+  background: linear-gradient(90deg,
+    transparent, rgba(255,107,0,0.15) 20%,
+    rgba(255,107,0,0.3) 45%, rgba(255,107,0,0.3) 55%,
+    rgba(255,107,0,0.15) 80%, transparent);
+}
+
 .refresh-hint {
-  text-align: center; padding: 8px; color: var(--text-dim); font-size: 10px;
+  text-align: center; padding: 12px;
+  color: var(--text-muted); font-size: 10px;
+  letter-spacing: 1px;
 }
 .refresh-hint kbd {
-  background: var(--surface2); border: 1px solid var(--border);
-  border-radius: 3px; padding: 2px 6px; font-family: inherit;
+  background: #0a0a0f;
+  border: 2px solid rgba(255,107,0,0.15);
+  padding: 2px 8px; font-family: inherit; color: var(--accent);
 }
-.alert-box {
-  background: rgba(255,215,64,0.08); border: 1px solid var(--yellow);
-  border-radius: 6px; padding: 12px; margin-bottom: 12px;
+
+/* ===== SINGLE LINE OVERFLOW ===== */
+.cron-table td,
+.tool-item,
+.todo-item,
+.ws-summary,
+.symlink-ok,
+.symlink-broken,
+.agent-detail,
+.project-name,
+.project-detail,
+.section-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.alert-box .alert-title { color: var(--yellow); font-weight: 600; margin-bottom: 6px; }
-.project-row { padding: 4px 0; border-bottom: 1px solid #1a1a25; }
-.project-row:last-child { border-bottom: none; }
-.project-name { font-weight: 600; color: var(--text); font-size: 11px; }
-.project-detail { font-size: 10px; color: var(--text-dim); margin-top: 1px; }</style>
+.cron-table { table-layout: fixed; }
+.cron-table td { max-width: 0; }
+
+/* ===== Compact panels ===== */
+.error-log, .log-content {
+  max-height: 200px;
+}
+.card-body { padding: 10px 18px; }
+
+/* ===== Collapsible sections ===== */
+details { margin: 2px 0; }
+details summary {
+  list-style: none;
+  user-select: none;
+}
+details summary::-webkit-details-marker { display: none; }
+details[open] summary { color: var(--accent) !important; }
+details[open] summary::before { content: ''; }
+
+/* ─── Mobile Responsive ─── */
+@media (max-width: 768px) {
+  .grid { grid-template-columns: 1fr !important; }
+  .header h1 { font-size: 1rem; letter-spacing: 2px; }
+  .header .meta { font-size: 0.7rem; flex-wrap: wrap; }
+  .card { padding: 12px; margin: 0; }
+  .card h2 { font-size: 0.85rem; }
+  .card li, .card p, .card td, .card th { font-size: 0.8rem; }
+  body { padding: 8px; }
+  .container { padding: 0 4px; }
+  .nav-bar { flex-wrap: wrap; gap: 6px; }
+  .nav-bar a { font-size: 0.75rem; padding: 4px 8px; }
+  .cron-table { font-size: 0.7rem; }
+  .cron-table th, .cron-table td { padding: 4px 6px; }
+  .refresh-btn { font-size: 0.7rem; padding: 3px 8px; }
+}
+
+@media (max-width: 480px) {
+  .header h1 { font-size: 0.85rem; letter-spacing: 1px; }
+  .card { padding: 8px; }
+  .card h2 { font-size: 0.8rem; }
+}
+</style>
 </head>
 <body>
+<!-- HUD Circuit Background -->
+<svg class="hud-circuit" xmlns="http://www.w3.org/2000/svg">
+  <line x1="0" y1="120" x2="80" y2="120" stroke="#EA5504" stroke-width="0.5" opacity="0.2"/>
+  <line x1="80" y1="120" x2="100" y2="140" stroke="#EA5504" stroke-width="0.5" opacity="0.2"/>
+  <line x1="100" y1="140" x2="100" y2="300" stroke="#EA5504" stroke-width="0.5" opacity="0.2"/>
+  <circle cx="100" cy="300" r="3" fill="#EA5504" opacity="0.3"/>
+  <line x1="95%" y1="200" x2="95%" y2="350" stroke="#EA5504" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="95%" cy="350" r="3" fill="#EA5504" opacity="0.25"/>
+  <circle cx="15%" cy="45%" r="1.5" fill="#EA5504" opacity="0.15"/>
+  <circle cx="85%" cy="55%" r="1.5" fill="#EA5504" opacity="0.15"/>
+  <path d="M 30 400 L 40 410 L 30 420" fill="none" stroke="#EA5504" stroke-width="0.8" opacity="0.15"/>
+</svg>
+
 <div class="header">
-  <h1>🐕 DOGI66 WORK DASHBOARD</h1>
-  <div class="meta">Generated: 2026-02-12 17:50:37</div>
+  <h1>🐕 DOGI66 SYSTEM DASHBOARD</h1>
+  <div class="meta" style="display:flex;align-items:center;gap:12px;">
+    <span>Generated: 2026-03-07 11:28:50</span>
+    <span class="pulse-dot"></span>
+    <button class="refresh-btn" onclick="doRefresh(this)">⟳ 更新</button>
+  </div>
+  <div class="data-stream"></div>
 </div>
+<script>
+function doRefresh(btn){
+  btn.classList.add('loading');
+  btn.innerHTML='<span class="spin">⟳</span> 更新中...';
+  fetch('/refresh').then(()=>{location.reload();}).catch(()=>{
+    btn.classList.remove('loading');btn.innerHTML='⟳ 更新';alert('更新失敗');
+  });
+}
+</script>
+<div class="ticker"><div class="ticker-inner">
+  ▹ DOGI66 WORK v2.0 ▹ TASKS ACTIVE ▹ AGENTS: DOGI + PIYO ▹ SHADOW PERFORMANCE CO. ▹ 
+</div></div>
 <div class="nav">
   <a href="index.html">系統狀態</a>
   <a href="work.html" class="active">工作互動</a>
+  <a href="pit.html">PIT STOP</a>
 </div>
 <div class="container">
-<div class="card card-full"><div class="card-header">⚠️ 需要 STEVEN 確認</div><div class="card-body"><div class="status-waiting">目前沒有待確認項目</div></div></div>
+<div class="card card-full"><div class="card-header">⚠️ 需要 STEVEN 確認</div><div class="card-body"><div class="section-label">🐕 Dogi</div><div class="review-content"><div class="status-waiting">無待確認項目</div></div></div></div>
 <div class="card">
   <div class="card-header">🐕 DOGI 待辦事項</div>
   <div class="card-body">
     <div class="section-label">MEMORY.md</div>
+<div class="todo-item"><span class="todo-checkbox">☐</span>TTQS AI 教育訓練計畫 — 等雅雪回覆</div>
+<div class="todo-item"><span class="todo-checkbox">☐</span>公司單據數位化（開發黃單、設計變更紅單、聯絡單）</div>
 <div class="todo-item"><span class="todo-checkbox">☐</span>App Icon 更換（等素材）</div>
-<div class="todo-item"><span class="todo-checkbox">☐</span>shadowperformace.com 指向 GitHub Pages（需 DNS 設定）</div>
 <div class="todo-item"><span class="todo-checkbox">☐</span>Notion 頁面轉 Database（可選）</div>
+<div class="todo-item"><span class="todo-checkbox">☐</span>資料庫重新整理專案（業務導向）</div>
+<div class="todo-item"><span class="todo-checkbox">☐</span>Drive SOP 重複檔案清理 + 權限設定（等 Steven 確認）</div>
+<div class="todo-item"><span class="todo-checkbox">☐</span>Notion 連結更新（等 Drive 清理完成後）</div>
+<div class="todo-item"><span class="todo-checkbox">☐</span>等雅雪回覆 TTQS+考核資料（Piyo 跟進中）</div>
+<div class="todo-item"><span class="todo-checkbox">☐</span>等雅雪 NAS 廠商到貨（3/10 追蹤）</div>
+<div class="todo-item"><span class="todo-checkbox">☐</span>等伊庭確認會議紀錄 + 回覆 Gem</div>
+<div class="todo-item"><span class="todo-checkbox">☐</span>等雅雪回覆盈餘分配資料</div>
+<div class="todo-item"><span class="todo-checkbox">☐</span>等 Steven 提供明隆正確 email（SWICA Lite 2 重寄）</div>
+<div class="todo-item"><span class="todo-checkbox">☐</span>Kuma 部門 AI 助理 → 分配給育杰</div>
     <div class="section-label">INBOX.md</div>
-<div class="todo-item"><span class="todo-checkbox">☐</span>**安裝 gcalcli**（讓 gog 可以新增 Google Calendar 事件）</div>
 <div class="todo-item"><span class="todo-checkbox">☐</span>申請 LINE Official Account（Dogi66）</div>
 <div class="todo-item"><span class="todo-checkbox">☐</span>申請 Facebook 粉絲專頁  </div>
 <div class="todo-item"><span class="todo-checkbox">☐</span>申請 Instagram 商業帳號</div>
@@ -166,39 +686,11 @@ body {
   <div class="card-header">📥 INBOX 記事本</div>
   <div class="card-body">
     <div class="section-label">📝 記錄</div>
-<div class="todo-item">- **2026-02-07 07:32** - 過年媽媽去台東尋夢</div>
-<div class="todo-item">- **2026-02-08 11:34** - 讓老婆變得更輕鬆，把工作分派出去</div>
+<div class="review-item"><span class="ri-bullet">▸</span><strong style="color:var(--accent);">2026-02-07 07:32</strong> - 過年媽媽去台東尋夢</div>
+<div class="review-item"><span class="ri-bullet">▸</span><strong style="color:var(--accent);">2026-02-08 11:34</strong> - 讓老婆變得更輕鬆，把工作分派出去</div>
     <div class="section-label">💡 想法/靈感</div>
-<div class="todo-item" style="color:var(--text-dim);font-style:italic;">等待輸入...</div>
+<div class="status-waiting">等待輸入...</div>
 </div></div>
 <div class="card">
   <div class="card-header">🐥 PIYO 待辦事項</div>
   <div class="card-body">
-<div class="todo-item"><span class="todo-checkbox">☐</span>完成首次對話自我介紹</div>
-<div class="todo-item"><span class="todo-checkbox">☐</span>了解 Yorda 的工作習慣</div>
-<div class="todo-item"><span class="todo-checkbox">☐</span>設定日常提醒</div>
-</div></div>
-<div class="card">
-  <div class="card-header">🐕 DOGI 近期日誌（3天）</div>
-  <div class="card-body"><div class="project-row"><div class="project-name">2026-02-12</div><div class="project-detail">146 行 · Compaction Buffer 提高 (00:21) · 系統健康檢查 (08:42) · iOS TestFlight (08:54) · 深度自我檢查 (09:15) · 路由修正 (09:44)</div></div><div class="project-row"><div class="project-name">2026-02-11</div><div class="project-detail">215 行 · 系統備份 (00:45) · 多使用者架構討論 (01:20) · Cron 任務驗證 (08:02) · 市場簡報轉發 (08:11) · 市場簡報轉發 Yorda (08:11)</div></div><div class="project-row"><div class="project-name">2026-02-10</div><div class="project-detail">327 行 · Shadow OBD App · OpenClaw 系統 · 工具資源更新 · 決策 · Notion 整合探索 (17:18)</div></div></div>
-</div>
-<div class="card">
-  <div class="card-header">🐥 PIYO 近期日誌（3天）</div>
-  <div class="card-body"><div class="project-row"><div class="project-name">2026-02-12</div><div class="project-detail">26 行 · 對話記錄 · 待辦事項 · 備註</div></div><div class="project-row"><div class="project-name">2026-02-11</div><div class="project-detail">41 行 · 系統建立 · 17:12 - 與 Yorda 首次對話 · 待辦 · 23:01-23:03 - 權限測試（重要）</div></div></div>
-</div>
-<div class="card">
-  <div class="card-header">📦 進行中專案</div>
-  <div class="card-body">
-<div class="project-row"><div class="project-name">shadow-obd-app</div><div class="project-detail">**名稱：** Shadow OBD2</div></div>
-</div></div>
-<div class="card">
-  <div class="card-header">🔧 最近自動修正紀錄</div>
-  <div class="card-body">
-<div class="status-waiting">尚無自動修正紀錄</div>
-  </div>
-</div>
-</div>
-<div class="refresh-hint">
-  執行 <kbd>openclaw-dashboard</kbd> 重新產生最新資料
-</div>
-</body></html>

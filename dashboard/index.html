@@ -2,150 +2,678 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dogi66 — 系統狀態</title>
-<style>:root {
-  --bg: #0a0a0f;
-  --surface: #12121a;
-  --surface2: #1a1a25;
-  --border: #2a2a3a;
-  --accent: #FF6B00;
-  --text: #e0e0e8;
-  --text-dim: #808090;
+<style>
+/* ================================================
+   DOGI66 HUD DASHBOARD — Sci-Fi Tactical Interface
+   ================================================ */
+:root {
+  --bg: #000000;
+  --surface: #060608;
+  --surface2: #0a0a0f;
+  --accent: #EA5504;
+  --accent2: #E8720C;
+  --accent-dim: rgba(255,107,0,0.3);
+  --accent-subtle: rgba(255,107,0,0.12);
+  --accent-glow: rgba(255,107,0,0.08);
+  --text: #e8e8ec;
+  --text-dim: #888898;
+  --text-muted: #555566;
+  --line: rgba(255,107,0,0.2);
+  --line-dim: rgba(255,107,0,0.08);
   --green: #00e676;
   --yellow: #ffd740;
   --red: #ff5252;
   --blue: #448aff;
 }
+
 * { margin:0; padding:0; box-sizing:border-box; }
+
+/* 5. Grid background */
 body {
-  background: var(--bg);
+  background: #000000;
   color: var(--text);
-  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
-  font-size: 12px;
-  line-height: 1.3;
+  font-family: 'Courier New', 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 15px;
+  line-height: 1.4;
+  background-image:
+    linear-gradient(rgba(255,107,0,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,107,0,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
 }
+
+/* Scanline overlay */
+body::after {
+  content: '';
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ===== HEADER ===== */
 .header {
-  background: linear-gradient(135deg, #12121a 0%, #1a1020 100%);
-  border-bottom: 1px solid var(--accent);
-  padding: 10px 24px;
+  background: #060608;
+  border-bottom: 3px solid var(--accent);
+  padding: 16px 28px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  z-index: 1;
 }
-.header h1 { font-size: 16px; color: var(--accent); font-weight: 600; letter-spacing: 2px; }
-.header .meta { color: var(--text-dim); font-size: 11px; }
-.nav {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 0 24px;
+/* 7. Scanning line animation */
+.header::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 120px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  animation: header-scan 4s linear infinite;
+}
+@keyframes header-scan {
+  0% { left: -120px; }
+  100% { left: 100%; }
+}
+/* 3. Title: monospace + uppercase + letter-spacing */
+.header h1 {
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-size: 20px;
+  color: var(--accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-shadow: 0 0 12px rgba(255,107,0,0.3);
+}
+.header .meta {
+  color: var(--text-dim);
+  font-size: 14px;
   display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ===== TICKER ===== */
+.ticker {
+  background: rgba(255,107,0,0.03);
+  border-bottom: 2px solid rgba(255,107,0,0.08);
+  padding: 3px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 13px;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+}
+.ticker-inner {
+  display: inline-block;
+  animation: ticker 35s linear infinite;
+}
+@keyframes ticker {
+  0% { transform: translateX(100vw); }
+  100% { transform: translateX(-100%); }
+}
+
+/* ===== NAV ===== */
+.nav {
+  background: #060608;
+  border-bottom: 2px solid rgba(255,107,0,0.2);
+  padding: 0 28px;
+  display: flex;
+  position: relative;
+  z-index: 1;
 }
 .nav a {
-  color: var(--text-dim);
+  color: var(--text-muted);
   text-decoration: none;
-  padding: 8px 16px;
+  padding: 10px 20px;
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
   border-bottom: 2px solid transparent;
   transition: all 0.2s;
-  font-size: 12px;
 }
 .nav a:hover { color: var(--text); }
-.nav a.active { color: var(--accent); border-bottom-color: var(--accent); }
+.nav a.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  text-shadow: 0 0 8px rgba(255,107,0,0.4);
+}
+
+/* ===== CONTAINER ===== */
 .container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 12px 24px;
+  padding: 18px 28px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 16px;
+  position: relative;
+  z-index: 1;
 }
+
+/* ===== HUD CARD =====
+   1. Cut corners via clip-path
+   2. L-bracket corner decorations
+   4. Orange glow box-shadow
+*/
 .card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  overflow: hidden;
+  background: #060608;
+  position: relative;
+  /* 1. Cut corners */
+  clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px);
+  /* 4. Glow — applied via wrapper since clip-path clips box-shadow */
+  padding: 1px;
+}
+/* Glow wrapper — we use an outer border simulation */
+.card-inner {
+  background: #060608;
+  clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px);
+}
+
+/* Since clip-path clips ::before/::after, we add corner brackets inside card-header and card-body */
+.card-header {
+  background: linear-gradient(90deg, rgba(255,107,0,0.08), transparent 60%);
+  padding: 10px 18px;
+  border-bottom: 2px solid rgba(255,107,0,0.15);
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  position: relative;
+}
+/* Tick mark beside header title */
+.card-header::before {
+  content: '▍';
+  margin-right: 8px;
+  font-size: 14px;
+  color: var(--accent);
+}
+/* Dot array decoration */
+.card-header::after {
+  content: '· · · ·';
+  position: absolute;
+  right: 18px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: rgba(255,107,0,0.25);
+  letter-spacing: 3px;
+}
+
+.card-body {
+  padding: 14px 18px;
+  position: relative;
+}
+
+/* 2. L-bracket corners inside card-body */
+.card-body::before {
+  content: '';
+  position: absolute;
+  top: 6px; left: 6px;
+  width: 14px; height: 14px;
+  border-top: 3px solid var(--accent);
+  border-left: 3px solid var(--accent);
+  pointer-events: none;
+}
+.card-body::after {
+  content: '';
+  position: absolute;
+  bottom: 6px; right: 6px;
+  width: 14px; height: 14px;
+  border-bottom: 3px solid var(--accent);
+  border-right: 3px solid var(--accent);
+  pointer-events: none;
+}
+
+.card-full { grid-column: 1 / -1; }
+
+/* ===== BORDER GLOW (since clip-path clips box-shadow) ===== */
+/* We add a background gradient to simulate glow */
+.card {
+  background: linear-gradient(135deg, rgba(255,107,0,0.15), rgba(255,107,0,0.05) 30%, rgba(255,107,0,0.05) 70%, rgba(255,107,0,0.15));
+}
+.card > .card-header,
+.card > .card-body {
+  background: #060608;
 }
 .card-header {
-  background: var(--surface2);
-  padding: 6px 12px;
-  border-bottom: 1px solid var(--border);
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--accent);
-  letter-spacing: 1px;
+  background: linear-gradient(90deg, rgba(255,107,0,0.08), #060608 60%);
 }
-.card-body { padding: 10px 12px; }
-.card-full { grid-column: 1 / -1; }
-.status-ok { color: var(--green); }
-.status-warn { color: var(--yellow); }
-.status-error { color: var(--red); }
-.status-waiting { color: var(--text-dim); font-style: italic; }
+
+/* ===== STATUS COLORS ===== */
+.status-ok { color: var(--green); text-shadow: 0 0 6px rgba(0,230,118,0.3); }
+.status-warn { color: var(--yellow); text-shadow: 0 0 6px rgba(255,215,64,0.3); }
+.status-error { color: var(--red); text-shadow: 0 0 6px rgba(255,82,82,0.3); }
+.status-waiting { color: var(--text-muted); font-style: italic; }
+
+/* ===== CRON TABLE ===== */
 .cron-table { width: 100%; border-collapse: collapse; }
 .cron-table th {
-  text-align: left; padding: 4px 8px; color: var(--text-dim);
-  font-weight: 500; font-size: 10px; text-transform: uppercase;
-  letter-spacing: 1px; border-bottom: 1px solid var(--border);
+  text-align: left; padding: 6px 8px;
+  color: var(--accent);
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-bottom: 2px solid var(--accent-dim);
 }
-.cron-table td { padding: 4px 8px; border-bottom: 1px solid #1a1a25; font-size: 11px; }
-.cron-table tr:hover { background: var(--surface2); }
+.cron-table td {
+  padding: 5px 8px;
+  border-bottom: 2px solid rgba(255,107,0,0.06);
+  font-size: 15px;
+}
+.cron-table tr:hover { background: rgba(255,107,0,0.03); }
+
+/* ===== BADGES ===== */
 .badge {
-  display: inline-block; padding: 2px 8px; border-radius: 4px;
-  font-size: 11px; font-weight: 600;
+  display: inline-block;
+  padding: 2px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border: 2px solid;
+  clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
 }
-.badge-on { background: rgba(0,230,118,0.15); color: var(--green); }
-.badge-off { background: rgba(255,82,82,0.15); color: var(--red); }
-.badge-ok { background: rgba(0,230,118,0.1); color: var(--green); }
-.badge-idle { background: rgba(68,138,255,0.1); color: var(--blue); }
-.badge-error { background: rgba(255,82,82,0.15); color: var(--red); }
+.badge-on { background: rgba(0,230,118,0.1); color: var(--green); border-color: rgba(0,230,118,0.3); }
+.badge-off { background: rgba(255,82,82,0.1); color: var(--red); border-color: rgba(255,82,82,0.3); }
+.badge-ok { background: rgba(0,230,118,0.08); color: var(--green); border-color: rgba(0,230,118,0.2); }
+.badge-idle { background: rgba(68,138,255,0.08); color: var(--blue); border-color: rgba(68,138,255,0.2); }
+.badge-error { background: rgba(255,82,82,0.1); color: var(--red); border-color: rgba(255,82,82,0.3); }
+
+/* 6. Status pulse animation for OK badges */
+.badge-on, .badge-ok {
+  animation: status-pulse 2.5s ease-in-out infinite;
+}
+@keyframes status-pulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(0,230,118,0.3); }
+  50% { box-shadow: 0 0 10px rgba(0,230,118,0.6); }
+}
+
+/* ===== AGENT ROW ===== */
 .agent-row {
-  display: flex; align-items: center; gap: 8px;
-  padding: 6px 0; border-bottom: 1px solid #1a1a25;
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px; margin: 4px 0;
+  border: 2px solid rgba(255,107,0,0.12);
+  background: rgba(255,107,0,0.02);
+  position: relative;
+  box-shadow: 0 0 8px rgba(255,107,0,0.06), inset 0 0 8px rgba(255,107,0,0.03);
 }
-.agent-row:last-child { border-bottom: none; }
-.agent-emoji { font-size: 18px; }
+/* Corner brackets on agent rows */
+.agent-row::before {
+  content: '';
+  position: absolute; top: 3px; left: 3px;
+  width: 10px; height: 10px;
+  border-top: 3px solid var(--accent);
+  border-left: 3px solid var(--accent);
+}
+.agent-row::after {
+  content: '';
+  position: absolute; bottom: 3px; right: 3px;
+  width: 10px; height: 10px;
+  border-bottom: 3px solid var(--accent);
+  border-right: 3px solid var(--accent);
+}
+.agent-emoji { font-size: 22px; }
 .agent-info { flex: 1; }
-.agent-name { font-weight: 600; }
-.agent-detail { font-size: 11px; color: var(--text-dim); }
-.symlink-ok { color: var(--green); padding: 4px 0; }
-.symlink-broken { color: var(--red); padding: 4px 0; }
-.review-content, .error-log, .log-content {
-  background: #0d0d12; border: 1px solid #1a1a25; border-radius: 4px;
-  padding: 8px; font-size: 11px; color: var(--text-dim);
-  max-height: 180px; overflow-y: auto; white-space: pre-wrap; word-break: break-all;
+.agent-name {
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-weight: 700; font-size: 17px; letter-spacing: 1px;
 }
-.todo-item { padding: 3px 0; border-bottom: 1px solid #1a1a25; font-size: 11px; }
+.agent-detail { font-size: 14px; color: var(--text-dim); margin-top: 2px; }
+
+/* ===== SYMLINKS ===== */
+.symlink-ok { color: var(--green); padding: 4px 0; font-size: 14px; }
+.symlink-broken { color: var(--red); padding: 4px 0; }
+
+/* ===== LOG / REVIEW PANELS ===== */
+.review-content, .error-log, .log-content {
+  background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,107,0,0.15);
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--text-dim);
+  max-height: 400px;
+  overflow-y: auto;
+  white-space: normal;
+  word-break: break-word;
+  position: relative;
+  box-shadow: inset 0 0 12px rgba(255,107,0,0.04);
+}
+.error-log { white-space: pre-wrap; word-break: break-all; }
+/* Corner bracket in log panels */
+.review-content::before, .error-log::before {
+  content: '';
+  position: absolute; top: 3px; left: 3px;
+  width: 8px; height: 8px;
+  border-top: 2px solid var(--accent);
+  border-left: 1px solid var(--accent);
+}
+
+/* ===== REVIEW STRUCTURED ITEMS ===== */
+.review-heading {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 10px 0 4px;
+  margin-top: 6px;
+  border-bottom: 1px solid rgba(255,107,0,0.12);
+}
+.review-heading:first-child { padding-top: 0; margin-top: 0; }
+.review-item {
+  padding: 3px 0 3px 6px;
+  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+.review-item .ri-check { flex-shrink: 0; font-size: 12px; }
+.review-item .ri-bullet { flex-shrink: 0; color: var(--accent); font-size: 11px; margin-top: 1px; }
+.review-done { color: var(--green); opacity: 0.7; }
+.review-pending { color: var(--yellow); }
+.review-summary {
+  padding: 6px 0 4px;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.review-summary strong { color: var(--accent); }
+.review-sep {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,107,0,0.2), transparent);
+  margin: 10px 0;
+}
+.review-line {
+  padding: 2px 0;
+  line-height: 1.5;
+}
+
+/* ===== TODO ITEMS ===== */
+.todo-item {
+  padding: 5px 0 5px 10px;
+  border-bottom: 2px solid rgba(255,107,0,0.06);
+  border-left: 2px solid transparent;
+  font-size: 15px;
+  transition: all 0.15s;
+}
+.todo-item:hover {
+  border-left-color: var(--accent);
+  background: rgba(255,107,0,0.02);
+}
 .todo-item:last-child { border-bottom: none; }
-.todo-checkbox { color: var(--yellow); margin-right: 6px; }
-.section-label { color: var(--accent); font-weight: 600; margin: 8px 0 4px; font-size: 11px; }
-.ws-summary { padding: 3px 0; font-size: 11px; }
-.ws-change { color: var(--yellow); font-size: 11px; margin-left: 8px; }
-.ws-stable { color: var(--text-dim); font-size: 11px; margin-left: 8px; }
+.todo-checkbox { color: var(--accent); margin-right: 6px; font-size: 12px; }
+
+/* ===== SECTION LABELS ===== */
+.section-label {
+  color: var(--accent);
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 12px 0 6px;
+  padding-left: 10px;
+  border-left: 3px solid var(--accent);
+}
+
+/* ===== WORKSPACE SUMMARY ===== */
+.ws-summary { padding: 4px 0; font-size: 14px; }
+.ws-change { color: var(--yellow); font-size: 14px; margin-left: 8px; }
+.ws-stable { color: var(--text-muted); font-size: 14px; margin-left: 8px; }
+
+/* ===== TOOLS ===== */
 .tool-section { margin-bottom: 12px; }
-.tool-item { padding: 2px 0; font-size: 11px; }
+.tool-item { padding: 3px 0; font-size: 14px; }
+
+/* ===== PROJECT ROW ===== */
+.project-row {
+  padding: 6px 10px; margin: 2px 0;
+  border-bottom: 2px solid rgba(255,107,0,0.06);
+}
+.project-row:hover { background: rgba(255,107,0,0.02); }
+.project-row:last-child { border-bottom: none; }
+.project-name {
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-weight: 700; color: var(--text); font-size: 15px; letter-spacing: 0.5px;
+}
+.project-detail { font-size: 13px; color: var(--text-dim); margin-top: 2px; }
+
+/* ===== ALERT BOX ===== */
+.alert-box {
+  background: rgba(255,215,64,0.04);
+  border: 2px solid rgba(255,215,64,0.25);
+  padding: 12px; margin-bottom: 12px;
+}
+.alert-box .alert-title {
+  color: var(--yellow); font-weight: 700;
+  font-size: 11px; letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* ===== REFRESH BUTTON ===== */
+.refresh-btn {
+  background: transparent;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  padding: 5px 18px;
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-size: 13px; font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 6px;
+  clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
+}
+.refresh-btn:hover {
+  background: var(--accent); color: #000;
+  box-shadow: 0 0 12px rgba(255,107,0,0.5);
+}
+.refresh-btn:active { transform: scale(0.96); }
+.refresh-btn.loading { opacity: 0.5; pointer-events: none; }
+.refresh-btn .spin { display: inline-block; animation: spin 1s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* ===== PULSE DOT (6. breathing animation) ===== */
+.pulse-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 4px var(--green), 0 0 10px rgba(0,230,118,0.4);
+  animation: pulse-glow 2s ease-in-out infinite;
+  display: inline-block;
+}
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; box-shadow: 0 0 4px var(--green), 0 0 10px rgba(0,230,118,0.4); }
+  50% { opacity: 0.3; box-shadow: 0 0 2px var(--green); }
+}
+
+/* ===== HUD DIVIDER ===== */
+.hud-divider {
+  grid-column: 1 / -1;
+  height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.hud-divider::before {
+  content: '';
+  position: absolute; top: 50%; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%, rgba(255,107,0,0.15) 10%,
+    rgba(255,107,0,0.3) 30%, var(--accent) 48%,
+    transparent 50%,
+    var(--accent) 52%, rgba(255,107,0,0.3) 70%,
+    rgba(255,107,0,0.15) 90%, transparent 100%);
+}
+.hud-divider::after {
+  content: '◆';
+  color: var(--accent); font-size: 6px;
+  background: #000; padding: 0 16px;
+  position: relative; z-index: 1;
+}
+
+/* ===== HUD CIRCUIT BACKGROUND SVG ===== */
+.hud-circuit {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 0; overflow: hidden;
+}
+
+/* ===== FOOTER ===== */
+.footer-circuit {
+  text-align: center; padding: 20px 28px;
+  position: relative; z-index: 1;
+  color: var(--text-muted);
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 2px; text-transform: uppercase;
+}
+.footer-circuit::before {
+  content: '';
+  display: block; margin: 0 auto 14px;
+  width: 50%; height: 1px;
+  background: linear-gradient(90deg,
+    transparent, rgba(255,107,0,0.15) 20%,
+    rgba(255,107,0,0.3) 45%, rgba(255,107,0,0.3) 55%,
+    rgba(255,107,0,0.15) 80%, transparent);
+}
+
 .refresh-hint {
-  text-align: center; padding: 8px; color: var(--text-dim); font-size: 10px;
+  text-align: center; padding: 12px;
+  color: var(--text-muted); font-size: 10px;
+  letter-spacing: 1px;
 }
 .refresh-hint kbd {
-  background: var(--surface2); border: 1px solid var(--border);
-  border-radius: 3px; padding: 2px 6px; font-family: inherit;
+  background: #0a0a0f;
+  border: 2px solid rgba(255,107,0,0.15);
+  padding: 2px 8px; font-family: inherit; color: var(--accent);
 }
-.alert-box {
-  background: rgba(255,215,64,0.08); border: 1px solid var(--yellow);
-  border-radius: 6px; padding: 12px; margin-bottom: 12px;
+
+/* ===== SINGLE LINE OVERFLOW ===== */
+.cron-table td,
+.tool-item,
+.todo-item,
+.ws-summary,
+.symlink-ok,
+.symlink-broken,
+.agent-detail,
+.project-name,
+.project-detail,
+.section-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.alert-box .alert-title { color: var(--yellow); font-weight: 600; margin-bottom: 6px; }
-.project-row { padding: 4px 0; border-bottom: 1px solid #1a1a25; }
-.project-row:last-child { border-bottom: none; }
-.project-name { font-weight: 600; color: var(--text); font-size: 11px; }
-.project-detail { font-size: 10px; color: var(--text-dim); margin-top: 1px; }</style>
+.cron-table { table-layout: fixed; }
+.cron-table td { max-width: 0; }
+
+/* ===== Compact panels ===== */
+.error-log, .log-content {
+  max-height: 200px;
+}
+.card-body { padding: 10px 18px; }
+
+/* ===== Collapsible sections ===== */
+details { margin: 2px 0; }
+details summary {
+  list-style: none;
+  user-select: none;
+}
+details summary::-webkit-details-marker { display: none; }
+details[open] summary { color: var(--accent) !important; }
+details[open] summary::before { content: ''; }
+
+/* ─── Mobile Responsive ─── */
+@media (max-width: 768px) {
+  .grid { grid-template-columns: 1fr !important; }
+  .header h1 { font-size: 1rem; letter-spacing: 2px; }
+  .header .meta { font-size: 0.7rem; flex-wrap: wrap; }
+  .card { padding: 12px; margin: 0; }
+  .card h2 { font-size: 0.85rem; }
+  .card li, .card p, .card td, .card th { font-size: 0.8rem; }
+  body { padding: 8px; }
+  .container { padding: 0 4px; }
+  .nav-bar { flex-wrap: wrap; gap: 6px; }
+  .nav-bar a { font-size: 0.75rem; padding: 4px 8px; }
+  .cron-table { font-size: 0.7rem; }
+  .cron-table th, .cron-table td { padding: 4px 6px; }
+  .refresh-btn { font-size: 0.7rem; padding: 3px 8px; }
+}
+
+@media (max-width: 480px) {
+  .header h1 { font-size: 0.85rem; letter-spacing: 1px; }
+  .card { padding: 8px; }
+  .card h2 { font-size: 0.8rem; }
+}
+</style>
 </head>
 <body>
+<!-- HUD Circuit Background -->
+<svg class="hud-circuit" xmlns="http://www.w3.org/2000/svg">
+  <!-- Left circuit traces -->
+  <line x1="0" y1="120" x2="80" y2="120" stroke="#EA5504" stroke-width="0.5" opacity="0.2"/>
+  <line x1="80" y1="120" x2="100" y2="140" stroke="#EA5504" stroke-width="0.5" opacity="0.2"/>
+  <line x1="100" y1="140" x2="100" y2="300" stroke="#EA5504" stroke-width="0.5" opacity="0.2"/>
+  <circle cx="100" cy="300" r="3" fill="#EA5504" opacity="0.3"/>
+  <line x1="100" y1="300" x2="60" y2="340" stroke="#EA5504" stroke-width="0.5" opacity="0.15"/>
+  <line x1="60" y1="340" x2="60" y2="600" stroke="#EA5504" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="60" cy="600" r="2" fill="#EA5504" opacity="0.2"/>
+  <line x1="60" y1="600" x2="0" y2="660" stroke="#EA5504" stroke-width="0.5" opacity="0.1"/>
+  <!-- Right circuit traces -->
+  <line x1="100%" y1="180" x2="calc(100% - 80px)" y2="180" stroke="#EA5504" stroke-width="0.5" opacity="0.2" style="transform:translateX(-80px)"/>
+  <line x1="95%" y1="200" x2="95%" y2="350" stroke="#EA5504" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="95%" cy="350" r="3" fill="#EA5504" opacity="0.25"/>
+  <line x1="95%" y1="350" x2="97%" y2="500" stroke="#EA5504" stroke-width="0.5" opacity="0.12"/>
+  <!-- Center top connector -->
+  <line x1="48%" y1="60" x2="50%" y2="80" stroke="#EA5504" stroke-width="0.5" opacity="0.15"/>
+  <line x1="50%" y1="80" x2="52%" y2="60" stroke="#EA5504" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="50%" cy="80" r="2" fill="#EA5504" opacity="0.2"/>
+  <!-- Scattered nodes -->
+  <circle cx="15%" cy="45%" r="1.5" fill="#EA5504" opacity="0.15"/>
+  <circle cx="85%" cy="55%" r="1.5" fill="#EA5504" opacity="0.15"/>
+  <circle cx="10%" cy="75%" r="2" fill="#EA5504" opacity="0.1"/>
+  <circle cx="90%" cy="30%" r="2" fill="#EA5504" opacity="0.1"/>
+  <!-- Chevron decorations -->
+  <path d="M 30 400 L 40 410 L 30 420" fill="none" stroke="#EA5504" stroke-width="0.8" opacity="0.15"/>
+  <path d="M 38 400 L 48 410 L 38 420" fill="none" stroke="#EA5504" stroke-width="0.8" opacity="0.1"/>
+</svg>
+
 <div class="header">
   <h1>🐕 DOGI66 SYSTEM DASHBOARD</h1>
-  <div class="meta">Generated: 2026-02-12 17:50:37</div>
+  <div class="meta" style="display:flex;align-items:center;gap:12px;">
+    <span>Generated: 2026-03-07 11:28:50</span>
+    <span class="pulse-dot"></span>
+    <button class="refresh-btn" onclick="doRefresh(this)">⟳ 更新</button>
+  </div>
+  <div class="data-stream"></div>
 </div>
+<script>
+function doRefresh(btn){
+  btn.classList.add('loading');
+  btn.innerHTML='<span class="spin">⟳</span> 更新中...';
+  fetch('/refresh').then(()=>{location.reload();}).catch(()=>{
+    btn.classList.remove('loading');btn.innerHTML='⟳ 更新';alert('更新失敗');
+  });
+}
+</script>
+<div class="ticker"><div class="ticker-inner">
+  ▹ DOGI66 SYSTEM v2.0 ▹ OPENCLAW 2026.2.9 ▹ TAILSCALE: CONNECTED ▹ AGENTS: 2 ONLINE ▹ CRON: ACTIVE ▹ SHADOW PERFORMANCE CO. ▹ 
+</div></div>
 <div class="nav">
   <a href="index.html" class="active">系統狀態</a>
   <a href="work.html">工作互動</a>
+  <a href="pit.html">PIT STOP</a>
 </div>
 <div class="container">
 <div class="card card-full">
@@ -153,105 +681,167 @@ body {
   <div class="card-body">
     <table class="cron-table">
       <tr><th>名稱</th><th>Agent</th><th>排程</th><th>狀態</th><th>上次執行</th><th>下次執行</th><th>錯誤</th></tr>
-<tr><td>Shadow 每日市場簡報</td><td>dogi</td><td>0 8 * * *</td><td><span class="badge badge-on">啟用</span> <span class="badge badge-ok">ok</span></td><td>02/12 08:00</td><td>02/13 08:00</td><td class="status-ok">0</td></tr>
-<tr><td>每日記憶整理</td><td>dogi</td><td>0 23 * * *</td><td><span class="badge badge-off">停用</span> <span class="badge badge-ok">ok</span></td><td>02/11 23:00</td><td>—</td><td class="status-ok">0</td></tr>
-<tr><td>每週帳號狀態報告</td><td>dogi</td><td>0 8 * * 1</td><td><span class="badge badge-on">啟用</span> <span class="badge badge-idle">idle</span></td><td>—</td><td>02/16 08:00</td><td class="status-ok">0</td></tr>
-<tr><td>每日世界新聞簡報</td><td>dogi</td><td>30 8 * * *</td><td><span class="badge badge-on">啟用</span> <span class="badge badge-ok">ok</span></td><td>02/12 08:30</td><td>02/13 08:30</td><td class="status-ok">0</td></tr>
-<tr><td>email-check-rd6</td><td>dogi</td><td>every</td><td><span class="badge badge-on">啟用</span> <span class="badge badge-ok">ok</span></td><td>02/12 17:36</td><td>02/12 17:56</td><td class="status-ok">0</td></tr>
-<tr><td>決策衝突檢查報告</td><td>dogi</td><td>0 8 * * *</td><td><span class="badge badge-off">停用</span> <span class="badge badge-ok">ok</span></td><td>02/12 08:03</td><td>—</td><td class="status-ok">0</td></tr>
-<tr><td>每日自動備份</td><td>dogi</td><td>0 2 * * *</td><td><span class="badge badge-on">啟用</span> <span class="badge badge-idle">idle</span></td><td>—</td><td>02/13 02:00</td><td class="status-ok">0</td></tr>
-<tr><td>Dogi 每日自我檢查</td><td>dogi</td><td>0 23 * * *</td><td><span class="badge badge-on">啟用</span> <span class="badge badge-idle">idle</span></td><td>—</td><td>02/12 23:00</td><td class="status-ok">0</td></tr>
-<tr><td>Piyo 每日自我檢查</td><td>piyo</td><td>0 23 * * *</td><td><span class="badge badge-on">啟用</span> <span class="badge badge-idle">idle</span></td><td>—</td><td>02/12 23:00</td><td class="status-ok">0</td></tr>
-<tr><td>每日晨報</td><td>dogi</td><td>0 8 * * *</td><td><span class="badge badge-on">啟用</span> <span class="badge badge-idle">idle</span></td><td>—</td><td>02/13 08:00</td><td class="status-ok">0</td></tr>
+<tr><td>Shadow 每日市場簡報</td><td>dogi</td><td>10 7 * * *</td><td><span class="badge badge-on">啟用</span> <span class="badge badge-ok">ok</span></td><td>03/07 07:10</td><td>03/08 07:10</td><td class="status-ok">0</td></tr>
+<tr><td>每週帳號狀態報告</td><td>dogi</td><td>0 7 * * 1</td><td><span class="badge badge-on">啟用</span> <span class="badge badge-error">error</span></td><td>03/02 08:00</td><td>03/09 07:00</td><td class="status-error">1</td></tr>
+<tr><td>每日世界新聞簡報</td><td>dogi</td><td>30 7 * * *</td><td><span class="badge badge-on">啟用</span> <span class="badge badge-ok">ok</span></td><td>03/07 07:30</td><td>03/08 07:30</td><td class="status-ok">0</td></tr>
+<tr><td>公司信箱檢查</td><td>dogi</td><td>0 8,10,12,14,16,18 * * 1-5</td><td><span class="badge badge-on">啟用</span> <span class="badge badge-ok">ok</span></td><td>03/06 18:00</td><td>03/09 08:00</td><td class="status-ok">0</td></tr>
+<tr><td>每日自動備份</td><td>dogi</td><td>0 1 * * *</td><td><span class="badge badge-on">啟用</span> <span class="badge badge-ok">ok</span></td><td>03/07 01:00</td><td>03/08 01:00</td><td class="status-ok">0</td></tr>
+<tr><td>Dogi 每日自我檢查</td><td>dogi</td><td>0 2 * * *</td><td><span class="badge badge-on">啟用</span> <span class="badge badge-ok">ok</span></td><td>03/07 02:00</td><td>03/08 02:00</td><td class="status-ok">0</td></tr>
+<tr><td>每日晨報</td><td>dogi</td><td>0 7 * * *</td><td><span class="badge badge-on">啟用</span> <span class="badge badge-ok">ok</span></td><td>03/07 07:00</td><td>03/08 07:00</td><td class="status-ok">0</td></tr>
+<tr><td>檢查 TTQS/人事考核進度</td><td>dogi</td><td>0 8,12,16,20 * * *</td><td><span class="badge badge-on">啟用</span> <span class="badge badge-ok">ok</span></td><td>03/07 08:00</td><td>03/07 12:00</td><td class="status-ok">0</td></tr>
+<tr><td>Dogi 每日智能反省</td><td>dogi</td><td>30 2 * * *</td><td><span class="badge badge-on">啟用</span> <span class="badge badge-ok">ok</span></td><td>03/07 02:30</td><td>03/08 02:30</td><td class="status-ok">0</td></tr>
+<tr><td>產品資料異動偵測</td><td>dogi</td><td>20 7 * * *</td><td><span class="badge badge-on">啟用</span> <span class="badge badge-ok">ok</span></td><td>03/07 07:20</td><td>03/08 07:20</td><td class="status-ok">0</td></tr>
+<tr><td>每週知識自測</td><td>dogi</td><td>40 7 * * 1</td><td><span class="badge badge-on">啟用</span> <span class="badge badge-error">error</span></td><td>03/02 09:00</td><td>03/09 07:40</td><td class="status-error">1</td></tr>
+<tr><td>每月社群內容補充</td><td>dogi</td><td>0 9 1 * *</td><td><span class="badge badge-on">啟用</span> <span class="badge badge-error">error</span></td><td>03/01 10:00</td><td>04/01 10:00</td><td class="status-error">1</td></tr>
+<tr><td>SWICA Lite 2 上架追蹤</td><td>dogi</td><td>at</td><td><span class="badge badge-off">停用</span> <span class="badge badge-error">error</span></td><td>02/26 09:00</td><td>—</td><td class="status-error">1</td></tr>
+<tr><td>追蹤 NAS 採購進度</td><td>dogi</td><td>at</td><td><span class="badge badge-on">啟用</span> <span class="badge badge-idle">idle</span></td><td>—</td><td>03/10 09:00</td><td class="status-ok">0</td></tr>
 </table></div></div>
 <div class="card">
   <div class="card-header">💾 備份狀態</div>
-  <div class="card-body"><div class="status-waiting">尚未建立 — 等待首次執行（每日 02:00）</div></div>
+  <div class="card-body"><div class="status-warn">⚠️ 2026-03-07 — 缺少: workspace-piyo/SOUL.md workspace-piyo/MEMORY.md</div></div>
 </div>
 <div class="card">
   <div class="card-header">🤖 AGENTS</div>
   <div class="card-body">
-<div class="agent-row"><div class="agent-emoji">🐥</div><div class="agent-info"><div class="agent-name">Piyo鴨鴨 <span style="color:#808090;font-weight:400;">(piyo)</span></div><div class="agent-detail">anthropic/claude-sonnet-4-5 · workspace-piyo · Telegram: 8361055040</div></div></div>
 <div class="agent-row"><div class="agent-emoji">🐕</div><div class="agent-info"><div class="agent-name">Dogi66 <span style="color:#808090;font-weight:400;">(dogi)</span></div><div class="agent-detail">anthropic/claude-opus-4-6 · workspace-dogi · Telegram: 8504756175</div></div></div>
 </div></div>
 <div class="card">
+  <div class="card-header">💰 TOKEN 等價用量（USD）</div>
+  <div class="card-body">
+<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
+<div style="font-size:24px;font-weight:700;color:var(--accent);">$-183687.73</div>
+<div style="font-size:12px;color:var(--text-dim);">今日 $12.22</div>
+</div>
+<div style="font-size:10px;color:var(--text-muted);margin-bottom:12px;">等價用量（Max plan US$200/月，含 API）</div>
+<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border-dim);font-size:10px;color:var(--text-muted);">
+累計 output tokens: 1,507,131 · cache read: 430,536,367
+</div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">📊 CLAUDE USAGE</div>
+  <div class="card-body">
+<div>
+<div style="font-size:10px;color:var(--text-muted);margin-bottom:10px;">Plan usage limits (OpenClaw tracked)</div>
+<div style="margin-bottom:12px;">
+<div style="font-size:12px;color:var(--text);font-weight:600;">Current session</div>
+<div style="font-size:10px;color:var(--text-muted);margin-bottom:4px;">Resets ~5h window</div>
+<div style="display:flex;align-items:center;gap:10px;">
+<div style="flex:1;background:rgba(255,255,255,0.08);height:8px;border-radius:4px;overflow:hidden;">
+<div style="background:#448aff;height:100%;width:8.4167%;border-radius:4px;"></div>
+</div>
+<span style="font-size:11px;color:var(--text-dim);min-width:60px;text-align:right;">8% used</span>
+</div>
+</div>
+<div style="border-top:1px solid rgba(255,107,0,0.15);margin-bottom:12px;"></div>
+<div style="font-size:12px;color:var(--text);font-weight:600;margin-bottom:8px;">Weekly limits</div>
+<div style="margin-bottom:10px;">
+<div style="font-size:11px;color:var(--text);">All models</div>
+<div style="font-size:10px;color:var(--text-muted);margin-bottom:4px;">Resets in 6d 11h</div>
+<div style="display:flex;align-items:center;gap:10px;">
+<div style="flex:1;background:rgba(255,255,255,0.08);height:8px;border-radius:4px;overflow:hidden;">
+<div style="background:#448aff;height:100%;width:1%;border-radius:4px;"></div>
+</div>
+<span style="font-size:11px;color:var(--text-dim);min-width:60px;text-align:right;">1% used</span>
+</div>
+</div>
+<div style="margin-bottom:8px;">
+<div style="font-size:11px;color:var(--text);">Sonnet only</div>
+<div style="font-size:10px;color:var(--text-muted);margin-bottom:4px;">Resets in 3d 2h</div>
+<div style="display:flex;align-items:center;gap:10px;">
+<div style="flex:1;background:rgba(255,255,255,0.08);height:8px;border-radius:4px;overflow:hidden;">
+<div style="background:#448aff;height:100%;width:1%;border-radius:4px;"></div>
+</div>
+<span style="font-size:11px;color:var(--text-dim);min-width:60px;text-align:right;">0% used</span>
+</div>
+</div>
+<div style="margin-top:8px;padding-top:6px;border-top:1px solid rgba(255,107,0,0.1);font-size:10px;color:var(--text-muted);">
+🐕 23K · 🐥 0 · ⚙️ 0 (output only)
+</div>
+</div>
+  </div>
+</div>
+<div class="hud-divider"></div>
+<div class="card">
   <div class="card-header">🐕 DOGI 自我檢查</div>
   <div class="card-body">
-    <div class="status-waiting" style="margin-bottom:8px;">尚未建立 — 等待首次執行（每日 23:00）</div>
-    <div class="review-content">尚未建立 — 等待首次執行（每日 23:00）</div>
+    <div class="status-ok" style="margin-bottom:8px;">📋 2026-03-07</div>
+    <div class="review-content"><div class="review-heading">每日檢查報告 2026-03-07</div><div class="review-heading">Checklist</div><div class="review-heading">A. 身份一致性</div><div class="review-item"><span class="ri-bullet">▸</span>✅ SOUL.md：Dogi = Steven 的數位夥伴，正確</div><div class="review-item"><span class="ri-bullet">▸</span>✅ SOUL.md 無矛盾（無 PERSONA.md）</div><div class="review-item"><span class="ri-bullet">▸</span>✅ AGENTS.md 無指向其他 workspace 的路徑</div><div class="review-item"><span class="ri-bullet">▸</span>✅ BOOTSTRAP.md 無指向其他 workspace 的路徑</div><div class="review-heading">B. 記憶完整性</div><div class="review-item"><span class="ri-bullet">▸</span>✅ MEMORY.md 存在且內容完整</div><div class="review-item"><span class="ri-bullet">▸</span>✅ 今天無 daily log（凌晨 2:00 cron，無活動，正常）</div><div class="review-item"><span class="ri-bullet">▸</span>✅ MEMORY.md 無明顯過時資訊</div><div class="review-heading">C. 權限隔離</div><div class="review-item"><span class="ri-bullet">▸</span>✅ grep workspace-piyo 無異常結果</div><div class="review-item"><span class="ri-bullet">▸</span>✅ shared → /Users/dogi/OpenClaw/shared（正確）</div><div class="review-item"><span class="ri-bullet">▸</span>✅ system → ../workspace/system（正確）</div><div class="review-item"><span class="ri-bullet">▸</span>✅ 無不該存在的檔案</div><div class="review-heading">D. 系統健康</div><div class="review-item"><span class="ri-bullet">▸</span>✅ 昨天備份存在（2026-03-06）</div><div class="review-item"><span class="ri-bullet">▸</span>✅ 昨天 review 報告存在</div><div class="review-item"><span class="ri-bullet">▸</span>✅ 根目錄結構正常</div><div class="review-summary"><strong>✅ Checklist 全部通過</strong></div><div class="review-heading">反省建議處理</div><div class="review-summary">1. <strong>雅雪 NAS 到貨 3/10 追蹤</strong> → ➡️ 距離到貨還有 3 天，持續追蹤中，已記錄於 MEMORY.md 待辦。3/10 當天主動提醒 Steven。</div><div class="review-heading">今日完成事項</div><div class="review-item"><span class="ri-bullet">▸</span>執行每日自我檢查（cron 02:00）</div><div class="review-heading">已自動修正</div><div class="review-line">無需修正項目。</div><div class="review-heading">⚠️ 需要 Steven 確認</div><div class="review-line">無。</div><div class="review-heading">明日待辦</div><div class="review-item"><span class="ri-bullet">▸</span>3/10 雅雪 NAS 到貨追蹤（後天）</div><div class="review-item"><span class="ri-bullet">▸</span>持續關注待辦清單中各項等待回覆的事項</div><div class="review-sep"></div><div class="review-line">產出時間: 2026-03-07 02:00</div></div>
   </div>
 </div>
 <div class="card">
   <div class="card-header">🐥 PIYO 自我檢查</div>
   <div class="card-body">
     <div class="status-waiting" style="margin-bottom:8px;">尚未建立 — 等待首次執行（每日 23:00）</div>
-    <div class="review-content">尚未建立 — 等待首次執行（每日 23:00）</div>
+    <div class="review-content"><div class="status-waiting">尚未建立 — 等待首次執行（每日 23:00）</div></div>
   </div>
 </div>
 <div class="card">
   <div class="card-header">📁 WORKSPACE 摘要</div>
   <div class="card-body">
-<div class="ws-summary">📂 <strong>workspace-dogi/</strong>: 18 files <span class="ws-stable">（無變動）</span></div>
-<div class="ws-summary">📂 <strong>workspace-piyo/</strong>: 15 files <span class="ws-stable">（無變動）</span></div>
+<div class="ws-summary">📂 <strong>workspace-dogi/</strong>: 170 files <span class="ws-change">（有變動）</span></div>
+<div style="padding-left:20px;font-size:11px;color:var(--green);">+org-chart.html</div>
+<div style="padding-left:20px;font-size:11px;color:var(--green);">+projects/company-ai-adoption.md</div>
+<div style="padding-left:20px;font-size:11px;color:var(--green);">+tmp/product-scan-diff.json</div>
+<div class="ws-summary">📂 <strong>workspace-piyo/</strong>: 0 files <span class="ws-stable">（首次掃描）</span></div>
 </div></div>
 <div class="card">
   <div class="card-header">🔗 SYMLINK 狀態</div>
-  <div class="card-body"><div class="symlink-ok">✅ dogi/shared → ../workspace/shared</div><div class="symlink-ok">✅ dogi/system → ../workspace/system</div><div class="symlink-ok">✅ piyo/shared → ../workspace/shared</div></div>
+  <div class="card-body"><div class="symlink-ok">✅ dogi/shared → /Users/dogi/OpenClaw/shared</div><div class="symlink-ok">✅ dogi/system → ../workspace/system</div><div class="symlink-ok" style="color:var(--yellow)">⚠️ piyo/shared — not a symlink</div></div>
 </div>
 <div class="card">
   <div class="card-header">🛠 工具 / SKILLS</div>
   <div class="card-body">
-<div class="section-label">共用工具（所有 Agent 繼承）</div>
+<div class="section-label" style="color:#EA5504;">🐕 Dogi66 (dogi)</div>
+<div class="tool-item">🧠 Model: anthropic/claude-opus-4-6</div>
+<div class="tool-item" style="color:var(--text-dim);">繼承共用工具（無覆蓋）</div>
+<div style="margin:8px 0 4px;padding:4px 8px;background:rgba(0,230,118,0.08);border-radius:4px;font-size:11px;color:var(--green);">✅ 兩個 Agent 工具權限完全相同（均繼承 defaults）</div>
+<div class="section-label" style="margin-top:8px;">共用工具（defaults）</div>
 <div class="tool-item">🔍 Web Search (brave)</div>
 <div class="tool-item">⚙️ Exec: full / gateway</div>
 <div class="tool-item">🔓 Elevated (allowFrom: 8504756175)</div>
 <div class="tool-item">🔌 MCP: notion</div>
-<div class="section-label" style="margin-top:12px;">Agent 專屬工具</div>
-<div class="tool-item" style="color:var(--text-dim);font-style:italic;">目前無 Agent 專屬工具（均繼承 defaults）</div>
-<div class="section-label" style="margin-top:12px;">可用但未啟用的 Skills（共 44 個）</div>
-<div class="tool-item" style="color:var(--text-dim);">🔐 1Password 整合</div>
-<div class="tool-item" style="color:var(--text-dim);">📝 Apple Notes 整合</div>
-<div class="tool-item" style="color:var(--text-dim);">⏰ Apple Reminders 整合</div>
-<div class="tool-item" style="color:var(--text-dim);">🐻 Bear Notes 整合</div>
-<div class="tool-item" style="color:var(--text-dim);">👀 Blog 監控</div>
-<div class="tool-item" style="color:var(--text-dim);">📷 攝影機快照</div>
-<div class="tool-item" style="color:var(--text-dim);">🖼 Canvas 視覺化</div>
-<div class="tool-item" style="color:var(--text-dim);">🏪 ClawHub 技能市場</div>
-<div class="tool-item" style="color:var(--text-dim);">💬 Discord 整合</div>
-<div class="tool-item" style="color:var(--text-dim);">📧 Himalaya 郵件</div>
-<div class="tool-item" style="color:var(--text-dim);">💬 iMessage 整合</div>
-<div class="tool-item" style="color:var(--text-dim);">📊 模型用量追蹤</div>
-<div class="tool-item" style="color:var(--text-dim);">📑 PDF 處理</div>
-<div class="tool-item" style="color:var(--text-dim);">📋 Notion（原生 skill）</div>
-<div class="tool-item" style="color:var(--text-dim);">📓 Obsidian 筆記整合</div>
-<div class="tool-item" style="color:var(--text-dim);">🎨 OpenAI 圖片生成</div>
-<div class="tool-item" style="color:var(--text-dim);">🎙 語音轉文字（本地）</div>
-<div class="tool-item" style="color:var(--text-dim);">🎙 語音轉文字（API）</div>
-<div class="tool-item" style="color:var(--text-dim);">🗣 ElevenLabs TTS 語音合成</div>
-<div class="tool-item" style="color:var(--text-dim);">📜 Session 日誌</div>
-<div class="tool-item" style="color:var(--text-dim);">💬 Slack 整合</div>
-<div class="tool-item" style="color:var(--text-dim);">🎵 Spotify 播放控制</div>
-<div class="tool-item" style="color:var(--text-dim);">📄 文件摘要</div>
-<div class="tool-item" style="color:var(--text-dim);">✅ Things 3 待辦</div>
-<div class="tool-item" style="color:var(--text-dim);">📋 Trello 看板整合</div>
-<div class="tool-item" style="color:var(--text-dim);">📞 語音通話</div>
-<div class="tool-item" style="color:var(--text-dim);">💬 WhatsApp CLI</div>
-<div class="tool-item" style="color:var(--text-dim);font-style:italic;">... 及其他 17 個 skill（執行 ls /usr/local/lib/node_modules/openclaw/skills/ 查看完整列表）</div>
+<div class="section-label" style="margin-top:8px;">可用 Skills（8 啟用 / 44 未啟用）</div>
+<details><summary style="cursor:pointer;color:var(--green);font-size:14px;padding:4px 0;">▸ 啟用中（8）</summary><div style="padding:4px 0 8px 16px;">
+<div class="tool-item" style="color:var(--green);">• coding-agent</div>
+<div class="tool-item" style="color:var(--green);">• gemini</div>
+<div class="tool-item" style="color:var(--green);">• github</div>
+<div class="tool-item" style="color:var(--green);">• gog</div>
+<div class="tool-item" style="color:var(--green);">• healthcheck</div>
+<div class="tool-item" style="color:var(--green);">• skill-creator</div>
+<div class="tool-item" style="color:var(--green);">• video-frames</div>
+<div class="tool-item" style="color:var(--green);">• weather</div>
+</div></details>
+<details><summary style="cursor:pointer;color:var(--text-dim);font-size:14px;padding:4px 0;">▸ 可啟用（44）</summary><div style="padding:4px 0 8px 16px;">
+<div class="tool-item" style="color:var(--text-dim);">📝 Apple Notes (apple-notes)</div>
+<div class="tool-item" style="color:var(--text-dim);">⏰ Apple Reminders (apple-reminders)</div>
+<div class="tool-item" style="color:var(--text-dim);">🖼 Canvas (canvas)</div>
+<div class="tool-item" style="color:var(--text-dim);">💬 iMessage (imsg)</div>
+<div class="tool-item" style="color:var(--text-dim);">📑 PDF (nano-pdf)</div>
+<div class="tool-item" style="color:var(--text-dim);">📋 Notion (notion)</div>
+<div class="tool-item" style="color:var(--text-dim);">📓 Obsidian (obsidian)</div>
+<div class="tool-item" style="color:var(--text-dim);">🎨 圖片生成 (openai-image-gen)</div>
+<div class="tool-item" style="color:var(--text-dim);">🎙 語音轉文字 (openai-whisper)</div>
+<div class="tool-item" style="color:var(--text-dim);">🎵 Spotify (spotify-player)</div>
+<div class="tool-item" style="color:var(--text-dim);">✅ Things 3 (things-mac)</div>
+<div class="tool-item" style="color:var(--text-muted);font-style:italic;">... 及其他 33 個</div>
+</div></details>
   </div>
 </div>
 <div class="card">
   <div class="card-header">🚨 近期錯誤</div>
-  <div class="card-body"><div class="error-log">    object: 'error',
-2026-02-12T07:25:59.009Z [tools] exec failed: === 1. workspace/archive/ ===
-2026-02-12T07:34:43.284Z [openclaw] Suppressed AbortError: AbortError: This operation was aborted
-2026-02-12T08:16:23.766Z [tools] browser failed: Sandbox browser is unavailable. Enable agents.defaults.sandbox.browser.enabled or use target="host" if allowed.
-2026-02-12T08:16:31.475Z [tools] browser failed: Can't reach the OpenClaw browser control service. Start (or restart) the OpenClaw gateway (OpenClaw.app menubar, or `openclaw gateway`) and try again. (Error: Error: Chrome extension relay is running, but no tab is connected. Click the OpenClaw Chrome extension icon on a tab to attach it (profile "chrome").)
-2026-02-12T08:16:40.310Z [tools] image failed: All image models failed (2): anthropic/claude-opus-4-6: Image model failed (anthropic/claude-opus-4-6): 401 {"type":"error","error":{"type":"authentication_error","message":"Invalid bearer token"},"request_id":"req_011CY3quHb1ugguHm132r7EE"} | anthropic/claude-opus-4-5: Image model failed (anthropic/claude-opus-4-5): 401 {"type":"error","error":{"type":"authentication_error","message":"Invalid bearer token"},"request_id":"req_011CY3quJrBA6DTxxTSSSTu5"}
-2026-02-12T08:20:33.936Z [tools] canvas failed: node required
-2026-02-12T09:50:27.413Z [tools] exec failed: Cloning into 'shadowperformace-site'...</div></div>
+  <div class="card-body"><div class="error-log">2026-03-07T11:27:47.627+08:00 Gateway failed to start: another gateway instance is already listening on ws://127.0.0.1:18789
+2026-03-07T11:27:58.535+08:00 Gateway failed to start: another gateway instance is already listening on ws://127.0.0.1:18789
+2026-03-07T11:28:09.105+08:00 Gateway failed to start: another gateway instance is already listening on ws://127.0.0.1:18789
+2026-03-07T11:28:09.627+08:00 [tools] exec failed: /Users/dogi/OpenClaw/shared/knowledge/skills/shadow-brand-2026
+2026-03-07T11:28:19.630+08:00 Gateway failed to start: another gateway instance is already listening on ws://127.0.0.1:18789
+2026-03-07T11:28:30.127+08:00 Gateway failed to start: another gateway instance is already listening on ws://127.0.0.1:18789
+2026-03-07T11:28:40.620+08:00 Gateway failed to start: another gateway instance is already listening on ws://127.0.0.1:18789
+2026-03-07T11:28:51.149+08:00 Gateway failed to start: another gateway instance is already listening on ws://127.0.0.1:18789</div></div>
 </div>
 </div>
-<div class="refresh-hint">
-  執行 <kbd>openclaw-dashboard</kbd> 重新產生最新資料
+<div class="footer-circuit">
+  <span style="color:var(--accent);">◁</span> SHADOW PERFORMANCE · DOGI66 SYSTEM DASHBOARD · OPENCLAW 2026 <span style="color:var(--accent);">▷</span>
+  <br><span style="font-size:9px;">執行 <kbd style="background:var(--surface2);border:1px solid var(--border-dim);padding:1px 6px;color:var(--accent);font-family:inherit;">openclaw-dashboard</kbd> 重新產生</span>
 </div>
 </body></html>

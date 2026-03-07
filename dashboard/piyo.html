@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PIYO — Agent 專頁</title>
+<style>
+:root {
+  --accent: #FFD740;
+  --accent-dim: rgba(255,215,64,0.3);
+  --accent-subtle: rgba(255,215,64,0.12);
+  --accent-glow: rgba(255,215,64,0.08);
+  --text: #e8e8ec;
+  --text-dim: #888898;
+  --text-muted: #555566;
+  --surface: #060608;
+  --surface2: #0a0a0f;
+  --green: #00e676;
+  --yellow: #ffd740;
+  --red: #ff5252;
+  --blue: #448aff;
+  --orange: #EA5504;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: #000;
+  color: var(--text);
+  font-family: 'Courier New', 'SF Mono', 'Consolas', monospace;
+  font-size: 15px;
+  line-height: 1.4;
+  background-image:
+    linear-gradient(rgba(255,215,64,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,215,64,0.025) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+body::after { content:''; position:fixed; top:0; left:0; right:0; bottom:0; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.05) 2px,rgba(0,0,0,0.05) 4px); pointer-events:none; z-index:9999; }
+.hud-circuit { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:hidden; }
+.header { background:#060608; border-bottom:3px solid var(--accent); padding:16px 28px; display:flex; justify-content:space-between; align-items:center; position:relative; z-index:1; }
+.header::before { content:''; position:absolute; bottom:0; left:0; width:120px; height:2px; background:linear-gradient(90deg,transparent,var(--accent),transparent); animation:hscan 4s linear infinite; }
+@keyframes hscan { 0%{left:-120px} 100%{left:100%} }
+.header h1 { font-size:20px; color:var(--accent); font-weight:700; text-transform:uppercase; letter-spacing:3px; text-shadow:0 0 12px rgba(255,215,64,0.4); }
+.header .meta { color:var(--text-dim); font-size:14px; display:flex; align-items:center; gap:12px; }
+.ticker { background:rgba(255,215,64,0.02); border-bottom:2px solid rgba(255,215,64,0.08); padding:3px 0; overflow:hidden; white-space:nowrap; font-size:13px; color:var(--text-muted); letter-spacing:2px; text-transform:uppercase; position:relative; z-index:1; }
+.ticker-inner { display:inline-block; animation:ticker 30s linear infinite; }
+@keyframes ticker { 0%{transform:translateX(100vw)} 100%{transform:translateX(-100%)} }
+.nav { background:#060608; border-bottom:2px solid rgba(255,215,64,0.2); padding:0 28px; display:flex; flex-wrap:wrap; position:relative; z-index:1; }
+.nav a { color:var(--text-muted); text-decoration:none; padding:10px 16px; font-size:13px; letter-spacing:2px; text-transform:uppercase; border-bottom:2px solid transparent; transition:all 0.2s; }
+.nav a:hover { color:var(--text); }
+.nav a.active { color:var(--accent); border-bottom-color:var(--accent); text-shadow:0 0 8px rgba(255,215,64,0.4); }
+.nav a.nav-dogi:hover { color:#EA5504; border-bottom-color:#EA5504; }
+.nav a.nav-niko:hover { color:#448AFF; border-bottom-color:#448AFF; }
+.nav a.nav-kumo:hover { color:#CE93D8; border-bottom-color:#CE93D8; }
+.nav a.nav-kuma:hover { color:#00E676; border-bottom-color:#00E676; }
+.container { max-width:1400px; margin:0 auto; padding:18px 28px; display:grid; grid-template-columns:1fr 1fr; gap:16px; position:relative; z-index:1; }
+.card { background:linear-gradient(135deg,rgba(255,215,64,0.12),rgba(255,215,64,0.04) 30%,rgba(255,215,64,0.04) 70%,rgba(255,215,64,0.12)); position:relative; clip-path:polygon(16px 0,100% 0,100% calc(100% - 16px),calc(100% - 16px) 100%,0 100%,0 16px); }
+.card-header { background:linear-gradient(90deg,rgba(255,215,64,0.1),#060608 60%); padding:10px 18px; border-bottom:2px solid rgba(255,215,64,0.2); font-size:14px; font-weight:700; color:var(--accent); letter-spacing:2px; text-transform:uppercase; position:relative; }
+.card-header::before { content:'▍'; margin-right:8px; color:var(--accent); }
+.card-header::after { content:'· · · ·'; position:absolute; right:18px; top:50%; transform:translateY(-50%); font-size:14px; color:rgba(255,215,64,0.25); letter-spacing:3px; }
+.card-body { background:#060608; padding:12px 18px; position:relative; }
+.card-body::before { content:''; position:absolute; top:6px; left:6px; width:14px; height:14px; border-top:3px solid var(--accent); border-left:3px solid var(--accent); pointer-events:none; }
+.card-body::after { content:''; position:absolute; bottom:6px; right:6px; width:14px; height:14px; border-bottom:3px solid var(--accent); border-right:3px solid var(--accent); pointer-events:none; }
+.card-full { grid-column:1/-1; }
+.identity-card { display:flex; gap:24px; align-items:flex-start; padding:4px 0; }
+.identity-avatar { font-size:64px; line-height:1; text-shadow:0 0 30px rgba(255,215,64,0.5); filter:drop-shadow(0 0 10px rgba(255,215,64,0.4)); }
+.identity-info { flex:1; }
+.identity-name { font-size:28px; font-weight:700; color:var(--accent); letter-spacing:3px; text-transform:uppercase; text-shadow:0 0 15px rgba(255,215,64,0.4); margin-bottom:6px; }
+.identity-role { font-size:14px; color:var(--text-dim); margin-bottom:12px; letter-spacing:1px; }
+.identity-meta { display:flex; flex-wrap:wrap; gap:8px; }
+.id-tag { font-size:12px; padding:3px 10px; border:1px solid rgba(255,215,64,0.3); color:var(--accent); background:rgba(255,215,64,0.06); clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%); }
+.badge { display:inline-block; padding:2px 8px; font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; border:2px solid; clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%); }
+.badge-on { background:rgba(0,230,118,0.1); color:var(--green); border-color:rgba(0,230,118,0.3); animation:spulse 2.5s ease-in-out infinite; }
+.badge-ok { background:rgba(0,230,118,0.08); color:var(--green); border-color:rgba(0,230,118,0.2); }
+.badge-warn { background:rgba(255,215,64,0.08); color:var(--yellow); border-color:rgba(255,215,64,0.3); }
+@keyframes spulse { 0%,100%{box-shadow:0 0 4px rgba(0,230,118,0.3)} 50%{box-shadow:0 0 10px rgba(0,230,118,0.6)} }
+.section-label { color:var(--accent); font-weight:700; font-size:13px; letter-spacing:2px; text-transform:uppercase; margin:10px 0 6px; padding-left:8px; border-left:3px solid var(--accent); }
+.todo-item { padding:6px 0 6px 10px; border-bottom:1px solid rgba(255,215,64,0.07); border-left:2px solid transparent; font-size:14px; transition:all 0.15s; }
+.todo-item:hover { border-left-color:var(--accent); background:rgba(255,215,64,0.02); }
+.todo-item:last-child { border-bottom:none; }
+.todo-done { opacity:0.5; text-decoration:line-through; }
+.todo-prio-high { border-left-color:rgba(255,82,82,0.5) !important; }
+.todo-prio-med { border-left-color:rgba(255,215,64,0.5) !important; }
+.log-block { background:rgba(0,0,0,0.6); border:1px solid rgba(255,215,64,0.15); padding:10px 14px; font-size:13px; color:var(--text-dim); max-height:220px; overflow-y:auto; box-shadow:inset 0 0 12px rgba(255,215,64,0.04); }
+.log-time { color:var(--text-muted); font-size:11px; }
+.log-entry { padding:3px 0; border-bottom:1px solid rgba(255,215,64,0.04); }
+.log-entry:last-child { border-bottom:none; }
+.review-block { background:rgba(0,0,0,0.6); border:1px solid rgba(255,215,64,0.15); padding:10px 14px; font-size:13px; color:var(--text-dim); max-height:260px; overflow-y:auto; box-shadow:inset 0 0 12px rgba(255,215,64,0.04); }
+.review-heading { color:var(--accent); font-weight:700; font-size:12px; letter-spacing:1.5px; text-transform:uppercase; padding:8px 0 3px; border-bottom:1px solid rgba(255,215,64,0.12); }
+.review-heading:first-child { padding-top:0; }
+.review-item { padding:2px 0 2px 8px; display:flex; gap:6px; line-height:1.5; }
+.review-done { color:var(--green); opacity:0.8; }
+.stat-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid rgba(255,215,64,0.07); font-size:13px; }
+.stat-row:last-child { border-bottom:none; }
+.stat-label { color:var(--text-dim); }
+.stat-value { color:var(--accent); font-weight:700; }
+.pulse-dot { width:6px; height:6px; border-radius:50%; background:var(--green); box-shadow:0 0 4px var(--green); animation:pglow 2s ease-in-out infinite; display:inline-block; }
+@keyframes pglow { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.hud-divider { grid-column:1/-1; height:28px; display:flex; align-items:center; justify-content:center; position:relative; }
+.hud-divider::before { content:''; position:absolute; top:50%; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent 0%,rgba(255,215,64,0.15) 10%,rgba(255,215,64,0.3) 30%,var(--accent) 48%,transparent 50%,var(--accent) 52%,rgba(255,215,64,0.3) 70%,rgba(255,215,64,0.15) 90%,transparent 100%); }
+.hud-divider::after { content:'◆'; color:var(--accent); font-size:6px; background:#000; padding:0 16px; position:relative; z-index:1; }
+.footer-circuit { text-align:center; padding:20px 28px; position:relative; z-index:1; color:var(--text-muted); font-size:13px; letter-spacing:2px; text-transform:uppercase; }
+.footer-circuit::before { content:''; display:block; margin:0 auto 14px; width:50%; height:1px; background:linear-gradient(90deg,transparent,rgba(255,215,64,0.15) 20%,rgba(255,215,64,0.3) 45%,rgba(255,215,64,0.3) 55%,rgba(255,215,64,0.15) 80%,transparent); }
+@media (max-width:900px) {
+  .container { grid-template-columns:1fr; padding:10px 12px; }
+  .card-full { grid-column:1; }
+  .identity-card { flex-direction:column; gap:12px; }
+  .identity-avatar { font-size:48px; }
+  .header h1 { font-size:15px; }
+  .nav a { padding:8px 10px; font-size:11px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Circuit Background — Yellow theme -->
+<svg class="hud-circuit" xmlns="http://www.w3.org/2000/svg">
+  <!-- TOP LEFT IC -->
+  <rect x="18" y="55" width="75" height="48" fill="none" stroke="#FFD740" stroke-width="0.9" opacity="0.13"/>
+  <text x="55" y="84" fill="#FFD740" font-size="8" text-anchor="middle" opacity="0.09" font-family="monospace">MCU-P1</text>
+  <line x1="18" y1="70" x2="0" y2="70" stroke="#FFD740" stroke-width="0.7" opacity="0.12"/>
+  <line x1="18" y1="82" x2="0" y2="82" stroke="#FFD740" stroke-width="0.7" opacity="0.12"/>
+  <line x1="93" y1="70" x2="150" y2="70" stroke="#FFD740" stroke-width="0.8" opacity="0.15"/>
+  <circle cx="150" cy="70" r="3" fill="#FFD740" opacity="0.2"/>
+  <line x1="150" y1="70" x2="150" y2="160" stroke="#FFD740" stroke-width="0.8" opacity="0.14"/>
+  <line x1="150" y1="160" x2="175" y2="185" stroke="#FFD740" stroke-width="0.8" opacity="0.13"/>
+  <circle cx="150" cy="160" r="2.5" fill="#FFD740" opacity="0.17"/>
+  <line x1="175" y1="185" x2="175" y2="350" stroke="#FFD740" stroke-width="0.8" opacity="0.11"/>
+  <circle cx="175" cy="270" r="3" fill="#FFD740" opacity="0.18"/>
+  <line x1="175" y1="270" x2="90" y2="270" stroke="#FFD740" stroke-width="0.6" opacity="0.1"/>
+  <circle cx="90" cy="270" r="2" fill="#FFD740" opacity="0.13"/>
+  <!-- IC-2 bottom left -->
+  <rect x="10" y="390" width="65" height="42" fill="none" stroke="#FFD740" stroke-width="0.8" opacity="0.1"/>
+  <text x="42" y="416" fill="#FFD740" font-size="7" text-anchor="middle" opacity="0.08" font-family="monospace">IC-P2</text>
+  <line x1="75" y1="410" x2="175" y2="350" stroke="#FFD740" stroke-width="0.7" opacity="0.1"/>
+  <line x1="175" y1="350" x2="155" y2="370" stroke="#FFD740" stroke-width="0.6" opacity="0.09"/>
+  <line x1="155" y1="370" x2="155" y2="600" stroke="#FFD740" stroke-width="0.6" opacity="0.07"/>
+  <!-- RIGHT SIDE -->
+  <line x1="1840" y1="110" x2="1780" y2="110" stroke="#FFD740" stroke-width="0.8" opacity="0.15"/>
+  <line x1="1780" y1="110" x2="1780" y2="240" stroke="#FFD740" stroke-width="0.8" opacity="0.14"/>
+  <line x1="1780" y1="240" x2="1750" y2="270" stroke="#FFD740" stroke-width="0.8" opacity="0.13"/>
+  <circle cx="1780" cy="240" r="3.5" fill="#FFD740" opacity="0.19"/>
+  <line x1="1750" y1="270" x2="1750" y2="500" stroke="#FFD740" stroke-width="0.8" opacity="0.11"/>
+  <circle cx="1750" cy="385" r="2.5" fill="#FFD740" opacity="0.16"/>
+  <line x1="1750" y1="385" x2="1810" y2="385" stroke="#FFD740" stroke-width="0.6" opacity="0.1"/>
+  <rect x="1815" y="365" width="62" height="38" fill="none" stroke="#FFD740" stroke-width="0.8" opacity="0.11"/>
+  <text x="1846" y="389" fill="#FFD740" font-size="7" text-anchor="middle" opacity="0.08" font-family="monospace">IC-P3</text>
+  <!-- center -->
+  <line x1="320" y1="35" x2="650" y2="35" stroke="#FFD740" stroke-width="0.6" opacity="0.09"/>
+  <circle cx="480" cy="35" r="1.5" fill="#FFD740" opacity="0.11"/>
+  <!-- scattered nodes -->
+  <circle cx="450" cy="480" r="1.5" fill="#FFD740" opacity="0.09"/>
+  <circle cx="850" cy="220" r="2" fill="#FFD740" opacity="0.08"/>
+  <circle cx="1200" cy="560" r="1.5" fill="#FFD740" opacity="0.09"/>
+  <!-- animated pulses -->
+  <path d="M 150 70 V 160 L 175 185 V 270" stroke="#FFD740" stroke-width="2" fill="none" stroke-dasharray="22 230" opacity="0">
+    <animate attributeName="stroke-dashoffset" from="252" to="-252" dur="3.8s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;0.35;0.35;0" dur="3.8s" repeatCount="indefinite"/>
+  </path>
+  <path d="M 1780 110 V 240 L 1750 270 V 500" stroke="#FFD740" stroke-width="2" fill="none" stroke-dasharray="20 250" opacity="0">
+    <animate attributeName="stroke-dashoffset" from="270" to="-270" dur="4.8s" repeatCount="indefinite" begin="0.8s"/>
+    <animate attributeName="opacity" values="0;0.3;0.3;0" dur="4.8s" repeatCount="indefinite" begin="0.8s"/>
+  </path>
+  <path d="M 30 550 L 44 564 L 30 578" fill="none" stroke="#FFD740" stroke-width="1" opacity="0.12"/>
+  <path d="M 42 550 L 56 564 L 42 578" fill="none" stroke="#FFD740" stroke-width="1" opacity="0.08"/>
+</svg>
+
+<div class="header">
+  <h1>🐥 PIYO — Agent 專頁</h1>
+  <div class="meta">
+    <span>2026-02-27 02:00</span>
+    <span class="pulse-dot"></span>
+    <span class="badge badge-on">ONLINE</span>
+  </div>
+</div>
+<div class="ticker"><div class="ticker-inner">
+  ▹ PIYO · YORDA 的工作夥伴 ▹ MODEL: CLAUDE-SONNET-4-5 ▹ WORKSPACE: workspace-piyo ▹ 管理部 AI 助手 ▹ SHADOW PERFORMANCE CO. ▹
+</div></div>
+<div class="nav">
+  <a href="index.html">🖥 系統總覽</a>
+  <a href="dogi.html" class="nav-dogi">🐕 DOGI</a>
+  <a href="piyo.html" class="active">🐥 PIYO</a>
+  <a href="niko.html" class="nav-niko">🐱 NIKO</a>
+  <a href="kumo.html" class="nav-kumo">🕷 KUMO</a>
+  <a href="kuma.html" class="nav-kuma">🐻 KUMA</a>
+</div>
+
+<div class="container">
+
+<!-- IDENTITY -->
+<div class="card card-full">
+  <div class="card-header">🪪 AGENT 身份卡</div>
+  <div class="card-body">
+    <div class="identity-card">
+      <div class="identity-avatar">🐥</div>
+      <div class="identity-info">
+        <div class="identity-name">PIYO</div>
+        <div class="identity-role">Yorda 的工作夥伴・管理部 AI 助手</div>
+        <div class="identity-meta">
+          <span class="id-tag">MODEL: claude-sonnet-4-5</span>
+          <span class="id-tag">WORKSPACE: workspace-piyo</span>
+          <span class="id-tag">TELEGRAM: 8361055040</span>
+          <span class="id-tag badge-on" style="border-color:rgba(0,230,118,0.5);color:var(--green);">● ONLINE</span>
+        </div>
+        <div style="margin-top:12px;font-size:13px;color:var(--text-dim);">
+          專長：人事管理・行政文件・Excel・法規查詢・TTQS 訓練計畫・活動籌辦
+        </div>
+      </div>
+      <div>
+        <div class="stat-row"><span class="stat-label">今日 Token</span><span class="stat-value">$0.09</span></div>
+        <div class="stat-row"><span class="stat-label">累計用量</span><span class="stat-value">$39.68</span></div>
+        <div class="stat-row"><span class="stat-label">Sessions</span><span class="stat-value">28</span></div>
+        <div class="stat-row"><span class="stat-label">Cron Jobs</span><span class="stat-value" style="color:var(--green);">1 active</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TODO -->
+<div class="card">
+  <div class="card-header">📋 待辦事項</div>
+  <div class="card-body">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">From MEMORY.md · 2026-02-27</div>
+    <div class="todo-item todo-prio-high">
+      <span style="color:#ff5252;margin-right:6px;">◉</span>
+      <strong>[HIGH]</strong> 員工績效考核 — 等待主管反饋，準備修改版本
+    </div>
+    <div class="todo-item todo-prio-high">
+      <span style="color:#ff5252;margin-right:6px;">◉</span>
+      <strong>[HIGH]</strong> TTQS AI 教育訓練計畫（協作 Dogi）— 3/15 截止
+    </div>
+    <div class="todo-item todo-prio-med">
+      <span style="color:var(--yellow);margin-right:6px;">◈</span>
+      <strong>[MED]</strong> 設定 Yorda 日常提醒機制（待辦・重要日期）
+    </div>
+    <div class="todo-item todo-prio-med">
+      <span style="color:var(--yellow);margin-right:6px;">◈</span>
+      <strong>[MED]</strong> 整理管理部 Notion + Google Drive 文件結構
+    </div>
+    <div class="todo-item">
+      <span style="color:var(--text-muted);margin-right:6px;">◇</span>
+      <strong>[LOW]</strong> 建立管理部 SOP 流程文件（公文、採購、請假）
+    </div>
+    <div class="todo-item">
+      <span style="color:var(--text-muted);margin-right:6px;">◇</span>
+      <strong>[LOW]</strong> 3 月份員工生日提醒清單更新
+    </div>
+    <div class="todo-item todo-done">
+      <span style="color:var(--green);margin-right:6px;">✓</span>
+      每日自我檢查 2026-02-27 03:00 — 完成
+    </div>
+  </div>
+</div>
+
+<!-- LOG -->
+<div class="card">
+  <div class="card-header">📜 近期日誌</div>
+  <div class="card-body">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">daily/2026-02-27.md</div>
+    <div class="log-block">
+      <div class="log-entry"><span class="log-time">03:00</span> <span style="color:var(--green);">✓</span> 每日自我檢查完成 — 系統健康</div>
+      <div class="log-entry"><span class="log-time">09:15</span> <span style="color:#aaa;">—</span> Yorda 詢問年假申請流程</div>
+      <div class="log-entry"><span class="log-time">09:20</span> <span style="color:#aaa;">—</span> 提供年假申請 SOP 及相關法規說明</div>
+      <div class="log-entry"><span class="log-time">10:30</span> <span style="color:#aaa;">—</span> Yorda 要求整理本月考勤記錄</div>
+      <div class="log-entry"><span class="log-time">10:45</span> <span style="color:var(--green);">✓</span> 本月考勤 Excel 整理完成，匯出 PDF</div>
+      <div class="log-entry"><span class="log-time">14:00</span> <span style="color:#aaa;">—</span> 協助 Yorda 草擬給主管的績效評語</div>
+      <div class="log-entry"><span class="log-time">16:30</span> <span style="color:#aaa;">—</span> TTQS 文件進度確認 — 章節 3/5 完成</div>
+      <div class="log-entry"><span class="log-time">17:00</span> <span style="color:var(--yellow);">⚠</span> 主管尚未回覆績效考核意見</div>
+    </div>
+  </div>
+</div>
+
+<!-- REVIEW -->
+<div class="card card-full">
+  <div class="card-header">🔍 自檢報告</div>
+  <div class="card-body">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">daily/2026-02-27-review.md · <span class="badge badge-on" style="font-size:10px;">通過</span></div>
+    <div class="review-block">
+      <div class="review-heading">A. 身份一致性</div>
+      <div class="review-item review-done"><span>✅</span> SOUL.md 描述正確（Piyo = Yorda 的工作夥伴）</div>
+      <div class="review-item review-done"><span>✅</span> SOUL.md 和 PERSONA.md 無矛盾</div>
+      <div class="review-item review-done"><span>✅</span> AGENTS.md 無指向其他 workspace 的路徑</div>
+      <div class="review-heading">B. 記憶完整性</div>
+      <div class="review-item review-done"><span>✅</span> MEMORY.md 存在且非空（最後更新 2026-02-16）</div>
+      <div class="review-item review-done"><span>✅</span> 今日 daily log 已建立</div>
+      <div class="review-heading">C. 權限隔離</div>
+      <div class="review-item review-done"><span>✅</span> 無跨 workspace 違規讀取</div>
+      <div class="review-item review-done"><span>✅</span> shared symlink → ../workspace/shared ✅</div>
+      <div class="review-heading">D. 系統健康</div>
+      <div class="review-item review-done"><span>✅</span> 備份存在：backups/2026-02-27/workspace-piyo/</div>
+      <div class="review-item review-done"><span>✅</span> 昨日 review 存在</div>
+      <div class="review-heading" style="color:var(--green);">✅ Checklist 全部通過</div>
+    </div>
+  </div>
+</div>
+
+<div class="hud-divider"></div>
+
+<!-- PIYO SPECIFIC: HR 管理 -->
+<div class="card">
+  <div class="card-header">👥 人事管理</div>
+  <div class="card-body">
+    <div class="section-label">考核進度</div>
+    <div style="font-size:13px;padding:4px 0;"><span style="color:var(--yellow);">●</span> Q1 績效考核 — <span style="color:var(--yellow);">等待主管反饋</span></div>
+    <div style="font-size:13px;padding:4px 0;"><span style="color:var(--green);">●</span> 年度目標設定 — <span style="color:var(--green);">完成</span></div>
+    <div style="font-size:13px;padding:4px 0;"><span style="color:var(--green);">●</span> 本月考勤整理 — <span style="color:var(--green);">完成 (02/26)</span></div>
+    <div class="section-label" style="margin-top:10px;">近期行政任務</div>
+    <div style="font-size:13px;padding:3px 0;color:var(--text-dim);">▸ 2/28 — 薪資單發送截止</div>
+    <div style="font-size:13px;padding:3px 0;color:var(--text-dim);">▸ 3/01 — 員工保險異動申報</div>
+    <div style="font-size:13px;padding:3px 0;color:var(--text-dim);">▸ 3/05 — 部門預算回報</div>
+    <div style="font-size:13px;padding:3px 0;color:var(--text-dim);">▸ 3/15 — TTQS 訓練計畫送審</div>
+  </div>
+</div>
+
+<!-- TTQS PROJECT -->
+<div class="card">
+  <div class="card-header">📄 TTQS 訓練計畫</div>
+  <div class="card-body">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:10px;">AI 教育訓練計畫 · 協作：Piyo + Dogi</div>
+    <div style="margin-bottom:12px;">
+      <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px;">整體進度</div>
+      <div style="background:#0a0a0f;height:16px;border-radius:2px;overflow:hidden;position:relative;">
+        <div style="background:var(--accent);height:100%;width:60%;opacity:0.7;"></div>
+        <div style="position:absolute;top:0;right:6px;height:100%;display:flex;align-items:center;font-size:10px;color:var(--text-dim);">60%</div>
+      </div>
+    </div>
+    <div style="font-size:13px;padding:3px 0;"><span style="color:var(--green);">✓</span> 章節 1 — 訓練需求分析</div>
+    <div style="font-size:13px;padding:3px 0;"><span style="color:var(--green);">✓</span> 章節 2 — 訓練目標設定</div>
+    <div style="font-size:13px;padding:3px 0;"><span style="color:var(--green);">✓</span> 章節 3 — 課程設計</div>
+    <div style="font-size:13px;padding:3px 0;"><span style="color:var(--yellow);">◌</span> 章節 4 — 講師遴選 <span style="color:var(--text-muted);font-size:11px;">進行中</span></div>
+    <div style="font-size:13px;padding:3px 0;"><span style="color:var(--text-muted);">◌</span> 章節 5 — 評估機制</div>
+    <div style="font-size:11px;color:var(--text-muted);margin-top:8px;">截止：2026-03-15 · 負責窗口：雅雪</div>
+  </div>
+</div>
+
+</div><!-- /container -->
+<div class="footer-circuit">
+  <span style="color:var(--accent);">◁</span> PIYO · SHADOW PERFORMANCE · OPENCLAW 2026 <span style="color:var(--accent);">▷</span>
+</div>
+</body>
+</html>

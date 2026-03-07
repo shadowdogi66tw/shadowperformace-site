@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shadow 組織架構 × AI 導入進度</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    background: #000000;
+    color: #FFFFFF;
+    font-family: 'Noto Sans TC', sans-serif;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #EA5504;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .header .subtitle {
+    font-size: 12px;
+    color: #333333;
+    letter-spacing: 4px;
+  }
+  .header .divider {
+    width: 60px;
+    height: 3px;
+    background: #EA5504;
+    margin: 16px auto 0;
+  }
+
+  /* CEO */
+  .ceo-card {
+    background: #0D0D0D;
+    border: 1px solid #EA5504;
+    border-radius: 8px;
+    padding: 16px 24px;
+    text-align: center;
+    max-width: 280px;
+    margin: 0 auto 12px;
+  }
+  .ceo-card .name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #FFFFFF;
+  }
+  .ceo-card .title {
+    font-size: 12px;
+    color: #EA5504;
+    margin-top: 2px;
+  }
+
+  /* Connector */
+  .connector-v {
+    width: 2px;
+    height: 24px;
+    background: #EA5504;
+    margin: 0 auto;
+    opacity: 0.4;
+  }
+  .connector-h {
+    height: 2px;
+    background: #EA5504;
+    opacity: 0.4;
+    margin: 0 40px;
+  }
+
+  /* Department grid */
+  .dept-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 12px;
+  }
+
+  .dept-card {
+    background: #0D0D0D;
+    border: 1px solid #1A1A1A;
+    border-radius: 8px;
+    padding: 16px;
+    border-top: 3px solid #EA5504;
+  }
+  .dept-card .dept-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #EA5504;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #1A1A1A;
+  }
+
+  .member {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid #0A0A0A;
+  }
+  .member:last-child { border-bottom: none; }
+  
+  .member-name {
+    font-size: 14px;
+    color: #FFFFFF;
+  }
+  .member-name.inactive {
+    color: #555555;
+  }
+  .member-name .leader {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: #EA5504;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  .tags {
+    display: flex;
+    gap: 4px;
+  }
+  .tag {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+  .tag-skill {
+    background: #EA5504;
+    color: #FFFFFF;
+  }
+  .tag-mcp {
+    background: #FFFFFF;
+    color: #000000;
+  }
+  .tag-soon-skill {
+    background: transparent;
+    border: 1px solid #EA5504;
+    color: #EA5504;
+  }
+  .tag-soon-mcp {
+    background: transparent;
+    border: 1px solid #FFFFFF;
+    color: #FFFFFF;
+  }
+  .tag-fast {
+    background: transparent;
+    border: 1px solid #4CAF50;
+    color: #4CAF50;
+    font-size: 9px;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin: 32px 0 16px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #777;
+  }
+
+  /* Stats */
+  .stats {
+    text-align: center;
+    margin-top: 24px;
+    padding: 20px;
+    background: #0D0D0D;
+    border-radius: 8px;
+    border: 1px solid #1A1A1A;
+  }
+  .stats-title {
+    font-size: 12px;
+    color: #555;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #1A1A1A;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #EA5504, #FF8A50);
+  }
+  .stats-numbers {
+    display: flex;
+    justify-content: space-around;
+  }
+  .stat-item .num {
+    font-size: 24px;
+    font-weight: 700;
+    color: #EA5504;
+  }
+  .stat-item .label {
+    font-size: 10px;
+    color: #555;
+    margin-top: 2px;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 10px;
+    color: #333333;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>SHADOW 組織架構</h1>
+    <div class="subtitle">AI 導入進度追蹤</div>
+    <div class="divider"></div>
+  </div>
+
+  <!-- CEO -->
+  <div class="ceo-card">
+    <div class="name">趙純賢 Steven</div>
+    <div class="title">總經理</div>
+    <div class="tags" style="justify-content:center; margin-top:8px;">
+      <span class="tag tag-skill">Skill</span>
+      <span class="tag tag-mcp">MCP</span>
+    </div>
+  </div>
+
+  <div class="connector-v"></div>
+  <div class="connector-h"></div>
+
+  <!-- Departments -->
+  <div class="dept-grid">
+
+    <!-- 管理部 -->
+    <div class="dept-card">
+      <div class="dept-name">管理部</div>
+      <div class="member">
+        <span class="member-name inactive"><span class="leader"></span>林玉娟</span>
+        <div class="tags"></div>
+      </div>
+      <div class="member">
+        <span class="member-name inactive">郭雅雪</span>
+        <div class="tags"></div>
+      </div>
+    </div>
+
+    <!-- 業務部 -->
+    <div class="dept-card">
+      <div class="dept-name">業務部</div>
+      <div class="member">
+        <span class="member-name inactive">李雨柔</span>
+        <div class="tags"></div>
+      </div>
+      <div class="member">
+        <span class="member-name">施人豪</span>
+        <div class="tags">
+          <span class="tag tag-skill">Skill</span>
+        </div>
+      </div>
+      <div class="member">
+        <span class="member-name inactive">林欣怡</span>
+        <div class="tags"></div>
+      </div>
+      <div class="member">
+        <span class="member-name">許哲維</span>
+        <div class="tags">
+          <span class="tag tag-soon-skill">Skill</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 研發部 -->
+    <div class="dept-card">
+      <div class="dept-name">研發部</div>
+      <div class="member">
+        <span class="member-name">巫明隆</span>
+        <div class="tags">
+          <span class="tag tag-soon-skill">Skill</span>
+          <span class="tag tag-soon-mcp">MCP</span>
+          <span class="tag tag-fast">⚡快</span>
+        </div>
+      </div>
+      <div class="member">
+        <span class="member-name">楊嘉欣</span>
+        <div class="tags">
+          <span class="tag tag-skill">Skill</span>
+          <span class="tag tag-mcp">MCP</span>
+        </div>
+      </div>
+      <div class="member">
+        <span class="member-name">鄭伊庭</span>
+        <div class="tags">
+          <span class="tag tag-soon-skill">Skill</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 生產部 -->
+    <div class="dept-card">
+      <div class="dept-name">生產部</div>
+      <div class="member">
+        <span class="member-name inactive">陳偉志</span>
+        <div class="tags"></div>
+      </div>
+      <div class="member">
+        <span class="member-name inactive">林素瑜</span>
+        <div class="tags"></div>
+      </div>
+      <div class="member">
+        <span class="member-name inactive">芊紫</span>
+        <div class="tags"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><span class="tag tag-skill">Skill</span> 已會</div>
+    <div class="legend-item"><span class="tag tag-mcp">MCP</span> 已會</div>
+    <div class="legend-item"><span class="tag tag-soon-skill">Skill</span> 學習中</div>
+    <div class="legend-item"><span class="tag tag-soon-mcp">MCP</span> 學習中</div>
+    <div class="legend-item"><span class="tag tag-fast">⚡快</span> 可快速上手</div>
+    <div class="legend-item"><span style="display:inline-block;width:6px;height:6px;background:#EA5504;border-radius:50;"></span> 部門主管</div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stats-title">AI 導入進度</div>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: 46%;"></div>
+    </div>
+    <div class="stats-numbers">
+      <div class="stat-item">
+        <div class="num">3</div>
+        <div class="label">已會 Skill</div>
+      </div>
+      <div class="stat-item">
+        <div class="num">2</div>
+        <div class="label">已會 MCP</div>
+      </div>
+      <div class="stat-item">
+        <div class="num">3</div>
+        <div class="label">學習中</div>
+      </div>
+      <div class="stat-item">
+        <div class="num">5</div>
+        <div class="label">未導入</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    SHADOW PERFORMANCE · 丞桀股份有限公司 · AI 導入追蹤 · 2026.03.07
+  </div>
+
+</div>
+</body>
+</html>

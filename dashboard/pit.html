@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dogi66 — PIT STOP</title>
+<style>
+/* === Same foundation as page 1/2 === */
+:root {
+  --bg: #000000;
+  --surface: #060608;
+  --surface2: #0a0a0f;
+  --accent: #EA5504;
+  --accent2: #E8720C;
+  --accent-dim: rgba(255,107,0,0.3);
+  --accent-subtle: rgba(255,107,0,0.12);
+  --accent-glow: rgba(255,107,0,0.08);
+  --text: #e8e8ec;
+  --text-dim: #888898;
+  --text-muted: #555566;
+  --line: rgba(255,107,0,0.2);
+  --line-dim: rgba(255,107,0,0.08);
+  --green: #00e676;
+  --yellow: #ffd740;
+  --red: #ff5252;
+  --blue: #448aff;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: #000000;
+  color: var(--text);
+  font-family: 'Courier New', 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 15px;
+  line-height: 1.4;
+  background-image:
+    linear-gradient(rgba(255,107,0,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,107,0,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+body::after {
+  content: '';
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ===== HEADER ===== */
+.header {
+  background: #060608;
+  border-bottom: 3px solid var(--accent);
+  padding: 16px 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+.header::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 120px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  animation: header-scan 4s linear infinite;
+}
+@keyframes header-scan {
+  0% { left: -120px; }
+  100% { left: 100%; }
+}
+.header h1 {
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-size: 20px;
+  color: var(--accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-shadow: 0 0 12px rgba(255,107,0,0.3);
+}
+.header .meta {
+  color: var(--text-dim);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.data-stream {
+  position: absolute; bottom: 4px; right: 28px;
+  font-size: 9px; color: rgba(255,107,0,0.15);
+  letter-spacing: 3px; font-family: monospace;
+}
+
+/* ===== PULSE DOT ===== */
+.pulse-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 4px var(--green), 0 0 10px rgba(0,230,118,0.4);
+  animation: pulse-glow 2s ease-in-out infinite;
+  display: inline-block;
+}
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; box-shadow: 0 0 4px var(--green); }
+  50% { opacity: 0.5; box-shadow: 0 0 10px var(--green), 0 0 20px rgba(0,230,118,0.3); }
+}
+
+/* ===== REFRESH BTN ===== */
+.refresh-btn {
+  background: transparent;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  padding: 5px 18px;
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-size: 13px; font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+}
+.refresh-btn:hover {
+  background: var(--accent); color: #000;
+  box-shadow: 0 0 12px rgba(255,107,0,0.5);
+}
+.refresh-btn:active { transform: scale(0.96); }
+.refresh-btn.loading { opacity: 0.5; pointer-events: none; }
+.refresh-btn .spin { display: inline-block; animation: spin 1s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* ===== TICKER ===== */
+.ticker {
+  background: rgba(255,107,0,0.03);
+  border-bottom: 2px solid rgba(255,107,0,0.08);
+  padding: 3px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 13px;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+}
+.ticker-inner {
+  display: inline-block;
+  animation: ticker 35s linear infinite;
+}
+@keyframes ticker {
+  0% { transform: translateX(100vw); }
+  100% { transform: translateX(-100%); }
+}
+
+/* ===== NAV ===== */
+.nav {
+  background: #060608;
+  border-bottom: 2px solid rgba(255,107,0,0.2);
+  padding: 0 28px;
+  display: flex;
+  position: relative;
+  z-index: 1;
+}
+.nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 10px 20px;
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+.nav a:hover { color: var(--text); }
+.nav a.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  text-shadow: 0 0 8px rgba(255,107,0,0.4);
+}
+
+/* ===== PIT STOP SPECIFIC ===== */
+.pit-main {
+  display: flex;
+  height: calc(100vh - 130px);
+  position: relative;
+  z-index: 1;
+}
+.scene-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  overflow: hidden;
+}
+.scene-container {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  aspect-ratio: 1/1;
+}
+.scene-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+  display: block;
+}
+.overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+}
+
+/* Bubbles */
+.bubble {
+  position: absolute;
+  background: rgba(255,255,255,0.95);
+  color: #222;
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 12px;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  transition: opacity 0.2s;
+}
+.bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid rgba(255,255,255,0.95);
+}
+.bubble.dogi { left: 6%; top: 15%; border: 2px solid var(--accent); }
+.bubble.piyo { right: 16%; top: 25%; left: auto; border: 2px solid var(--yellow); }
+.bubble.fade { opacity: 0; }
+.bubble .txt { color: #333; }
+
+/* Agent tags */
+.tag {
+  position: absolute;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.tag.dogi { left: 10%; bottom: 42%; color: var(--accent); border-left: 2px solid var(--accent); }
+.tag.piyo { left: 38%; bottom: 26%; color: var(--yellow); border-left: 2px solid var(--yellow); }
+.tag .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); animation: pulse-glow 2s infinite; }
+
+/* Scanlines on scene */
+.scanlines {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px
+  );
+  pointer-events: none;
+}
+
+/* Status bar */
+.status-bar {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(0,0,0,0.75);
+  padding: 4px 12px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  border-top: 1px solid rgba(255,107,0,0.2);
+}
+.status-bar .left { color: var(--accent); }
+.status-bar .right { color: var(--text-muted); }
+
+/* Sidebar */
+.sb {
+  width: 280px;
+  background: var(--surface);
+  border-left: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+}
+.sb-h {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line-dim);
+  color: var(--accent);
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sb-h .lv { font-size: 9px; color: var(--green); animation: pulse-glow 2s infinite; }
+.ac { padding: 12px; border-bottom: 1px solid var(--line-dim); }
+.cd {
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  background: var(--surface2);
+  border-left: 3px solid var(--accent);
+  border-radius: 2px;
+}
+.cd.py { border-left-color: var(--yellow); }
+.cd .nm {
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.cd .nm.d { color: var(--accent); }
+.cd .nm.p { color: var(--yellow); }
+.cd .st { font-size: 12px; color: var(--text-dim); margin-left: 14px; }
+.sd {
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse-glow 2s infinite;
+}
+.al { flex: 1; overflow-y: auto; padding: 8px; }
+.le {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--surface2);
+  font-size: 12px;
+  line-height: 1.5;
+  animation: fi .4s ease;
+}
+.le .t { color: var(--text-muted); margin-right: 4px; }
+.le .ad { color: var(--accent); }
+.le .ap { color: var(--yellow); }
+.le .m { color: var(--text-dim); }
+
+@keyframes fi { from { opacity:0; transform:translateY(-3px); } to { opacity:1; transform:translateY(0); } }
+
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+
+@media (max-width: 768px) {
+  .pit-main { flex-direction: column; }
+  .sb { width: 100%; height: 35vh; border-left: none; border-top: 1px solid var(--line); }
+  .scene-container { max-width: 100%; }
+  .bubble { font-size: 11px; padding: 6px 10px; }
+  .tag { font-size: 10px; }
+  .header h1 { font-size: 14px; letter-spacing: 1px; }
+  .nav a { font-size: 12px; padding: 8px 12px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🐕 DOGI66 SYSTEM DASHBOARD</h1>
+  <div class="meta" style="display:flex;align-items:center;gap:12px;">
+    <span id="gen-time"></span>
+    <span class="pulse-dot"></span>
+    <button class="refresh-btn" onclick="doRefresh(this)">⟳ 更新</button>
+  </div>
+  <div class="data-stream">▹ DOGI66 PIT STOP v1.0</div>
+</div>
+<script>
+document.getElementById('gen-time').textContent='Generated: '+new Date().toLocaleString('sv-SE',{timeZone:'Asia/Taipei'}).replace('T',' ');
+function doRefresh(btn){
+  btn.classList.add('loading');
+  btn.innerHTML='<span class="spin">⟳</span> 更新中...';
+  fetch('/refresh').then(()=>{location.reload();}).catch(()=>{
+    btn.classList.remove('loading');btn.innerHTML='⟳ 更新';alert('更新失敗');
+  });
+}
+</script>
+<div class="ticker"><div class="ticker-inner">
+  ▹ DOGI66 SYSTEM v2.0 ▹ OPENCLAW 2026.2.9 ▹ TAILSCALE: CONNECTED ▹ AGENTS: 2 ONLINE ▹ CRON: ACTIVE ▹ SHADOW PERFORMANCE CO. ▹
+</div></div>
+<div class="nav">
+  <a href="index.html">系統狀態</a>
+  <a href="work.html">工作互動</a>
+  <a href="pit.html" class="active">PIT STOP</a>
+</div>
+
+<div class="pit-main">
+<div class="scene-wrap">
+  <div class="scene-container">
+    <img src="assets/pit-bg.jpg" alt="Shadow Pit Stop">
+    <div class="overlay">
+      <div class="bubble dogi" id="dogi-bubble"><span class="txt" id="dogi-txt"></span></div>
+      <div class="bubble piyo" id="piyo-bubble"><span class="txt" id="piyo-txt"></span></div>
+      <div class="tag dogi"><span class="dot"></span>DOGI 指揮官</div>
+      <div class="tag piyo"><span class="dot"></span>PIYO 維修技師</div>
+      <div class="scanlines"></div>
+    </div>
+    <div class="status-bar">
+      <span class="left">▸ SHADOW PIT — LIVE</span>
+      <span class="right" id="clock"></span>
+    </div>
+  </div>
+</div>
+<div class="sb">
+  <div class="ac">
+    <div class="cd"><div class="nm d"><span class="sd"></span>DOGI — 指揮官</div><div class="st" id="ds">系統監控中...</div></div>
+    <div class="cd py"><div class="nm p"><span class="sd"></span>PIYO — 維修技師</div><div class="st" id="ps">待命中...</div></div>
+  </div>
+  <div class="sb-h">■ ACTIVITY LOG <span class="lv">● LIVE</span></div>
+  <div class="al" id="log"></div>
+</div>
+</div>
+
+<script>
+// Real tasks — Dogi
+const dogiMsgs=[
+  '產業簡報每日發送中',
+  'CRM：追蹤 JOHN KON 運費報價',
+  'CRM：Michael Zaki 待跟進',
+  'Training Loop 2.0 Cycle 13',
+  '感恩日記 2/21 已寫入 Notion',
+  '督察修正指令：16 項處理中',
+  '系統備份 02:00 自動執行',
+  '品牌知識庫：22 項產品已建檔',
+  'Dashboard Pit Stop 頁面建置',
+  '商務政策已寫入 Notion',
+  '經銷合作方案（草案）已建立',
+  'Piyo README 跨 workspace 引用已修正',
+  'OBD2 v3.0 開發規格 14 週計畫',
+  '等明隆回覆 AWG 數據',
+  '等雅雪回覆 TTQS 資料',
+];
+// Real tasks — Piyo
+const piyoMsgs=[
+  'TTQS 教育訓練計畫追蹤中',
+  '每日自我檢查：workspace 完整',
+  'HR 考核資料整理中',
+  '雅雪溝通進度追蹤',
+  '公司內部文件歸檔',
+  'learned-skills 已更新為獨立版',
+  'Notion SOP 搬遷進度追蹤',
+  '跨 Agent handoff 訊息確認',
+];
+
+let curD=0, curP=0;
+const dTxt=document.getElementById('dogi-txt');
+const pTxt=document.getElementById('piyo-txt');
+const dBub=document.getElementById('dogi-bubble');
+const pBub=document.getElementById('piyo-bubble');
+
+function flipBubble(el,txtEl,msgs,idx){
+  el.classList.add('fade');
+  setTimeout(()=>{
+    txtEl.textContent=msgs[idx];
+    el.classList.remove('fade');
+  },200);
+}
+
+dTxt.textContent=dogiMsgs[0];
+pTxt.textContent=piyoMsgs[0];
+
+setInterval(()=>{
+  curD=(curD+1)%dogiMsgs.length;
+  flipBubble(dBub,dTxt,dogiMsgs,curD);
+  document.getElementById('ds').textContent=dogiMsgs[curD];
+},4500);
+setInterval(()=>{
+  curP=(curP+1)%piyoMsgs.length;
+  flipBubble(pBub,pTxt,piyoMsgs,curP);
+  document.getElementById('ps').textContent=piyoMsgs[curP];
+},5500);
+
+// Activity log
+const logEl=document.getElementById('log');
+const logs=[
+  {a:'d',t:'儀表板資料已更新'},{a:'p',t:'每日自我檢查完成'},{a:'d',t:'產業簡報已發送'},
+  {a:'d',t:'感恩日記 2/21 寫入 Notion'},{a:'p',t:'TTQS 進度追蹤中'},{a:'d',t:'CRM 客戶狀態確認'},
+  {a:'d',t:'系統備份完成'},{a:'p',t:'待命中...'},{a:'d',t:'Training Loop 2.0 Cycle 13'},
+  {a:'d',t:'督察修正指令處理中'},{a:'p',t:'learned-skills 已修正'},{a:'d',t:'Pit Stop 頁面上線'},
+  {a:'d',t:'Piyo README 更新完成'},{a:'p',t:'handoff 訊息確認'},{a:'d',t:'遙測數據分析完成'},
+];
+function addLog(){
+  const m=logs[Math.floor(Math.random()*logs.length)];
+  const t=new Date().toTimeString().slice(0,8);
+  const e=document.createElement('div');
+  e.className='le';
+  e.innerHTML=`<span class="t">${t}</span><span class="a${m.a}">[${m.a==='d'?'DOGI':'PIYO'}]</span> <span class="m">${m.t}</span>`;
+  logEl.insertBefore(e,logEl.firstChild);
+  if(logEl.children.length>50)logEl.removeChild(logEl.lastChild);
+}
+for(let i=0;i<8;i++)addLog();
+setInterval(addLog,7000);
+
+// Clock
+function updateClock(){
+  const now=new Date();
+  document.getElementById('clock').textContent=
+    now.toLocaleDateString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit'})+' '+
+    now.toTimeString().slice(0,8);
+}
+updateClock();
+setInterval(updateClock,1000);
+</script>
+</body>
+</html>

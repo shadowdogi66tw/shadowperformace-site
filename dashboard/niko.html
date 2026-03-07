@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NIKO — Agent 專頁</title>
+<style>
+:root {
+  --accent: #448AFF;
+  --accent-dim: rgba(68,138,255,0.3);
+  --accent-subtle: rgba(68,138,255,0.12);
+  --text: #e8e8ec;
+  --text-dim: #888898;
+  --text-muted: #555566;
+  --surface: #060608;
+  --surface2: #0a0a0f;
+  --green: #00e676;
+  --yellow: #ffd740;
+  --red: #ff5252;
+  --orange: #EA5504;
+  --purple: #CE93D8;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: #000;
+  color: var(--text);
+  font-family: 'Courier New', 'SF Mono', 'Consolas', monospace;
+  font-size: 15px;
+  line-height: 1.4;
+  background-image:
+    linear-gradient(rgba(68,138,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(68,138,255,0.025) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+body::after { content:''; position:fixed; top:0; left:0; right:0; bottom:0; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.05) 2px,rgba(0,0,0,0.05) 4px); pointer-events:none; z-index:9999; }
+.hud-circuit { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:hidden; }
+.header { background:#060608; border-bottom:3px solid var(--accent); padding:16px 28px; display:flex; justify-content:space-between; align-items:center; position:relative; z-index:1; }
+.header::before { content:''; position:absolute; bottom:0; left:0; width:120px; height:2px; background:linear-gradient(90deg,transparent,var(--accent),transparent); animation:hscan 4s linear infinite; }
+@keyframes hscan { 0%{left:-120px} 100%{left:100%} }
+.header h1 { font-size:20px; color:var(--accent); font-weight:700; text-transform:uppercase; letter-spacing:3px; text-shadow:0 0 12px rgba(68,138,255,0.5); }
+.header .meta { color:var(--text-dim); font-size:14px; display:flex; align-items:center; gap:12px; }
+.ticker { background:rgba(68,138,255,0.02); border-bottom:2px solid rgba(68,138,255,0.08); padding:3px 0; overflow:hidden; white-space:nowrap; font-size:13px; color:var(--text-muted); letter-spacing:2px; text-transform:uppercase; position:relative; z-index:1; }
+.ticker-inner { display:inline-block; animation:ticker 30s linear infinite; }
+@keyframes ticker { 0%{transform:translateX(100vw)} 100%{transform:translateX(-100%)} }
+.nav { background:#060608; border-bottom:2px solid rgba(68,138,255,0.2); padding:0 28px; display:flex; flex-wrap:wrap; position:relative; z-index:1; }
+.nav a { color:var(--text-muted); text-decoration:none; padding:10px 16px; font-size:13px; letter-spacing:2px; text-transform:uppercase; border-bottom:2px solid transparent; transition:all 0.2s; }
+.nav a:hover { color:var(--text); }
+.nav a.active { color:var(--accent); border-bottom-color:var(--accent); text-shadow:0 0 8px rgba(68,138,255,0.5); }
+.nav a.nav-dogi:hover { color:#EA5504; border-bottom-color:#EA5504; }
+.nav a.nav-piyo:hover { color:#FFD740; border-bottom-color:#FFD740; }
+.nav a.nav-kumo:hover { color:#CE93D8; border-bottom-color:#CE93D8; }
+.nav a.nav-kuma:hover { color:#00E676; border-bottom-color:#00E676; }
+.container { max-width:1400px; margin:0 auto; padding:18px 28px; display:grid; grid-template-columns:1fr 1fr; gap:16px; position:relative; z-index:1; }
+.card { background:linear-gradient(135deg,rgba(68,138,255,0.12),rgba(68,138,255,0.04) 30%,rgba(68,138,255,0.04) 70%,rgba(68,138,255,0.12)); position:relative; clip-path:polygon(16px 0,100% 0,100% calc(100% - 16px),calc(100% - 16px) 100%,0 100%,0 16px); }
+.card-header { background:linear-gradient(90deg,rgba(68,138,255,0.1),#060608 60%); padding:10px 18px; border-bottom:2px solid rgba(68,138,255,0.2); font-size:14px; font-weight:700; color:var(--accent); letter-spacing:2px; text-transform:uppercase; position:relative; }
+.card-header::before { content:'▍'; margin-right:8px; color:var(--accent); }
+.card-header::after { content:'· · · ·'; position:absolute; right:18px; top:50%; transform:translateY(-50%); font-size:14px; color:rgba(68,138,255,0.25); letter-spacing:3px; }
+.card-body { background:#060608; padding:12px 18px; position:relative; }
+.card-body::before { content:''; position:absolute; top:6px; left:6px; width:14px; height:14px; border-top:3px solid var(--accent); border-left:3px solid var(--accent); pointer-events:none; }
+.card-body::after { content:''; position:absolute; bottom:6px; right:6px; width:14px; height:14px; border-bottom:3px solid var(--accent); border-right:3px solid var(--accent); pointer-events:none; }
+.card-full { grid-column:1/-1; }
+.identity-card { display:flex; gap:24px; align-items:flex-start; padding:4px 0; }
+.identity-avatar { font-size:64px; line-height:1; filter:drop-shadow(0 0 12px rgba(68,138,255,0.5)); }
+.identity-info { flex:1; }
+.identity-name { font-size:28px; font-weight:700; color:var(--accent); letter-spacing:3px; text-transform:uppercase; text-shadow:0 0 15px rgba(68,138,255,0.5); margin-bottom:6px; }
+.identity-role { font-size:14px; color:var(--text-dim); margin-bottom:12px; letter-spacing:1px; }
+.identity-meta { display:flex; flex-wrap:wrap; gap:8px; }
+.id-tag { font-size:12px; padding:3px 10px; border:1px solid rgba(68,138,255,0.3); color:var(--accent); background:rgba(68,138,255,0.06); clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%); }
+.badge { display:inline-block; padding:2px 8px; font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; border:2px solid; clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%); }
+.badge-on { background:rgba(0,230,118,0.1); color:var(--green); border-color:rgba(0,230,118,0.3); animation:spulse 2.5s ease-in-out infinite; }
+.badge-idle { background:rgba(68,138,255,0.08); color:var(--accent); border-color:rgba(68,138,255,0.3); }
+.badge-ok { background:rgba(0,230,118,0.08); color:var(--green); border-color:rgba(0,230,118,0.2); }
+@keyframes spulse { 0%,100%{box-shadow:0 0 4px rgba(0,230,118,0.3)} 50%{box-shadow:0 0 10px rgba(0,230,118,0.6)} }
+.section-label { color:var(--accent); font-weight:700; font-size:13px; letter-spacing:2px; text-transform:uppercase; margin:10px 0 6px; padding-left:8px; border-left:3px solid var(--accent); }
+.todo-item { padding:6px 0 6px 10px; border-bottom:1px solid rgba(68,138,255,0.07); border-left:2px solid transparent; font-size:14px; transition:all 0.15s; }
+.todo-item:hover { border-left-color:var(--accent); background:rgba(68,138,255,0.02); }
+.todo-item:last-child { border-bottom:none; }
+.todo-done { opacity:0.5; text-decoration:line-through; }
+.todo-prio-high { border-left-color:rgba(255,82,82,0.5) !important; }
+.todo-prio-med { border-left-color:rgba(68,138,255,0.5) !important; }
+.log-block { background:rgba(0,0,0,0.6); border:1px solid rgba(68,138,255,0.15); padding:10px 14px; font-size:13px; color:var(--text-dim); max-height:220px; overflow-y:auto; box-shadow:inset 0 0 12px rgba(68,138,255,0.04); }
+.log-time { color:var(--text-muted); font-size:11px; }
+.log-entry { padding:3px 0; border-bottom:1px solid rgba(68,138,255,0.04); }
+.log-entry:last-child { border-bottom:none; }
+.review-block { background:rgba(0,0,0,0.6); border:1px solid rgba(68,138,255,0.15); padding:10px 14px; font-size:13px; color:var(--text-dim); max-height:260px; overflow-y:auto; box-shadow:inset 0 0 12px rgba(68,138,255,0.04); }
+.review-heading { color:var(--accent); font-weight:700; font-size:12px; letter-spacing:1.5px; text-transform:uppercase; padding:8px 0 3px; border-bottom:1px solid rgba(68,138,255,0.12); }
+.review-heading:first-child { padding-top:0; }
+.review-item { padding:2px 0 2px 8px; display:flex; gap:6px; line-height:1.5; }
+.review-done { color:var(--green); opacity:0.8; }
+.stat-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid rgba(68,138,255,0.07); font-size:13px; }
+.stat-row:last-child { border-bottom:none; }
+.stat-label { color:var(--text-dim); }
+.stat-value { color:var(--accent); font-weight:700; }
+.pulse-dot { width:6px; height:6px; border-radius:50%; background:var(--green); box-shadow:0 0 4px var(--green); animation:pglow 2s ease-in-out infinite; display:inline-block; }
+@keyframes pglow { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.hud-divider { grid-column:1/-1; height:28px; display:flex; align-items:center; justify-content:center; position:relative; }
+.hud-divider::before { content:''; position:absolute; top:50%; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent 0%,rgba(68,138,255,0.15) 10%,rgba(68,138,255,0.3) 30%,var(--accent) 48%,transparent 50%,var(--accent) 52%,rgba(68,138,255,0.3) 70%,rgba(68,138,255,0.15) 90%,transparent 100%); }
+.hud-divider::after { content:'◆'; color:var(--accent); font-size:6px; background:#000; padding:0 16px; position:relative; z-index:1; }
+.footer-circuit { text-align:center; padding:20px 28px; position:relative; z-index:1; color:var(--text-muted); font-size:13px; letter-spacing:2px; text-transform:uppercase; }
+.footer-circuit::before { content:''; display:block; margin:0 auto 14px; width:50%; height:1px; background:linear-gradient(90deg,transparent,rgba(68,138,255,0.15) 20%,rgba(68,138,255,0.3) 45%,rgba(68,138,255,0.3) 55%,rgba(68,138,255,0.15) 80%,transparent); }
+.project-row { padding:8px 10px; border-bottom:1px solid rgba(68,138,255,0.07); }
+.project-row:last-child { border-bottom:none; }
+.project-name { font-weight:700; font-size:14px; color:var(--text); }
+.project-status { font-size:12px; color:var(--text-dim); margin-top:2px; }
+@media (max-width:900px) {
+  .container { grid-template-columns:1fr; padding:10px 12px; }
+  .card-full { grid-column:1; }
+  .identity-card { flex-direction:column; gap:12px; }
+  .identity-avatar { font-size:48px; }
+  .header h1 { font-size:15px; }
+  .nav a { padding:8px 10px; font-size:11px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Circuit Background — Blue theme -->
+<svg class="hud-circuit" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="60" width="72" height="46" fill="none" stroke="#448AFF" stroke-width="0.9" opacity="0.13"/>
+  <text x="56" y="88" fill="#448AFF" font-size="8" text-anchor="middle" opacity="0.09" font-family="monospace">DSP-N1</text>
+  <line x1="20" y1="74" x2="0" y2="74" stroke="#448AFF" stroke-width="0.7" opacity="0.12"/>
+  <line x1="20" y1="86" x2="0" y2="86" stroke="#448AFF" stroke-width="0.7" opacity="0.11"/>
+  <line x1="92" y1="74" x2="155" y2="74" stroke="#448AFF" stroke-width="0.8" opacity="0.15"/>
+  <circle cx="155" cy="74" r="3" fill="#448AFF" opacity="0.2"/>
+  <line x1="155" y1="74" x2="155" y2="170" stroke="#448AFF" stroke-width="0.8" opacity="0.14"/>
+  <line x1="155" y1="170" x2="180" y2="195" stroke="#448AFF" stroke-width="0.8" opacity="0.13"/>
+  <circle cx="155" cy="170" r="2.5" fill="#448AFF" opacity="0.17"/>
+  <line x1="180" y1="195" x2="180" y2="420" stroke="#448AFF" stroke-width="0.8" opacity="0.11"/>
+  <circle cx="180" cy="300" r="3" fill="#448AFF" opacity="0.18"/>
+  <line x1="180" y1="300" x2="85" y2="300" stroke="#448AFF" stroke-width="0.6" opacity="0.1"/>
+  <rect x="8" y="430" width="68" height="44" fill="none" stroke="#448AFF" stroke-width="0.8" opacity="0.1"/>
+  <text x="42" y="457" fill="#448AFF" font-size="7" text-anchor="middle" opacity="0.08" font-family="monospace">IC-N2</text>
+  <line x1="76" y1="452" x2="180" y2="420" stroke="#448AFF" stroke-width="0.7" opacity="0.1"/>
+  <line x1="180" y1="420" x2="160" y2="440" stroke="#448AFF" stroke-width="0.6" opacity="0.09"/>
+  <line x1="160" y1="440" x2="160" y2="640" stroke="#448AFF" stroke-width="0.6" opacity="0.07"/>
+  <!-- RIGHT -->
+  <line x1="1845" y1="105" x2="1785" y2="105" stroke="#448AFF" stroke-width="0.8" opacity="0.15"/>
+  <line x1="1785" y1="105" x2="1785" y2="230" stroke="#448AFF" stroke-width="0.8" opacity="0.14"/>
+  <line x1="1785" y1="230" x2="1755" y2="260" stroke="#448AFF" stroke-width="0.8" opacity="0.13"/>
+  <circle cx="1785" cy="230" r="3.5" fill="#448AFF" opacity="0.19"/>
+  <line x1="1755" y1="260" x2="1755" y2="510" stroke="#448AFF" stroke-width="0.8" opacity="0.11"/>
+  <circle cx="1755" cy="390" r="2.5" fill="#448AFF" opacity="0.16"/>
+  <line x1="1755" y1="390" x2="1815" y2="390" stroke="#448AFF" stroke-width="0.6" opacity="0.1"/>
+  <rect x="1820" y="370" width="62" height="38" fill="none" stroke="#448AFF" stroke-width="0.8" opacity="0.11"/>
+  <text x="1851" y="394" fill="#448AFF" font-size="7" text-anchor="middle" opacity="0.08" font-family="monospace">IC-N3</text>
+  <!-- center top -->
+  <line x1="340" y1="30" x2="680" y2="30" stroke="#448AFF" stroke-width="0.6" opacity="0.08"/>
+  <circle cx="510" cy="30" r="1.5" fill="#448AFF" opacity="0.1"/>
+  <!-- scattered -->
+  <circle cx="500" cy="500" r="1.5" fill="#448AFF" opacity="0.09"/>
+  <circle cx="900" cy="280" r="2" fill="#448AFF" opacity="0.08"/>
+  <circle cx="1300" cy="600" r="1.5" fill="#448AFF" opacity="0.09"/>
+  <!-- animated pulses -->
+  <path d="M 155 74 V 170 L 180 195 V 300" stroke="#448AFF" stroke-width="2" fill="none" stroke-dasharray="22 230" opacity="0">
+    <animate attributeName="stroke-dashoffset" from="252" to="-252" dur="4s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;0.4;0.4;0" dur="4s" repeatCount="indefinite"/>
+  </path>
+  <path d="M 1785 105 V 230 L 1755 260 V 510" stroke="#448AFF" stroke-width="2" fill="none" stroke-dasharray="20 250" opacity="0">
+    <animate attributeName="stroke-dashoffset" from="270" to="-270" dur="5s" repeatCount="indefinite" begin="1.2s"/>
+    <animate attributeName="opacity" values="0;0.35;0.35;0" dur="5s" repeatCount="indefinite" begin="1.2s"/>
+  </path>
+  <path d="M 30 560 L 44 574 L 30 588" fill="none" stroke="#448AFF" stroke-width="1" opacity="0.12"/>
+  <path d="M 42 560 L 56 574 L 42 588" fill="none" stroke="#448AFF" stroke-width="1" opacity="0.08"/>
+</svg>
+
+<div class="header">
+  <h1>🐱 NIKO — Agent 專頁</h1>
+  <div class="meta">
+    <span>2026-02-27 02:00</span>
+    <span class="pulse-dot"></span>
+    <span class="badge badge-idle">IDLE</span>
+  </div>
+</div>
+<div class="ticker"><div class="ticker-inner">
+  ▹ NIKO · 研發部 AI 助手 ▹ MODEL: CLAUDE-SONNET-4-5 ▹ WORKSPACE: workspace-niko ▹ R&D DIVISION ▹ SHADOW PERFORMANCE CO. ▹
+</div></div>
+<div class="nav">
+  <a href="index.html">🖥 系統總覽</a>
+  <a href="dogi.html" class="nav-dogi">🐕 DOGI</a>
+  <a href="piyo.html" class="nav-piyo">🐥 PIYO</a>
+  <a href="niko.html" class="active">🐱 NIKO</a>
+  <a href="kumo.html" class="nav-kumo">🕷 KUMO</a>
+  <a href="kuma.html" class="nav-kuma">🐻 KUMA</a>
+</div>
+
+<div class="container">
+
+<!-- IDENTITY -->
+<div class="card card-full">
+  <div class="card-header">🪪 AGENT 身份卡</div>
+  <div class="card-body">
+    <div class="identity-card">
+      <div class="identity-avatar">🐱</div>
+      <div class="identity-info">
+        <div class="identity-name">NIKO</div>
+        <div class="identity-role">研發部 AI 助手・產品開發・技術研究</div>
+        <div class="identity-meta">
+          <span class="id-tag">MODEL: claude-sonnet-4-5</span>
+          <span class="id-tag">WORKSPACE: workspace-niko</span>
+          <span class="id-tag">DEPT: 研發部 R&D</span>
+          <span class="id-tag badge-idle" style="border-color:rgba(68,138,255,0.5);">● IDLE</span>
+        </div>
+        <div style="margin-top:12px;font-size:13px;color:var(--text-dim);">
+          專長：產品規格書・競品分析・技術文件・原型設計・研發專案管理
+        </div>
+      </div>
+      <div>
+        <div class="stat-row"><span class="stat-label">累計用量</span><span class="stat-value">$48.20</span></div>
+        <div class="stat-row"><span class="stat-label">Sessions</span><span class="stat-value">12</span></div>
+        <div class="stat-row"><span class="stat-label">Active Projects</span><span class="stat-value" style="color:var(--accent);">3</span></div>
+        <div class="stat-row"><span class="stat-label">Cron Jobs</span><span class="stat-value" style="color:var(--text-muted);">0</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TODO -->
+<div class="card">
+  <div class="card-header">📋 待辦事項</div>
+  <div class="card-body">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">From MEMORY.md · 2026-02-27</div>
+    <div class="todo-item todo-prio-high">
+      <span style="color:#ff5252;margin-right:6px;">◉</span>
+      <strong>[HIGH]</strong> 火花放大器 V5.0 規格書最終版 — 等待 Steven 確認方向
+    </div>
+    <div class="todo-item todo-prio-high">
+      <span style="color:#ff5252;margin-right:6px;">◉</span>
+      <strong>[HIGH]</strong> SWICA Lite 2 競品分析報告 — Q1 截止
+    </div>
+    <div class="todo-item todo-prio-med">
+      <span style="color:var(--accent);margin-right:6px;">◈</span>
+      <strong>[MED]</strong> Shadow Pro 系列新品規劃 — 概念提案
+    </div>
+    <div class="todo-item todo-prio-med">
+      <span style="color:var(--accent);margin-right:6px;">◈</span>
+      <strong>[MED]</strong> 產品認證文件整理 — CE/FCC 資料更新
+    </div>
+    <div class="todo-item">
+      <span style="color:var(--text-muted);margin-right:6px;">◇</span>
+      <strong>[LOW]</strong> 研發部知識庫建立 — Notion 頁面架構
+    </div>
+    <div class="todo-item todo-done">
+      <span style="color:var(--green);margin-right:6px;">✓</span>
+      火花放大器 V4.2 BOM 表整理 — 完成
+    </div>
+  </div>
+</div>
+
+<!-- LOG -->
+<div class="card">
+  <div class="card-header">📜 近期日誌</div>
+  <div class="card-body">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">daily/2026-02-27.md</div>
+    <div class="log-block">
+      <div class="log-entry"><span class="log-time">10:20</span> <span style="color:#aaa;">—</span> Steven 詢問 SWICA Lite 2 競品調查進度</div>
+      <div class="log-entry"><span class="log-time">10:35</span> <span style="color:var(--accent);">→</span> 提供市場競品對比分析（5 款產品）</div>
+      <div class="log-entry"><span class="log-time">14:00</span> <span style="color:#aaa;">—</span> 收到火花放大器 V5.0 規格需求更新</div>
+      <div class="log-entry"><span class="log-time">14:30</span> <span style="color:var(--accent);">→</span> 整理 V5.0 章節架構草稿</div>
+      <div class="log-entry"><span class="log-time">15:45</span> <span style="color:var(--yellow);">⚠</span> 規格書 5.2 節技術參數需 Steven 確認</div>
+      <div class="log-entry"><span class="log-time">16:00</span> <span style="color:var(--green);">✓</span> BOM 表 V4.2 更新完成，上傳至 Notion</div>
+    </div>
+  </div>
+</div>
+
+<!-- REVIEW -->
+<div class="card card-full">
+  <div class="card-header">🔍 自檢報告</div>
+  <div class="card-body">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">daily/2026-02-27-review.md · <span class="badge badge-ok" style="font-size:10px;">通過</span></div>
+    <div class="review-block">
+      <div class="review-heading">A. 身份一致性</div>
+      <div class="review-item review-done"><span>✅</span> SOUL.md 描述正確（Niko = 研發部 AI 助手）</div>
+      <div class="review-item review-done"><span>✅</span> AGENTS.md 無跨 workspace 路徑</div>
+      <div class="review-heading">B. 記憶完整性</div>
+      <div class="review-item review-done"><span>✅</span> MEMORY.md 存在且非空</div>
+      <div class="review-item review-done"><span>✅</span> 今日 daily log 已建立</div>
+      <div class="review-heading">C. 權限隔離</div>
+      <div class="review-item review-done"><span>✅</span> 無跨 workspace 違規讀取</div>
+      <div class="review-item review-done"><span>✅</span> shared symlink 正確</div>
+      <div class="review-heading">D. 系統健康</div>
+      <div class="review-item review-done"><span>✅</span> 備份存在：backups/2026-02-27/workspace-niko/</div>
+      <div class="review-heading" style="color:var(--green);">✅ Checklist 全部通過</div>
+    </div>
+  </div>
+</div>
+
+<div class="hud-divider"></div>
+
+<!-- NIKO SPECIFIC: R&D Projects -->
+<div class="card">
+  <div class="card-header">🔬 研發專案</div>
+  <div class="card-body">
+    <div class="project-row">
+      <div class="project-name">🔥 火花放大器 V5.0</div>
+      <div class="project-status">規格書撰寫中 · 等待確認技術參數</div>
+      <div style="margin-top:6px;background:#0a0a0f;height:8px;border-radius:2px;overflow:hidden;">
+        <div style="background:var(--accent);height:100%;width:70%;opacity:0.7;"></div>
+      </div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">70% · 目標 Q1 完成</div>
+    </div>
+    <div class="project-row">
+      <div class="project-name">⚡ SWICA Lite 2</div>
+      <div class="project-status">競品分析 + 功能規劃 · 待上架目標確認</div>
+      <div style="margin-top:6px;background:#0a0a0f;height:8px;border-radius:2px;overflow:hidden;">
+        <div style="background:var(--accent);height:100%;width:45%;opacity:0.7;"></div>
+      </div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">45% · 目標 Q2 上架</div>
+    </div>
+    <div class="project-row">
+      <div class="project-name">🎯 Shadow Pro 系列</div>
+      <div class="project-status">概念提案階段 · 市場調研中</div>
+      <div style="margin-top:6px;background:#0a0a0f;height:8px;border-radius:2px;overflow:hidden;">
+        <div style="background:var(--accent);height:100%;width:15%;opacity:0.7;"></div>
+      </div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">15% · 目標 Q3 提案</div>
+    </div>
+  </div>
+</div>
+
+<!-- CERTIFICATIONS -->
+<div class="card">
+  <div class="card-header">📜 認證 / 合規</div>
+  <div class="card-body">
+    <div class="section-label">現有產品認證</div>
+    <div style="font-size:13px;padding:3px 0;"><span style="color:var(--green);">✅</span> 火花放大器 V4.2 — CE Marking</div>
+    <div style="font-size:13px;padding:3px 0;"><span style="color:var(--green);">✅</span> 火花放大器 V4.2 — FCC ID</div>
+    <div style="font-size:13px;padding:3px 0;"><span style="color:var(--yellow);">⚠</span> SWICA Lite — CE 更新中 (V2用)</div>
+    <div style="font-size:13px;padding:3px 0;"><span style="color:var(--text-muted);">◌</span> Shadow Pro — 待申請</div>
+    <div class="section-label" style="margin-top:10px;">技術文件</div>
+    <div style="font-size:13px;padding:3px 0;color:var(--text-dim);">▸ BOM 表 V4.2 — 最新 (02/26)</div>
+    <div style="font-size:13px;padding:3px 0;color:var(--text-dim);">▸ 電路圖 V4.1 — 待更新</div>
+    <div style="font-size:13px;padding:3px 0;color:var(--text-dim);">▸ 用戶手冊 — EN/ZH/JP 版</div>
+  </div>
+</div>
+
+</div><!-- /container -->
+<div class="footer-circuit">
+  <span style="color:var(--accent);">◁</span> NIKO · R&D DIVISION · SHADOW PERFORMANCE · OPENCLAW 2026 <span style="color:var(--accent);">▷</span>
+</div>
+</body>
+</html>

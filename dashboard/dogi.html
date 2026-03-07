@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOGI — Agent 專頁</title>
+<style>
+:root {
+  --accent: #EA5504;
+  --accent2: #E8720C;
+  --accent-dim: rgba(255,107,0,0.3);
+  --accent-subtle: rgba(255,107,0,0.12);
+  --accent-glow: rgba(255,107,0,0.08);
+  --text: #e8e8ec;
+  --text-dim: #888898;
+  --text-muted: #555566;
+  --surface: #060608;
+  --surface2: #0a0a0f;
+  --green: #00e676;
+  --yellow: #ffd740;
+  --red: #ff5252;
+  --blue: #448aff;
+  --purple: #CE93D8;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: #000;
+  color: var(--text);
+  font-family: 'Courier New', 'SF Mono', 'Consolas', monospace;
+  font-size: 15px;
+  line-height: 1.4;
+  background-image:
+    linear-gradient(rgba(255,107,0,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,107,0,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+body::after {
+  content: '';
+  position: fixed; top:0; left:0; right:0; bottom:0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px);
+  pointer-events: none;
+  z-index: 9999;
+}
+.hud-circuit { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:hidden; }
+.header {
+  background: #060608;
+  border-bottom: 3px solid var(--accent);
+  padding: 16px 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+.header::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0;
+  width: 120px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  animation: hscan 4s linear infinite;
+}
+@keyframes hscan { 0%{left:-120px} 100%{left:100%} }
+.header h1 { font-size: 20px; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0 0 12px rgba(255,107,0,0.4); }
+.header .meta { color: var(--text-dim); font-size: 14px; display: flex; align-items: center; gap: 12px; }
+.ticker { background: rgba(255,107,0,0.03); border-bottom: 2px solid rgba(255,107,0,0.08); padding: 3px 0; overflow: hidden; white-space: nowrap; font-size: 13px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; position: relative; z-index:1; }
+.ticker-inner { display: inline-block; animation: ticker 30s linear infinite; }
+@keyframes ticker { 0%{transform:translateX(100vw)} 100%{transform:translateX(-100%)} }
+.nav { background: #060608; border-bottom: 2px solid rgba(255,107,0,0.2); padding: 0 28px; display: flex; flex-wrap: wrap; position: relative; z-index:1; }
+.nav a { color: var(--text-muted); text-decoration: none; padding: 10px 16px; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; border-bottom: 2px solid transparent; transition: all 0.2s; }
+.nav a:hover { color: var(--text); }
+.nav a.active { color: var(--accent); border-bottom-color: var(--accent); text-shadow: 0 0 8px rgba(255,107,0,0.4); }
+.nav a.nav-piyo:hover { color:#FFD740; border-bottom-color:#FFD740; }
+.nav a.nav-niko:hover { color:#448AFF; border-bottom-color:#448AFF; }
+.nav a.nav-kumo:hover { color:#CE93D8; border-bottom-color:#CE93D8; }
+.nav a.nav-kuma:hover { color:#00E676; border-bottom-color:#00E676; }
+.container { max-width: 1400px; margin: 0 auto; padding: 18px 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; position: relative; z-index:1; }
+.card {
+  background: linear-gradient(135deg, rgba(255,107,0,0.15), rgba(255,107,0,0.05) 30%, rgba(255,107,0,0.05) 70%, rgba(255,107,0,0.15));
+  position: relative;
+  clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px);
+}
+.card-header { background: linear-gradient(90deg, rgba(255,107,0,0.1), #060608 60%); padding: 10px 18px; border-bottom: 2px solid rgba(255,107,0,0.2); font-size: 14px; font-weight: 700; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; position: relative; }
+.card-header::before { content: '▍'; margin-right: 8px; color: var(--accent); }
+.card-header::after { content: '· · · ·'; position: absolute; right: 18px; top: 50%; transform: translateY(-50%); font-size: 14px; color: rgba(255,107,0,0.25); letter-spacing: 3px; }
+.card-body { background: #060608; padding: 12px 18px; position: relative; }
+.card-body::before { content:''; position:absolute; top:6px; left:6px; width:14px; height:14px; border-top:3px solid var(--accent); border-left:3px solid var(--accent); pointer-events:none; }
+.card-body::after { content:''; position:absolute; bottom:6px; right:6px; width:14px; height:14px; border-bottom:3px solid var(--accent); border-right:3px solid var(--accent); pointer-events:none; }
+.card-full { grid-column: 1 / -1; }
+.card-third { grid-column: span 1; }
+/* Identity Card */
+.identity-card {
+  display: flex; gap: 24px; align-items: flex-start;
+  padding: 4px 0;
+}
+.identity-avatar {
+  font-size: 64px; line-height: 1;
+  text-shadow: 0 0 30px rgba(255,107,0,0.5);
+  filter: drop-shadow(0 0 10px rgba(255,107,0,0.4));
+}
+.identity-info { flex:1; }
+.identity-name { font-size: 28px; font-weight: 700; color: var(--accent); letter-spacing: 3px; text-transform: uppercase; text-shadow: 0 0 15px rgba(255,107,0,0.4); margin-bottom: 6px; }
+.identity-role { font-size: 14px; color: var(--text-dim); margin-bottom: 12px; letter-spacing: 1px; }
+.identity-meta { display: flex; flex-wrap: wrap; gap: 8px; }
+.id-tag { font-size: 12px; padding: 3px 10px; border: 1px solid rgba(255,107,0,0.3); color: var(--accent); background: rgba(255,107,0,0.06); clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%); }
+/* Badges */
+.badge { display: inline-block; padding: 2px 8px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; border: 2px solid; clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%); }
+.badge-on { background: rgba(0,230,118,0.1); color: var(--green); border-color: rgba(0,230,118,0.3); animation: spulse 2.5s ease-in-out infinite; }
+.badge-warn { background: rgba(255,215,64,0.08); color: var(--yellow); border-color: rgba(255,215,64,0.3); }
+.badge-ok { background: rgba(0,230,118,0.08); color: var(--green); border-color: rgba(0,230,118,0.2); }
+.badge-error { background: rgba(255,82,82,0.1); color: var(--red); border-color: rgba(255,82,82,0.3); }
+@keyframes spulse { 0%,100%{box-shadow:0 0 4px rgba(0,230,118,0.3)} 50%{box-shadow:0 0 10px rgba(0,230,118,0.6)} }
+/* Section labels */
+.section-label { color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; margin: 10px 0 6px; padding-left: 8px; border-left: 3px solid var(--accent); }
+/* Todo */
+.todo-item { padding: 6px 0 6px 10px; border-bottom: 1px solid rgba(255,107,0,0.07); border-left: 2px solid transparent; font-size: 14px; transition: all 0.15s; }
+.todo-item:hover { border-left-color: var(--accent); background: rgba(255,107,0,0.02); }
+.todo-item:last-child { border-bottom: none; }
+.todo-done { opacity: 0.5; text-decoration: line-through; }
+.todo-prio-high { border-left-color: rgba(255,82,82,0.5) !important; }
+.todo-prio-med { border-left-color: rgba(255,215,64,0.4) !important; }
+/* Log content */
+.log-block { background: rgba(0,0,0,0.6); border: 1px solid rgba(255,107,0,0.15); padding: 10px 14px; font-size: 13px; color: var(--text-dim); max-height: 220px; overflow-y: auto; position: relative; box-shadow: inset 0 0 12px rgba(255,107,0,0.04); }
+.log-time { color: var(--text-muted); font-size: 11px; }
+.log-entry { padding: 3px 0; border-bottom: 1px solid rgba(255,107,0,0.04); }
+.log-entry:last-child { border-bottom: none; }
+/* Review */
+.review-block { background: rgba(0,0,0,0.6); border: 1px solid rgba(255,107,0,0.15); padding: 10px 14px; font-size: 13px; color: var(--text-dim); max-height: 260px; overflow-y: auto; box-shadow: inset 0 0 12px rgba(255,107,0,0.04); }
+.review-heading { color: var(--accent); font-weight: 700; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; padding: 8px 0 3px; margin-top: 4px; border-bottom: 1px solid rgba(255,107,0,0.12); }
+.review-heading:first-child { padding-top: 0; margin-top: 0; }
+.review-item { padding: 2px 0 2px 8px; display: flex; gap: 6px; line-height: 1.5; }
+.review-done { color: var(--green); opacity: 0.8; }
+/* Stat row */
+.stat-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid rgba(255,107,0,0.07); font-size: 13px; }
+.stat-row:last-child { border-bottom: none; }
+.stat-label { color: var(--text-dim); }
+.stat-value { color: var(--accent); font-weight: 700; }
+/* Pulse dot */
+.pulse-dot { width:6px; height:6px; border-radius:50%; background:var(--green); box-shadow:0 0 4px var(--green); animation:pglow 2s ease-in-out infinite; display:inline-block; }
+@keyframes pglow { 0%,100%{opacity:1} 50%{opacity:0.3} }
+/* HUD divider */
+.hud-divider { grid-column:1/-1; height:28px; display:flex; align-items:center; justify-content:center; position:relative; }
+.hud-divider::before { content:''; position:absolute; top:50%; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent 0%,rgba(255,107,0,0.15) 10%,rgba(255,107,0,0.3) 30%,var(--accent) 48%,transparent 50%,var(--accent) 52%,rgba(255,107,0,0.3) 70%,rgba(255,107,0,0.15) 90%,transparent 100%); }
+.hud-divider::after { content:'◆'; color:var(--accent); font-size:6px; background:#000; padding:0 16px; position:relative; z-index:1; }
+/* Footer */
+.footer-circuit { text-align:center; padding:20px 28px; position:relative; z-index:1; color:var(--text-muted); font-size:13px; letter-spacing:2px; text-transform:uppercase; }
+.footer-circuit::before { content:''; display:block; margin:0 auto 14px; width:50%; height:1px; background:linear-gradient(90deg,transparent,rgba(255,107,0,0.15) 20%,rgba(255,107,0,0.3) 45%,rgba(255,107,0,0.3) 55%,rgba(255,107,0,0.15) 80%,transparent); }
+@media (max-width:900px) {
+  .container { grid-template-columns: 1fr; padding:10px 12px; }
+  .card-full { grid-column:1; }
+  .identity-card { flex-direction:column; gap:12px; }
+  .identity-avatar { font-size:48px; }
+  .header h1 { font-size:15px; }
+  .nav a { padding:8px 10px; font-size:11px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Circuit Background — Orange theme -->
+<svg class="hud-circuit" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <!-- TOP LEFT cluster -->
+  <rect x="15" y="60" width="80" height="50" fill="none" stroke="#EA5504" stroke-width="1" opacity="0.14"/>
+  <text x="55" y="90" fill="#EA5504" font-size="8" text-anchor="middle" opacity="0.1" font-family="monospace">MCU-A1</text>
+  <line x1="15" y1="75" x2="0" y2="75" stroke="#EA5504" stroke-width="0.7" opacity="0.13"/>
+  <line x1="15" y1="87" x2="0" y2="87" stroke="#EA5504" stroke-width="0.7" opacity="0.13"/>
+  <line x1="15" y1="99" x2="0" y2="99" stroke="#EA5504" stroke-width="0.7" opacity="0.1"/>
+  <line x1="95" y1="75" x2="160" y2="75" stroke="#EA5504" stroke-width="0.8" opacity="0.16"/>
+  <line x1="95" y1="87" x2="140" y2="87" stroke="#EA5504" stroke-width="0.8" opacity="0.14"/>
+  <circle cx="160" cy="75" r="3" fill="#EA5504" opacity="0.22"/>
+  <line x1="160" y1="75" x2="160" y2="180" stroke="#EA5504" stroke-width="0.8" opacity="0.15"/>
+  <line x1="160" y1="180" x2="190" y2="210" stroke="#EA5504" stroke-width="0.8" opacity="0.14"/>
+  <circle cx="160" cy="180" r="2.5" fill="#EA5504" opacity="0.18"/>
+  <line x1="190" y1="210" x2="190" y2="420" stroke="#EA5504" stroke-width="0.8" opacity="0.12"/>
+  <!-- branch at 300 -->
+  <circle cx="190" cy="300" r="3" fill="#EA5504" opacity="0.2"/>
+  <line x1="190" y1="300" x2="100" y2="300" stroke="#EA5504" stroke-width="0.7" opacity="0.12"/>
+  <circle cx="100" cy="300" r="2" fill="#EA5504" opacity="0.15"/>
+  <line x1="100" y1="300" x2="100" y2="380" stroke="#EA5504" stroke-width="0.6" opacity="0.1"/>
+  <!-- IC chip bottom-left -->
+  <rect x="20" y="440" width="70" height="42" fill="none" stroke="#EA5504" stroke-width="0.8" opacity="0.12"/>
+  <text x="55" y="466" fill="#EA5504" font-size="7" text-anchor="middle" opacity="0.09" font-family="monospace">IC-B2</text>
+  <line x1="90" y1="455" x2="130" y2="455" stroke="#EA5504" stroke-width="0.6" opacity="0.11"/>
+  <circle cx="130" cy="455" r="2.5" fill="#EA5504" opacity="0.16"/>
+  <line x1="130" y1="455" x2="190" y2="420" stroke="#EA5504" stroke-width="0.7" opacity="0.12"/>
+  <!-- continue down -->
+  <line x1="190" y1="420" x2="165" y2="445" stroke="#EA5504" stroke-width="0.7" opacity="0.1"/>
+  <line x1="165" y1="445" x2="165" y2="620" stroke="#EA5504" stroke-width="0.6" opacity="0.08"/>
+  <!-- RIGHT SIDE circuit -->
+  <line x1="1820" y1="120" x2="1760" y2="120" stroke="#EA5504" stroke-width="0.8" opacity="0.16"/>
+  <line x1="1760" y1="120" x2="1760" y2="200" stroke="#EA5504" stroke-width="0.8" opacity="0.15"/>
+  <line x1="1760" y1="200" x2="1730" y2="230" stroke="#EA5504" stroke-width="0.8" opacity="0.14"/>
+  <circle cx="1760" cy="200" r="3.5" fill="#EA5504" opacity="0.2"/>
+  <line x1="1730" y1="230" x2="1730" y2="480" stroke="#EA5504" stroke-width="0.8" opacity="0.12"/>
+  <circle cx="1730" cy="350" r="3" fill="#EA5504" opacity="0.17"/>
+  <line x1="1730" y1="350" x2="1790" y2="350" stroke="#EA5504" stroke-width="0.6" opacity="0.1"/>
+  <rect x="1795" y="330" width="65" height="40" fill="none" stroke="#EA5504" stroke-width="0.8" opacity="0.12"/>
+  <text x="1827" y="355" fill="#EA5504" font-size="7" text-anchor="middle" opacity="0.09" font-family="monospace">IC-C3</text>
+  <line x1="1730" y1="480" x2="1755" y2="505" stroke="#EA5504" stroke-width="0.7" opacity="0.1"/>
+  <line x1="1755" y1="505" x2="1755" y2="700" stroke="#EA5504" stroke-width="0.6" opacity="0.08"/>
+  <!-- center horizontal traces -->
+  <line x1="350" y1="45" x2="700" y2="45" stroke="#EA5504" stroke-width="0.6" opacity="0.1"/>
+  <circle cx="500" cy="45" r="2" fill="#EA5504" opacity="0.12"/>
+  <line x1="500" y1="45" x2="500" y2="0" stroke="#EA5504" stroke-width="0.6" opacity="0.1"/>
+  <!-- scattered nodes -->
+  <circle cx="400" cy="500" r="1.5" fill="#EA5504" opacity="0.1"/>
+  <circle cx="800" cy="250" r="2" fill="#EA5504" opacity="0.09"/>
+  <circle cx="1100" cy="700" r="1.5" fill="#EA5504" opacity="0.1"/>
+  <circle cx="1400" cy="180" r="2" fill="#EA5504" opacity="0.09"/>
+  <!-- Animated pulses -->
+  <path d="M 160 75 V 180 L 190 210 V 300" stroke="#EA5504" stroke-width="2" fill="none" stroke-dasharray="25 250" opacity="0">
+    <animate attributeName="stroke-dashoffset" from="275" to="-275" dur="3.5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;0.4;0.4;0" dur="3.5s" repeatCount="indefinite"/>
+  </path>
+  <path d="M 1760 120 V 200 L 1730 230 V 480" stroke="#EA5504" stroke-width="2" fill="none" stroke-dasharray="20 260" opacity="0">
+    <animate attributeName="stroke-dashoffset" from="280" to="-280" dur="4.5s" repeatCount="indefinite" begin="1s"/>
+    <animate attributeName="opacity" values="0;0.35;0.35;0" dur="4.5s" repeatCount="indefinite" begin="1s"/>
+  </path>
+  <!-- chevrons -->
+  <path d="M 250 550 L 264 564 L 250 578" fill="none" stroke="#EA5504" stroke-width="1" opacity="0.13"/>
+  <path d="M 262 550 L 276 564 L 262 578" fill="none" stroke="#EA5504" stroke-width="1" opacity="0.08"/>
+</svg>
+
+<div class="header">
+  <h1>🐕 DOGI — Agent 專頁</h1>
+  <div class="meta">
+    <span>2026-02-27 02:00</span>
+    <span class="pulse-dot"></span>
+    <span class="badge badge-on">ONLINE</span>
+  </div>
+</div>
+<div class="ticker"><div class="ticker-inner">
+  ▹ DOGI66 · STEVEN 的數位夥伴 ▹ MODEL: CLAUDE-OPUS-4-6 ▹ WORKSPACE: workspace-dogi ▹ TELEGRAM: 8504756175 ▹ SHADOW PERFORMANCE CO. ▹
+</div></div>
+<div class="nav">
+  <a href="index.html">🖥 系統總覽</a>
+  <a href="dogi.html" class="active">🐕 DOGI</a>
+  <a href="piyo.html" class="nav-piyo">🐥 PIYO</a>
+  <a href="niko.html" class="nav-niko">🐱 NIKO</a>
+  <a href="kumo.html" class="nav-kumo">🕷 KUMO</a>
+  <a href="kuma.html" class="nav-kuma">🐻 KUMA</a>
+</div>
+
+<div class="container">
+
+<!-- IDENTITY CARD -->
+<div class="card card-full">
+  <div class="card-header">🪪 AGENT 身份卡</div>
+  <div class="card-body">
+    <div class="identity-card">
+      <div class="identity-avatar">🐕</div>
+      <div class="identity-info">
+        <div class="identity-name">DOGI66</div>
+        <div class="identity-role">Steven 的數位夥伴・全能助理・主要 Agent</div>
+        <div class="identity-meta">
+          <span class="id-tag">MODEL: claude-opus-4-6</span>
+          <span class="id-tag">WORKSPACE: workspace-dogi</span>
+          <span class="id-tag">TELEGRAM: 8504756175</span>
+          <span class="id-tag">CHANNEL: telegram</span>
+          <span class="id-tag">THINKING: low</span>
+          <span class="id-tag badge-on" style="border-color:rgba(0,230,118,0.5);color:var(--green);">● ONLINE</span>
+        </div>
+        <div style="margin-top:12px;font-size:13px;color:var(--text-dim);">
+          核心價值：安心是自由的前提。真正有幫助，而非表演式幫助。先自己想辦法，再問。
+        </div>
+      </div>
+      <div>
+        <div class="stat-row"><span class="stat-label">今日 Token</span><span class="stat-value">$17.64</span></div>
+        <div class="stat-row"><span class="stat-label">累計用量</span><span class="stat-value">$395.90</span></div>
+        <div class="stat-row"><span class="stat-label">Sessions</span><span class="stat-value">88</span></div>
+        <div class="stat-row"><span class="stat-label">Cron Jobs</span><span class="stat-value" style="color:var(--green);">13 active</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TODO -->
+<div class="card">
+  <div class="card-header">📋 待辦事項</div>
+  <div class="card-body">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">From MEMORY.md · 2026-02-27</div>
+    <div class="todo-item todo-prio-high">
+      <span style="color:var(--red);margin-right:6px;">◉</span>
+      <strong>[HIGH]</strong> SWICA Lite 2 上架追蹤 cron 錯誤 — 確認目標 URL 是否恢復
+    </div>
+    <div class="todo-item todo-prio-high">
+      <span style="color:var(--red);margin-right:6px;">◉</span>
+      <strong>[HIGH]</strong> 信箱 auth 401 Unauthorized — 確認 API Key 是否過期
+    </div>
+    <div class="todo-item todo-prio-med">
+      <span style="color:var(--yellow);margin-right:6px;">◈</span>
+      <strong>[MED]</strong> 火花放大器開發規格書 V5.0 — 等待 Steven 確認修改方向
+    </div>
+    <div class="todo-item todo-prio-med">
+      <span style="color:var(--yellow);margin-right:6px;">◈</span>
+      <strong>[MED]</strong> 雅雪 NAS 採購信件 — 排程 03/01 21:00 自動寄送，需確認內容
+    </div>
+    <div class="todo-item">
+      <span style="color:var(--text-muted);margin-right:6px;">◇</span>
+      <strong>[LOW]</strong> 每月社群內容補充 — 03/01 執行，預先準備內容草稿
+    </div>
+    <div class="todo-item">
+      <span style="color:var(--text-muted);margin-right:6px;">◇</span>
+      <strong>[LOW]</strong> 每週知識自測錯題明細 — 待下次 Notion 存取時執行
+    </div>
+    <div class="todo-item todo-done">
+      <span style="color:var(--green);margin-right:6px;">✓</span>
+      每日備份 2026-02-27 02:00 — 完成
+    </div>
+    <div class="todo-item todo-done">
+      <span style="color:var(--green);margin-right:6px;">✓</span>
+      每日自我檢查 2026-02-27 03:00 — 完成
+    </div>
+  </div>
+</div>
+
+<!-- RECENT LOG -->
+<div class="card">
+  <div class="card-header">📜 近期日誌</div>
+  <div class="card-body">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">daily/2026-02-27.md</div>
+    <div class="log-block">
+      <div class="log-entry"><span class="log-time">02:00</span> <span style="color:var(--green);">✓</span> 每日備份完成 (3.8M, 全部驗證通過)</div>
+      <div class="log-entry"><span class="log-time">03:00</span> <span style="color:var(--green);">✓</span> 每日自我檢查完成 — 系統健康</div>
+      <div class="log-entry"><span class="log-time">03:30</span> <span style="color:var(--green);">✓</span> 每日智能反省完成 — 記錄待改進事項 3 條</div>
+      <div class="log-entry"><span class="log-time">08:00</span> <span style="color:var(--green);">✓</span> Shadow 每日市場簡報已送出 → Steven</div>
+      <div class="log-entry"><span class="log-time">08:00</span> <span style="color:var(--green);">✓</span> 產品資料異動偵測 — 無變動</div>
+      <div class="log-entry"><span class="log-time">08:30</span> <span style="color:var(--green);">✓</span> 世界新聞簡報已送出 → Steven</div>
+      <div class="log-entry"><span class="log-time">09:00</span> <span style="color:var(--yellow);">⚠</span> SWICA Lite 2 上架追蹤失敗 — HTTP 503</div>
+      <div class="log-entry"><span class="log-time">09:00</span> <span style="color:var(--green);">✓</span> TTQS/人事考核進度檢查 — 無新進度</div>
+      <div class="log-entry"><span class="log-time">13:00</span> <span style="color:var(--green);">✓</span> TTQS 第 2 次檢查 — 無異動</div>
+      <div class="log-entry"><span class="log-time">17:00</span> <span style="color:var(--green);">✓</span> TTQS 第 3 次檢查 — 無異動</div>
+      <div class="log-entry"><span class="log-time">21:00</span> <span style="color:var(--green);">✓</span> TTQS 第 4 次檢查 — Yorda 提交了一份新文件</div>
+      <div class="log-entry"><span class="log-time">21:30</span> <span style="color:#aaa;">—</span> Steven 詢問 Shadow 火花放大器定價策略</div>
+      <div class="log-entry"><span class="log-time">22:15</span> <span style="color:#aaa;">—</span> 提供 3 種定價方案，Steven 傾向方案 B</div>
+    </div>
+  </div>
+</div>
+
+<!-- SELF REVIEW -->
+<div class="card card-full">
+  <div class="card-header">🔍 自檢報告</div>
+  <div class="card-body">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">daily/2026-02-27-review.md · <span class="badge badge-on" style="font-size:10px;">通過</span></div>
+    <div class="review-block">
+      <div class="review-heading">A. 身份一致性</div>
+      <div class="review-item review-done"><span>✅</span> SOUL.md 描述正確（Dogi = Steven 的數位夥伴）</div>
+      <div class="review-item review-done"><span>✅</span> 無 PERSONA.md 矛盾</div>
+      <div class="review-item review-done"><span>✅</span> AGENTS.md 無指向其他 workspace 的讀取路徑</div>
+      <div class="review-heading">B. 記憶完整性</div>
+      <div class="review-item review-done"><span>✅</span> MEMORY.md 存在且非空（最後更新 2026-02-26）</div>
+      <div class="review-item review-done"><span>✅</span> 今日 daily log 已建立</div>
+      <div class="review-item review-done"><span>✅</span> MEMORY.md 無明顯過時資訊</div>
+      <div class="review-heading">C. 權限隔離</div>
+      <div class="review-item review-done"><span>✅</span> 無跨 workspace 違規讀取</div>
+      <div class="review-item review-done"><span>✅</span> symlink 正確：shared → ../workspace/shared</div>
+      <div class="review-heading">D. 系統健康</div>
+      <div class="review-item review-done"><span>✅</span> 備份存在：backups/2026-02-27/</div>
+      <div class="review-item review-done"><span>✅</span> 昨日 review 存在：daily/2026-02-26-review.md</div>
+      <div class="review-item" style="color:var(--yellow);"><span>⚠</span> SWICA Lite 2 cron 失敗 — 需 Steven 確認目標站點狀態</div>
+      <div class="review-item" style="color:var(--yellow);"><span>⚠</span> 信箱 API 401 錯誤 — 需檢查 x-api-key 設定</div>
+      <div class="review-heading" style="color:var(--green);">✅ Checklist 通過（2 項警告需人工確認）</div>
+    </div>
+  </div>
+</div>
+
+<div class="hud-divider"></div>
+
+<!-- DOGI SPECIFIC: Cron Jobs -->
+<div class="card card-full">
+  <div class="card-header">⏱ DOGI 排程任務</div>
+  <div class="card-body">
+    <table style="width:100%;border-collapse:collapse;table-layout:fixed;">
+      <colgroup><col style="width:25%"><col style="width:18%"><col style="width:14%"><col style="width:14%"><col style="width:14%"><col style="width:15%"></colgroup>
+      <tr style="font-size:12px;color:var(--accent);text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid rgba(255,107,0,0.3);">
+        <th style="padding:5px 8px;text-align:left;">任務名稱</th>
+        <th style="padding:5px 8px;text-align:left;">排程</th>
+        <th style="padding:5px 8px;text-align:left;">狀態</th>
+        <th style="padding:5px 8px;text-align:left;">上次</th>
+        <th style="padding:5px 8px;text-align:left;">下次</th>
+        <th style="padding:5px 8px;text-align:left;">結果</th>
+      </tr>
+      <tr style="font-size:13px;border-bottom:1px solid rgba(255,107,0,0.06);">
+        <td style="padding:5px 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Shadow 每日市場簡報</td>
+        <td style="padding:5px 8px;color:var(--text-dim);">0 8 * * *</td>
+        <td style="padding:5px 8px;"><span class="badge badge-ok">ok</span></td>
+        <td style="padding:5px 8px;color:var(--text-dim);">02/27 08:00</td>
+        <td style="padding:5px 8px;color:var(--text-dim);">02/28 08:00</td>
+        <td style="padding:5px 8px;color:var(--green);">已送出</td>
+      </tr>
+      <tr style="font-size:13px;border-bottom:1px solid rgba(255,107,0,0.06);">
+        <td style="padding:5px 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">每日世界新聞簡報</td>
+        <td style="padding:5px 8px;color:var(--text-dim);">30 8 * * *</td>
+        <td style="padding:5px 8px;"><span class="badge badge-ok">ok</span></td>
+        <td style="padding:5px 8px;color:var(--text-dim);">02/27 08:30</td>
+        <td style="padding:5px 8px;color:var(--text-dim);">02/28 08:30</td>
+        <td style="padding:5px 8px;color:var(--green);">已送出</td>
+      </tr>
+      <tr style="font-size:13px;border-bottom:1px solid rgba(255,107,0,0.06);">
+        <td style="padding:5px 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">SWICA Lite 2 上架追蹤</td>
+        <td style="padding:5px 8px;color:var(--text-dim);">at</td>
+        <td style="padding:5px 8px;"><span class="badge badge-error">error</span></td>
+        <td style="padding:5px 8px;color:var(--text-dim);">02/27 09:00</td>
+        <td style="padding:5px 8px;color:var(--text-dim);">—</td>
+        <td style="padding:5px 8px;color:var(--red);">HTTP 503</td>
+      </tr>
+      <tr style="font-size:13px;border-bottom:1px solid rgba(255,107,0,0.06);">
+        <td style="padding:5px 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">公司信箱檢查</td>
+        <td style="padding:5px 8px;color:var(--text-dim);">every 20m</td>
+        <td style="padding:5px 8px;"><span class="badge badge-ok">ok</span></td>
+        <td style="padding:5px 8px;color:var(--text-dim);">02/27 01:40</td>
+        <td style="padding:5px 8px;color:var(--text-dim);">02/27 02:00</td>
+        <td style="padding:5px 8px;color:var(--green);">2 封新信</td>
+      </tr>
+      <tr style="font-size:13px;border-bottom:1px solid rgba(255,107,0,0.06);">
+        <td style="padding:5px 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">每日自我檢查</td>
+        <td style="padding:5px 8px;color:var(--text-dim);">0 3 * * *</td>
+        <td style="padding:5px 8px;"><span class="badge badge-ok">ok</span></td>
+        <td style="padding:5px 8px;color:var(--text-dim);">02/27 03:00</td>
+        <td style="padding:5px 8px;color:var(--text-dim);">02/28 03:00</td>
+        <td style="padding:5px 8px;color:var(--green);">通過</td>
+      </tr>
+      <tr style="font-size:13px;">
+        <td style="padding:5px 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">寄信給雅雪-NAS採購</td>
+        <td style="padding:5px 8px;color:var(--text-dim);">at 03/01 21:00</td>
+        <td style="padding:5px 8px;"><span class="badge" style="background:rgba(68,138,255,0.08);color:#448aff;border-color:rgba(68,138,255,0.3);">PENDING</span></td>
+        <td style="padding:5px 8px;color:var(--text-dim);">—</td>
+        <td style="padding:5px 8px;color:var(--text-dim);">03/01 21:00</td>
+        <td style="padding:5px 8px;color:#448aff;">等待中</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- KNOWLEDGE BASE -->
+<div class="card">
+  <div class="card-header">📚 知識庫 / 技能</div>
+  <div class="card-body">
+    <div class="section-label">已載入知識</div>
+    <div style="font-size:13px;padding:3px 0;"><span style="color:var(--green);">✅</span> brand/brand-guide.md</div>
+    <div style="font-size:13px;padding:3px 0;"><span style="color:var(--green);">✅</span> brand/communication-guide.md</div>
+    <div style="font-size:13px;padding:3px 0;"><span style="color:var(--green);">✅</span> brand/ta-analysis.md</div>
+    <div style="font-size:13px;padding:3px 0;"><span style="color:var(--green);">✅</span> skills/presentation-making.md</div>
+    <div style="font-size:13px;padding:3px 0;"><span style="color:var(--green);">✅</span> skills/notion-integration.md</div>
+    <div class="section-label" style="margin-top:10px;">Active Skills (8)</div>
+    <div style="font-size:13px;display:flex;flex-wrap:wrap;gap:5px;padding:4px 0;">
+      <span style="color:var(--green);padding:2px 6px;border:1px solid rgba(0,230,118,0.3);font-size:11px;">coding-agent</span>
+      <span style="color:var(--green);padding:2px 6px;border:1px solid rgba(0,230,118,0.3);font-size:11px;">gemini</span>
+      <span style="color:var(--green);padding:2px 6px;border:1px solid rgba(0,230,118,0.3);font-size:11px;">github</span>
+      <span style="color:var(--green);padding:2px 6px;border:1px solid rgba(0,230,118,0.3);font-size:11px;">gog</span>
+      <span style="color:var(--green);padding:2px 6px;border:1px solid rgba(0,230,118,0.3);font-size:11px;">healthcheck</span>
+      <span style="color:var(--green);padding:2px 6px;border:1px solid rgba(0,230,118,0.3);font-size:11px;">skill-creator</span>
+      <span style="color:var(--green);padding:2px 6px;border:1px solid rgba(0,230,118,0.3);font-size:11px;">video-frames</span>
+      <span style="color:var(--green);padding:2px 6px;border:1px solid rgba(0,230,118,0.3);font-size:11px;">weather</span>
+    </div>
+  </div>
+</div>
+
+<!-- MEMORY HIGHLIGHTS -->
+<div class="card">
+  <div class="card-header">🧠 記憶摘要</div>
+  <div class="card-body">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">MEMORY.md 精煉 · 更新 2026-02-26</div>
+    <div class="section-label">重要事項</div>
+    <div style="font-size:13px;padding:3px 0;color:var(--text-dim);">▸ Steven 確認品牌資料只能從 Notion 讀取（2026-02-20）</div>
+    <div style="font-size:13px;padding:3px 0;color:var(--text-dim);">▸ SWICA Lite 2 開發中，定價方案 B 獲 Steven 青睞</div>
+    <div style="font-size:13px;padding:3px 0;color:var(--text-dim);">▸ 雅雪 NAS 採購案 — 03/01 截止</div>
+    <div style="font-size:13px;padding:3px 0;color:var(--text-dim);">▸ TTQS AI 訓練計畫進行中（配合 Piyo）</div>
+    <div style="font-size:13px;padding:3px 0;color:var(--text-dim);">▸ 火花放大器 V5.0 規格書待 Steven 確認</div>
+    <div class="section-label" style="margin-top:10px;">注意事項</div>
+    <div style="font-size:13px;padding:3px 0;color:var(--yellow);">⚠ 商務資訊（價格/保固/認證）永遠從 Notion 讀取，不自行推測</div>
+    <div style="font-size:13px;padding:3px 0;color:var(--yellow);">⚠ 未授權對外通訊需 Steven 確認</div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<div class="footer-circuit">
+  <span style="color:var(--accent);">◁</span> DOGI66 · SHADOW PERFORMANCE · OPENCLAW 2026 <span style="color:var(--accent);">▷</span>
+</div>
+</body>
+</html>
