@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>機車改裝售後市場調查報告 2026 — Shadow Performance</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700;900&family=Anton&display=swap');
+
+  :root {
+    --orange: #EA5504;
+    --bg: #0A0A0F;
+    --bg2: #111118;
+    --bg3: #16161F;
+    --white: #FFFFFF;
+    --gray: #888899;
+    --light-gray: #CCCCDD;
+    --border: #2A2A38;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .page-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* ===== COVER ===== */
+  .cover {
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 80px 80px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cover-stripes {
+    position: absolute;
+    right: -60px;
+    top: 0;
+    bottom: 0;
+    width: 320px;
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    transform: skewX(-8deg);
+    opacity: 0.12;
+  }
+
+  .stripe {
+    width: 28px;
+    height: 100%;
+    background: var(--orange);
+  }
+
+  .cover-label {
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    font-weight: 700;
+  }
+
+  .cover-title-zh {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 52px;
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 12px;
+    max-width: 680px;
+  }
+
+  .cover-title-en {
+    font-family: 'Anton', 'Arial Black', sans-serif;
+    font-size: 18px;
+    color: var(--gray);
+    letter-spacing: 2px;
+    margin-bottom: 48px;
+    text-transform: uppercase;
+  }
+
+  .cover-meta {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 60px;
+  }
+
+  .cover-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .cover-meta-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--gray);
+    text-transform: uppercase;
+  }
+
+  .cover-meta-value {
+    font-size: 15px;
+    color: var(--white);
+    font-weight: 700;
+  }
+
+  .cover-divider {
+    width: 80px;
+    height: 3px;
+    background: var(--orange);
+    margin-bottom: 40px;
+  }
+
+  .cover-highlight {
+    background: var(--bg2);
+    border-left: 4px solid var(--orange);
+    padding: 24px 32px;
+    max-width: 640px;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .cover-highlight p {
+    color: var(--light-gray);
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .cover-highlight span {
+    color: var(--orange);
+    font-weight: 700;
+  }
+
+  /* ===== SECTION ===== */
+  section {
+    padding: 80px 80px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  section:nth-child(even) {
+    background: var(--bg2);
+  }
+
+  .section-number {
+    font-family: 'Anton', sans-serif;
+    font-size: 80px;
+    color: var(--orange);
+    opacity: 0.12;
+    line-height: 1;
+    margin-bottom: -20px;
+  }
+
+  .section-title {
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--white);
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .section-subtitle {
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 48px;
+    font-weight: 700;
+  }
+
+  /* ===== STAT CARDS ===== */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  .stat-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--orange);
+  }
+
+  .stat-card-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--gray);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .stat-card-value {
+    font-family: 'Anton', 'Arial Black', sans-serif;
+    font-size: 42px;
+    color: var(--orange);
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+
+  .stat-card-unit {
+    font-size: 16px;
+    color: var(--white);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .stat-card-sub {
+    font-size: 12px;
+    color: var(--gray);
+  }
+
+  .stat-card-arrow {
+    font-size: 11px;
+    color: var(--orange);
+    font-weight: 700;
+    margin-top: 12px;
+  }
+
+  /* ===== GROWTH BAR ===== */
+  .growth-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .growth-label {
+    width: 200px;
+    flex-shrink: 0;
+    font-size: 13px;
+    color: var(--light-gray);
+  }
+
+  .growth-bar-wrap {
+    flex: 1;
+    background: var(--border);
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .growth-bar {
+    height: 100%;
+    background: var(--orange);
+    border-radius: 4px;
+  }
+
+  .growth-pct {
+    width: 60px;
+    text-align: right;
+    font-size: 13px;
+    color: var(--orange);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* ===== TABLE ===== */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+  }
+
+  .data-table thead th {
+    background: var(--orange);
+    color: var(--white);
+    padding: 14px 18px;
+    text-align: left;
+    font-size: 12px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .data-table thead th:first-child {
+    border-radius: 8px 0 0 0;
+  }
+
+  .data-table thead th:last-child {
+    border-radius: 0 8px 0 0;
+  }
+
+  .data-table tbody tr {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .data-table tbody tr:nth-child(even) {
+    background: rgba(255,255,255,0.02);
+  }
+
+  .data-table tbody tr:hover {
+    background: rgba(234, 85, 4, 0.06);
+  }
+
+  .data-table td {
+    padding: 14px 18px;
+    font-size: 14px;
+    color: var(--light-gray);
+    vertical-align: top;
+  }
+
+  .data-table td:first-child {
+    color: var(--white);
+    font-weight: 700;
+  }
+
+  .highlight-text {
+    color: var(--orange);
+    font-weight: 700;
+  }
+
+  /* ===== CATEGORY GRID ===== */
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-top: 8px;
+  }
+
+  .category-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 22px;
+  }
+
+  .category-card-title {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--orange);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .category-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: var(--light-gray);
+  }
+
+  .category-item::before {
+    content: '›';
+    color: var(--orange);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ===== REGION CARDS ===== */
+  .region-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  .region-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .region-header {
+    background: linear-gradient(135deg, #1A1A24, #1E1E2C);
+    border-bottom: 2px solid var(--orange);
+    padding: 20px 24px;
+  }
+
+  .region-name {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--white);
+    margin-bottom: 2px;
+  }
+
+  .region-tag {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--orange);
+    text-transform: uppercase;
+  }
+
+  .region-body {
+    padding: 20px 24px;
+  }
+
+  .region-item {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: var(--light-gray);
+    align-items: flex-start;
+  }
+
+  .region-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--orange);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+
+  /* ===== CHANNEL ===== */
+  .channel-block {
+    margin-bottom: 36px;
+  }
+
+  .channel-block-title {
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--white);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .channel-block-title::before {
+    content: '>>';
+    color: var(--orange);
+    font-size: 13px;
+    font-weight: 900;
+  }
+
+  .channel-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .channel-tag {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 12px;
+    color: var(--light-gray);
+  }
+
+  .channel-tag.primary {
+    border-color: var(--orange);
+    color: var(--orange);
+    font-weight: 700;
+  }
+
+  /* ===== STRATEGY ===== */
+  .strategy-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .strategy-item {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .strategy-num {
+    font-family: 'Anton', sans-serif;
+    font-size: 32px;
+    color: var(--orange);
+    opacity: 0.5;
+    line-height: 1;
+    flex-shrink: 0;
+    width: 40px;
+  }
+
+  .strategy-content h4 {
+    font-size: 15px;
+    font-weight: 900;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .strategy-content p {
+    font-size: 13px;
+    color: var(--gray);
+    line-height: 1.6;
+  }
+
+  /* ===== TRENDS ===== */
+  .trend-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+
+  .trend-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 20px;
+    text-align: center;
+  }
+
+  .trend-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+
+  .trend-title {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+
+  .trend-desc {
+    font-size: 12px;
+    color: var(--gray);
+    line-height: 1.6;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    background: var(--bg);
+    padding: 60px 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border);
+  }
+
+  .footer-brand {
+    font-family: 'Anton', sans-serif;
+    font-size: 24px;
+    color: var(--orange);
+    letter-spacing: 3px;
+  }
+
+  .footer-info {
+    text-align: right;
+  }
+
+  .footer-url {
+    font-size: 13px;
+    color: var(--gray);
+    margin-bottom: 4px;
+  }
+
+  .footer-copy {
+    font-size: 11px;
+    color: var(--border);
+  }
+
+  /* ===== BADGE ===== */
+  .badge {
+    display: inline-block;
+    background: rgba(234,85,4,0.15);
+    border: 1px solid rgba(234,85,4,0.4);
+    color: var(--orange);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .info-box {
+    background: rgba(234,85,4,0.06);
+    border: 1px solid rgba(234,85,4,0.25);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-top: 24px;
+    color: var(--light-gray);
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  .info-box strong {
+    color: var(--orange);
+  }
+
+  @media (max-width: 768px) {
+    .cover, section, .footer { padding: 48px 24px; }
+    .cover-title-zh { font-size: 32px; }
+    .section-title { font-size: 24px; }
+    .section-number { font-size: 56px; }
+    .stat-card-value { font-size: 32px; }
+    .footer { flex-direction: column; gap: 20px; text-align: center; }
+    .footer-info { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== COVER ===== -->
+<div class="cover">
+  <div class="cover-stripes">
+    <div class="stripe"></div>
+    <div class="stripe"></div>
+    <div class="stripe"></div>
+    <div class="stripe"></div>
+    <div class="stripe"></div>
+  </div>
+
+  <div class="cover-label">Market Research Report</div>
+  <div class="cover-title-zh">機車改裝<br>售後市場調查報告</div>
+  <div class="cover-title-en">Motorcycle Aftermarket &amp; Modification Market Research</div>
+  <div class="cover-divider"></div>
+
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <span class="cover-meta-label">Edition</span>
+      <span class="cover-meta-value">2026</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="cover-meta-label">Prepared by</span>
+      <span class="cover-meta-value">Shadow Performance</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="cover-meta-label">Coverage</span>
+      <span class="cover-meta-value">Global Market</span>
+    </div>
+  </div>
+
+  <div class="cover-highlight">
+    <p>全球機車配件市場穩定成長，<span>亞太地區主導市場份額</span>，北美歐洲為高單價市場。台灣製造的品質優勢，是進攻國際市場最有力的談判籌碼。</p>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: 市場規模 ===== -->
+<section>
+  <div class="section-number">01</div>
+  <div class="section-title">市場規模</div>
+  <div class="section-subtitle">Global Market Size Overview</div>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-card-label">機車配件市場 / 2024</div>
+      <div class="stat-card-value">88.1</div>
+      <div class="stat-card-unit">億美元</div>
+      <div class="stat-card-sub">Motorcycle Accessories Market</div>
+      <div class="stat-card-arrow">▲ 預估 2034 年達 210.5 億美元</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-label">機車零件與配件市場 / 2024</div>
+      <div class="stat-card-value">412.9</div>
+      <div class="stat-card-unit">億美元</div>
+      <div class="stat-card-sub">Motorcycle Parts &amp; Accessories</div>
+      <div class="stat-card-arrow">▲ 預估 2035 年達 608.5 億美元</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-label">年複合成長率 CAGR</div>
+      <div class="stat-card-value">3.6</div>
+      <div class="stat-card-unit">%</div>
+      <div class="stat-card-sub">穩健成長，長期趨勢向上</div>
+      <div class="stat-card-arrow">兩大市場一致成長率</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-label">北美市場佔比</div>
+      <div class="stat-card-value">25.4</div>
+      <div class="stat-card-unit">%</div>
+      <div class="stat-card-sub">全球配件市場份額</div>
+      <div class="stat-card-arrow">高單價、高利潤市場</div>
+    </div>
+  </div>
+
+  <div style="margin-top: 32px;">
+    <div style="font-size: 13px; color: var(--gray); margin-bottom: 16px; letter-spacing: 1px; text-transform: uppercase; font-weight: 700;">市場份額分佈</div>
+    <div class="growth-item">
+      <span class="growth-label">亞太地區（最大市場）</span>
+      <div class="growth-bar-wrap"><div class="growth-bar" style="width: 65%"></div></div>
+      <span class="growth-pct">65%+</span>
+    </div>
+    <div class="growth-item">
+      <span class="growth-label">北美</span>
+      <div class="growth-bar-wrap"><div class="growth-bar" style="width: 25%"></div></div>
+      <span class="growth-pct">25.4%</span>
+    </div>
+    <div class="growth-item">
+      <span class="growth-label">歐洲</span>
+      <div class="growth-bar-wrap"><div class="growth-bar" style="width: 10%"></div></div>
+      <span class="growth-pct">~10%</span>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong>核心驅動力：</strong>中國、印度、東南亞機車普及率持續提升，帶動龐大改裝售後需求。亞太地區佔全球機車銷量 <strong>90%+</strong>，是量的引擎；北美、歐洲是單價與利潤的高地。
+  </div>
+</section>
+
+<!-- ===== SECTION 2: 改裝品項分類 ===== -->
+<section>
+  <div class="section-number">02</div>
+  <div class="section-title">改裝品項分類</div>
+  <div class="section-subtitle">Modification Category Breakdown — Non-Consumables</div>
+
+  <div class="category-grid">
+    <div class="category-card">
+      <div class="category-card-title">⚙ 性能升級類</div>
+      <div class="category-item">排氣管系統（Full system / Slip-on）</div>
+      <div class="category-item">ECU 調校 / 供油電腦</div>
+      <div class="category-item">進氣系統（高流量濾芯、進氣歧管）</div>
+      <div class="category-item">懸吊升級（前叉、後避震）</div>
+      <div class="category-item">煞車系統（卡鉗、碟盤、油管）</div>
+      <div class="category-item">離合器 / 傳動升級</div>
+    </div>
+    <div class="category-card">
+      <div class="category-card-title">🎨 外觀改裝類</div>
+      <div class="category-item">車殼 / 整流罩</div>
+      <div class="category-item">後照鏡、拉桿、腳踏</div>
+      <div class="category-item">LED 燈具 / 日行燈</div>
+      <div class="category-item">儀表板（數位儀表、OBD 顯示器）</div>
+      <div class="category-item">車身貼膜 / 烤漆</div>
+    </div>
+    <div class="category-card">
+      <div class="category-card-title">🔧 功能配件類</div>
+      <div class="category-item">手機支架 / 導航系統</div>
+      <div class="category-item">行車記錄器</div>
+      <div class="category-item">USB 充電座</div>
+      <div class="category-item">防盜系統</div>
+      <div class="category-item">行李箱 / 馬鞍包</div>
+    </div>
+    <div class="category-card">
+      <div class="category-card-title">📡 電子配件類</div>
+      <div class="category-item">智慧安全帽通訊系統</div>
+      <div class="category-item">胎壓偵測器（TPMS）</div>
+      <div class="category-item">藍牙通訊模組</div>
+      <div class="category-item">GPS 追蹤器</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 3: 車款分級 ===== -->
+<section>
+  <div class="section-number">03</div>
+  <div class="section-title">車款分級與改裝市場</div>
+  <div class="section-subtitle">Vehicle Segment & Modification Market</div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>等級</th>
+        <th>排氣量</th>
+        <th>代表車款</th>
+        <th>改裝特性</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>入門通勤</td>
+        <td>125–250cc</td>
+        <td>Honda CB125, Yamaha MT-15</td>
+        <td>外觀為主，預算敏感，<span class="highlight-text">數量最大</span></td>
+      </tr>
+      <tr>
+        <td>輕檔街車</td>
+        <td>250–500cc</td>
+        <td>Kawasaki Ninja 400, KTM Duke 390</td>
+        <td>性能 + 外觀並重，年輕族群</td>
+      </tr>
+      <tr>
+        <td>中量級</td>
+        <td>500–750cc</td>
+        <td>Honda CB650R, Yamaha MT-07</td>
+        <td>全方位改裝，<span class="highlight-text">黃金市場</span></td>
+      </tr>
+      <tr>
+        <td>公升級</td>
+        <td>750–1000cc</td>
+        <td>BMW S1000RR, Ducati Panigale V4</td>
+        <td>性能導向，<span class="highlight-text">高單價零件</span></td>
+      </tr>
+      <tr>
+        <td>旗艦巡航</td>
+        <td>1000cc+</td>
+        <td>Harley-Davidson, Indian</td>
+        <td>高度客製化，配件生態系完整</td>
+      </tr>
+      <tr>
+        <td>速克達</td>
+        <td>125–350cc</td>
+        <td>Yamaha XMAX, Honda Forza</td>
+        <td>都市實用改裝，<span class="highlight-text">成長最快</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ===== SECTION 4: 區域市場 ===== -->
+<section>
+  <div class="section-number">04</div>
+  <div class="section-title">區域市場分析</div>
+  <div class="section-subtitle">Regional Market Analysis</div>
+
+  <div class="region-grid">
+    <div class="region-card">
+      <div class="region-header">
+        <div class="region-name">亞太地區 <span class="badge">最大市場</span></div>
+        <div class="region-tag">Asia Pacific — Primary Target</div>
+      </div>
+      <div class="region-body">
+        <div class="region-item"><div class="region-dot"></div><span>佔全球機車銷量 <strong style="color:var(--orange)">90%+</strong></span></div>
+        <div class="region-item"><div class="region-dot"></div><span>前五大市場：中國、印度、印尼、越南、泰國</span></div>
+        <div class="region-item"><div class="region-dot"></div><span>台灣年出口 <strong style="color:var(--orange)">170 萬台</strong>，重要出口基地</span></div>
+        <div class="region-item"><div class="region-dot"></div><span>東南亞客製化需求快速成長</span></div>
+        <div class="region-item"><div class="region-dot"></div><span>改裝文化：泰國、印尼特別活躍</span></div>
+      </div>
+    </div>
+    <div class="region-card">
+      <div class="region-header">
+        <div class="region-name">北美 <span class="badge">高單價</span></div>
+        <div class="region-tag">North America — Premium Market</div>
+      </div>
+      <div class="region-body">
+        <div class="region-item"><div class="region-dot"></div><span>佔全球配件市場約 <strong style="color:var(--orange)">25.4%</strong></span></div>
+        <div class="region-item"><div class="region-dot"></div><span>Harley-Davidson 生態系帶動巡航改裝</span></div>
+        <div class="region-item"><div class="region-dot"></div><span>Adventure / ADV 車型改裝快速成長</span></div>
+        <div class="region-item"><div class="region-dot"></div><span>電商滲透率高（RevZilla、J&amp;P Cycles）</span></div>
+      </div>
+    </div>
+    <div class="region-card">
+      <div class="region-header">
+        <div class="region-name">歐洲 <span class="badge">技術導向</span></div>
+        <div class="region-tag">Europe — Quality &amp; Compliance</div>
+      </div>
+      <div class="region-body">
+        <div class="region-item"><div class="region-dot"></div><span>核心市場：義大利、德國、西班牙</span></div>
+        <div class="region-item"><div class="region-dot"></div><span>品質要求高、認證門檻嚴格（E-mark）</span></div>
+        <div class="region-item"><div class="region-dot"></div><span>Adventure 車型（BMW GS 系列）帶動配件市場</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 5: 國際展覽 ===== -->
+<section>
+  <div class="section-number">05</div>
+  <div class="section-title">國際重要展覽</div>
+  <div class="section-subtitle">Key International Trade Shows</div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>展覽名稱</th>
+        <th>地點</th>
+        <th>時間</th>
+        <th>說明</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>EICMA <span class="badge">全球最大</span></td>
+        <td>義大利 米蘭</td>
+        <td>每年 11 月</td>
+        <td><span class="highlight-text">1,200+ 品牌，50 萬+ 訪客</span>，全球機車產業最重要年度展</td>
+      </tr>
+      <tr>
+        <td>INTERMOT</td>
+        <td>德國 科隆</td>
+        <td>雙數年 10 月</td>
+        <td>歐洲第二大，偏技術與 B2B</td>
+      </tr>
+      <tr>
+        <td>AIMExpo <span class="badge">北美最大</span></td>
+        <td>美國</td>
+        <td>每年 2 月</td>
+        <td>北美最大機車產業展，B2B + B2C</td>
+      </tr>
+      <tr>
+        <td>Tokyo Motorcycle Show</td>
+        <td>日本 東京</td>
+        <td>每年 3 月</td>
+        <td>亞洲重要展會，日系品牌發表主場</td>
+      </tr>
+      <tr>
+        <td>Bangkok Motorbike Festival</td>
+        <td>泰國 曼谷</td>
+        <td>每年 1–2 月</td>
+        <td>東南亞改裝文化指標展</td>
+      </tr>
+      <tr>
+        <td>IMOS</td>
+        <td>印尼 雅加達</td>
+        <td>每年 11 月</td>
+        <td><span class="highlight-text">東南亞最大機車展</span></td>
+      </tr>
+      <tr>
+        <td>Taipei AMPA / Motorcycle Taiwan <span class="badge">台灣主場</span></td>
+        <td>台灣 台北</td>
+        <td>每年 4 月</td>
+        <td>台灣機車零件出口展，<span class="highlight-text">B2B 為主</span>，進入國際市場首選</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ===== SECTION 6: 通路策略 ===== -->
+<section>
+  <div class="section-number">06</div>
+  <div class="section-title">通路與進攻策略</div>
+  <div class="section-subtitle">Channel Strategy &amp; Market Entry</div>
+
+  <div class="channel-block">
+    <div class="channel-block-title">B2B 通路</div>
+    <div class="channel-tags">
+      <div class="channel-tag primary">Alibaba.com</div>
+      <div class="channel-tag primary">eWorldTrade</div>
+      <div class="channel-tag primary">Thomasnet</div>
+      <div class="channel-tag">Parts Unlimited（北美最大）</div>
+      <div class="channel-tag">Parts Europe</div>
+      <div class="channel-tag">EICMA 參展</div>
+      <div class="channel-tag">AIMExpo 參展</div>
+      <div class="channel-tag">AMPA 參展</div>
+      <div class="channel-tag">OEM 代工</div>
+    </div>
+  </div>
+
+  <div class="channel-block">
+    <div class="channel-block-title">B2C 通路</div>
+    <div class="channel-tags">
+      <div class="channel-tag primary">Amazon</div>
+      <div class="channel-tag primary">Shopee（東南亞）</div>
+      <div class="channel-tag">eBay</div>
+      <div class="channel-tag">Lazada</div>
+      <div class="channel-tag">RevZilla</div>
+      <div class="channel-tag">Motosport</div>
+      <div class="channel-tag">Webike（日本）</div>
+      <div class="channel-tag">iMotorbike</div>
+      <div class="channel-tag">品牌官網 DTC</div>
+    </div>
+  </div>
+
+  <div class="strategy-list">
+    <div class="strategy-item">
+      <div class="strategy-num">1</div>
+      <div class="strategy-content">
+        <h4>選定品項聚焦</h4>
+        <p>不要全品項鋪開，選 2–3 個有技術門檻的品項深耕。優先考量：ECU、儀表、TPMS——技術壁壘高，競品少，毛利空間充足。</p>
+      </div>
+    </div>
+    <div class="strategy-item">
+      <div class="strategy-num">2</div>
+      <div class="strategy-content">
+        <h4>區域優先級 <span class="highlight-text" style="font-size:13px">東南亞 → 北美 → 歐洲</span></h4>
+        <p>東南亞：量大、文化親近、改裝需求快速成長。北美：高單價、電商成熟。歐洲：需 E-mark 認證，進入門檻較高。</p>
+      </div>
+    </div>
+    <div class="strategy-item">
+      <div class="strategy-num">3</div>
+      <div class="strategy-content">
+        <h4>展覽策略</h4>
+        <p>第一年：AMPA（台灣主場）+ AIMExpo（美國）。第二年加 EICMA。以小成本建立國際品牌曝光，逐年擴大。</p>
+      </div>
+    </div>
+    <div class="strategy-item">
+      <div class="strategy-num">4</div>
+      <div class="strategy-content">
+        <h4>電商先行</h4>
+        <p>先在 Alibaba 建品牌頁，同步在 Shopee / Amazon 測試 B2C。數位先行，低成本探索市場反應。</p>
+      </div>
+    </div>
+    <div class="strategy-item">
+      <div class="strategy-num">5</div>
+      <div class="strategy-content">
+        <h4>善用台灣製造優勢 <span class="highlight-text" style="font-size:13px">最大談判籌碼</span></h4>
+        <p>品質接近日本，價格比日本低 30–40%。這是進攻國際市場最有力的差異化優勢，務必在所有 B2B 溝通中主動強調。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 7: 市場趨勢 ===== -->
+<section>
+  <div class="section-number">07</div>
+  <div class="section-title">市場趨勢</div>
+  <div class="section-subtitle">Market Trends 2026</div>
+
+  <div class="trend-grid">
+    <div class="trend-card">
+      <div class="trend-icon">⚡</div>
+      <div class="trend-title">電動機車改裝萌芽</div>
+      <div class="trend-desc">電動機車配件（儀表、充電配件、車身件）是新藍海，早期進入者優勢明顯</div>
+    </div>
+    <div class="trend-card">
+      <div class="trend-icon">📡</div>
+      <div class="trend-title">智慧配件高速成長</div>
+      <div class="trend-desc">TPMS、藍牙通訊、行車記錄器需求暴增，科技整合是主要驅動力</div>
+    </div>
+    <div class="trend-card">
+      <div class="trend-icon">🎨</div>
+      <div class="trend-title">個性化需求上升</div>
+      <div class="trend-desc">年輕車主願意花錢在外觀和個性化配件，社群媒體驅動改裝風潮</div>
+    </div>
+    <div class="trend-card">
+      <div class="trend-icon">🛒</div>
+      <div class="trend-title">電商佔比持續提升</div>
+      <div class="trend-desc">COVID 後線上購買比例大幅增加，不可逆趨勢，數位通路是必爭之地</div>
+    </div>
+    <div class="trend-card">
+      <div class="trend-icon">🌏</div>
+      <div class="trend-title">東南亞爆發點</div>
+      <div class="trend-desc">印尼、泰國、越南改裝文化快速發展，是下一個最大成長市場</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONCLUSION ===== -->
+<section style="background: linear-gradient(135deg, #0A0A0F, #111118);">
+  <div class="section-number">結語</div>
+  <div class="section-title">Shadow 的切入點</div>
+  <div class="section-subtitle">Strategic Conclusion</div>
+
+  <div style="max-width: 760px; line-height: 2; color: var(--light-gray); font-size: 16px; margin-bottom: 32px;">
+    全球機車改裝市場穩定成長中，<span style="color:var(--orange); font-weight:700">亞太地區是量的引擎，北美歐洲是價值高地</span>。台灣製造的品質優勢，加上對東南亞市場的地理與文化親近性，是進攻的最佳起點。<br><br>
+    細節不說話，但會被看見。數據說話，品質立命。這，是 Shadow 的方式。
+  </div>
+
+  <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+    <div style="background: var(--bg3); border: 1px solid var(--orange); border-radius: 10px; padding: 20px 28px; flex: 1; min-width: 200px;">
+      <div style="font-size: 11px; color: var(--orange); letter-spacing: 2px; font-weight: 700; margin-bottom: 8px; text-transform: uppercase;">短期目標</div>
+      <div style="font-size: 14px; color: var(--white); line-height: 1.8;">AMPA + AIMExpo 參展<br>Alibaba 品牌頁建立<br>Shopee / Amazon 測試</div>
+    </div>
+    <div style="background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 20px 28px; flex: 1; min-width: 200px;">
+      <div style="font-size: 11px; color: var(--gray); letter-spacing: 2px; font-weight: 700; margin-bottom: 8px; text-transform: uppercase;">中期目標</div>
+      <div style="font-size: 14px; color: var(--light-gray); line-height: 1.8;">EICMA 參展<br>東南亞經銷商建立<br>北美市場深耕</div>
+    </div>
+    <div style="background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 20px 28px; flex: 1; min-width: 200px;">
+      <div style="font-size: 11px; color: var(--gray); letter-spacing: 2px; font-weight: 700; margin-bottom: 8px; text-transform: uppercase;">長期目標</div>
+      <div style="font-size: 14px; color: var(--light-gray); line-height: 1.8;">歐洲 E-mark 認證<br>DTC 品牌官網<br>全球品牌佈局</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+  <div>
+    <div class="footer-brand">SHADOW PERFORMANCE</div>
+    <div style="font-size: 11px; color: var(--gray); margin-top: 4px; letter-spacing: 1px;">細節不說話，但會被看見</div>
+  </div>
+  <div class="footer-info">
+    <div class="footer-url">www.shadowperformance.com</div>
+    <div class="footer-copy">© 2026 Shadow Performance. Market Research Report. Confidential.</div>
+  </div>
+</div>
+
+</body>
+</html>
