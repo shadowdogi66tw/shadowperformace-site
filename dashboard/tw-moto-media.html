@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1200">
+<title>台灣二輪媒體全景圖 2026 — Shadow Performance</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700;900&family=Anton&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1200px;
+    background: #0A0A0F;
+    color: #FFFFFF;
+    font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+  }
+
+  .dm-wrapper {
+    width: 1200px;
+    min-height: 1800px;
+    background: #0A0A0F;
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  /* ── 背景裝飾斜紋 ── */
+  .bg-stripes {
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 300px;
+    height: 600px;
+    opacity: 0.07;
+    background: repeating-linear-gradient(
+      45deg,
+      #EA5504,
+      #EA5504 6px,
+      transparent 6px,
+      transparent 22px
+    );
+    transform: rotate(0deg);
+    pointer-events: none;
+  }
+
+  .bg-stripes-bottom {
+    position: absolute;
+    bottom: 120px;
+    left: -40px;
+    width: 200px;
+    height: 400px;
+    opacity: 0.06;
+    background: repeating-linear-gradient(
+      45deg,
+      #EA5504,
+      #EA5504 5px,
+      transparent 5px,
+      transparent 18px
+    );
+    pointer-events: none;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    padding: 64px 72px 48px;
+    border-bottom: 1px solid #1E1E2A;
+    position: relative;
+  }
+
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 32px;
+  }
+
+  .brand-mark {
+    font-family: 'Anton', 'Noto Sans TC', sans-serif;
+    font-size: 13px;
+    letter-spacing: 4px;
+    color: #EA5504;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .brand-mark::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 2px;
+    background: #EA5504;
+  }
+
+  .year-tag {
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: #444455;
+    text-transform: uppercase;
+  }
+
+  .title-block {
+    max-width: 720px;
+  }
+
+  .title-zh {
+    font-size: 56px;
+    font-weight: 900;
+    line-height: 1.1;
+    color: #FFFFFF;
+    letter-spacing: -1px;
+    margin-bottom: 10px;
+  }
+
+  .title-zh span {
+    color: #EA5504;
+  }
+
+  .title-en {
+    font-family: 'Anton', sans-serif;
+    font-size: 16px;
+    letter-spacing: 5px;
+    color: #444455;
+    text-transform: uppercase;
+  }
+
+  .header-divider {
+    width: 48px;
+    height: 3px;
+    background: #EA5504;
+    margin: 28px 0 0;
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .section-label span {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #EA5504;
+    font-weight: 700;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #1E1E2A;
+  }
+
+  /* ── TABLE SECTION ── */
+  .table-section {
+    padding: 52px 72px 48px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  thead tr {
+    border-bottom: 2px solid #EA5504;
+  }
+
+  thead th {
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #EA5504;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  thead th:first-child { padding-left: 0; }
+
+  tbody tr {
+    border-bottom: 1px solid #14141E;
+    transition: background 0.15s;
+  }
+
+  tbody tr:nth-child(even) {
+    background: rgba(255,255,255,0.02);
+  }
+
+  tbody tr:hover {
+    background: rgba(234, 85, 4, 0.05);
+  }
+
+  tbody td {
+    padding: 18px 16px;
+    vertical-align: top;
+    color: #CCCCCC;
+    line-height: 1.5;
+  }
+
+  tbody td:first-child { padding-left: 0; }
+
+  .media-name {
+    font-weight: 700;
+    color: #FFFFFF;
+    font-size: 15px;
+    line-height: 1.3;
+  }
+
+  .media-type {
+    font-size: 11px;
+    color: #555566;
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  .fb-count {
+    font-family: 'Anton', monospace;
+    font-size: 18px;
+    color: #FFFFFF;
+    font-weight: 400;
+  }
+
+  .fb-count.na {
+    color: #333344;
+    font-size: 14px;
+  }
+
+  .feature-text {
+    font-size: 13px;
+    color: #AAAABC;
+    line-height: 1.6;
+  }
+
+  /* ── 星級 ── */
+  .stars {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    white-space: nowrap;
+  }
+
+  .star {
+    font-size: 18px;
+    color: #1E1E2A;
+  }
+
+  .star.filled {
+    color: #EA5504;
+    text-shadow: 0 0 6px rgba(234,85,4,0.4);
+  }
+
+  .star-score {
+    margin-left: 6px;
+    font-size: 11px;
+    color: #555566;
+    letter-spacing: 1px;
+  }
+
+  .remark {
+    font-size: 12px;
+    color: #666677;
+    line-height: 1.6;
+  }
+
+  /* ── HIGHLIGHT ROW ── */
+  .row-top td {
+    border-left: 3px solid #EA5504;
+    padding-left: 13px;
+  }
+
+  .row-stopped td {
+    opacity: 0.45;
+  }
+
+  /* ── 分類摘要 ── */
+  .categories-section {
+    padding: 0 72px 52px;
+  }
+
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 4px;
+  }
+
+  .category-card {
+    background: #0E0E16;
+    border: 1px solid #1A1A26;
+    border-radius: 4px;
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .category-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: #EA5504;
+  }
+
+  .cat-title {
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #EA5504;
+    font-weight: 700;
+    margin-bottom: 18px;
+  }
+
+  .cat-item {
+    margin-bottom: 14px;
+  }
+
+  .cat-item-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 4px;
+  }
+
+  .cat-item-desc {
+    font-size: 12px;
+    color: #666677;
+    line-height: 1.5;
+  }
+
+  /* ── 結論區塊 ── */
+  .conclusion-section {
+    padding: 0 72px 72px;
+  }
+
+  .conclusion-box {
+    background: linear-gradient(135deg, #0E0E16 0%, #12121C 100%);
+    border: 1px solid #EA5504;
+    border-radius: 4px;
+    padding: 48px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .conclusion-box::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #EA5504, rgba(234,85,4,0.3));
+  }
+
+  .conclusion-box::after {
+    content: '»';
+    position: absolute;
+    top: 50%;
+    right: 56px;
+    transform: translateY(-50%);
+    font-size: 200px;
+    color: rgba(234,85,4,0.04);
+    font-family: 'Anton', sans-serif;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .conclusion-label {
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: #EA5504;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .conclusion-label::before {
+    content: '>>';
+    font-family: 'Anton', monospace;
+    font-size: 14px;
+  }
+
+  .conclusion-text {
+    font-size: 22px;
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1.7;
+    max-width: 860px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .conclusion-text .highlight {
+    color: #EA5504;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    padding: 28px 72px;
+    border-top: 1px solid #1A1A26;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-brand {
+    font-family: 'Anton', sans-serif;
+    font-size: 16px;
+    letter-spacing: 4px;
+    color: #EA5504;
+    text-transform: uppercase;
+  }
+
+  .footer-sub {
+    font-size: 11px;
+    color: #333344;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .footer-right {
+    text-align: right;
+    font-size: 11px;
+    color: #333344;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    line-height: 1.8;
+  }
+
+  /* ── 停刊 badge ── */
+  .badge-stopped {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 1px;
+    background: #1A1A26;
+    color: #555566;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-top: 4px;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<div class="dm-wrapper">
+
+  <!-- 背景裝飾 -->
+  <div class="bg-stripes"></div>
+  <div class="bg-stripes-bottom"></div>
+
+  <!-- ── HEADER ── -->
+  <div class="header">
+    <div class="header-top">
+      <div class="brand-mark">Shadow Performance</div>
+      <div class="year-tag">Market Intelligence · 2026</div>
+    </div>
+    <div class="title-block">
+      <div class="title-zh">台灣二輪<span>媒體</span>全景圖</div>
+      <div class="title-en">Taiwan Motorcycle Media Landscape 2026</div>
+    </div>
+    <div class="header-divider"></div>
+  </div>
+
+  <!-- ── TABLE SECTION ── -->
+  <div class="table-section">
+    <div class="section-label">
+      <span>媒體評比總表</span>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width:22%">媒體名稱</th>
+          <th style="width:10%">類型</th>
+          <th style="width:11%">FB 粉絲</th>
+          <th style="width:28%">特色定位</th>
+          <th style="width:16%">廣告合作適合度</th>
+          <th style="width:13%">備註</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="row-top">
+          <td>
+            <div class="media-name">MOTO7</div>
+            <div class="media-type">網路媒體</div>
+          </td>
+          <td><span style="color:#888899;font-size:13px">網路</span></td>
+          <td><div class="fb-count">47.8萬</div></td>
+          <td><div class="feature-text">專業測試、技術科普、賽道實測、影音強</div></td>
+          <td>
+            <div class="stars">
+              <span class="star filled">★</span>
+              <span class="star filled">★</span>
+              <span class="star filled">★</span>
+              <span class="star filled">★</span>
+              <span class="star filled">★</span>
+              <span class="star-score">5/5</span>
+            </div>
+          </td>
+          <td><div class="remark">台灣最大機車網路媒體，YT 影響力高</div></td>
+        </tr>
+
+        <tr>
+          <td>
+            <div class="media-name">TOP RIDER 流行騎士</div>
+            <div class="media-type">紙本＋數位</div>
+          </td>
+          <td><span style="color:#888899;font-size:13px">紙本+數位</span></td>
+          <td><div class="fb-count">26.5萬</div></td>
+          <td><div class="feature-text">重機專門、騎乘教學、海外新車、旅遊生活</div></td>
+          <td>
+            <div class="stars">
+              <span class="star filled">★</span>
+              <span class="star filled">★</span>
+              <span class="star filled">★</span>
+              <span class="star filled">★</span>
+              <span class="star">★</span>
+              <span class="star-score">4/5</span>
+            </div>
+          </td>
+          <td><div class="remark">老牌重機雜誌，忠實讀者群穩定</div></td>
+        </tr>
+
+        <tr>
+          <td>
+            <div class="media-name">MotorWorld 摩托車雜誌</div>
+            <div class="media-type">紙本＋電子書</div>
+          </td>
+          <td><span style="color:#888899;font-size:13px">紙本+數位</span></td>
+          <td><div class="fb-count na">—</div></td>
+          <td><div class="feature-text">年度風雲車、米蘭車展報導、全車種涵蓋</div></td>
+          <td>
+            <div class="stars">
+              <span class="star filled">★</span>
+              <span class="star filled">★</span>
+              <span class="star filled">★</span>
+              <span class="star filled">★</span>
+              <span class="star">★</span>
+              <span class="star-score">4/5</span>
+            </div>
+          </td>
+          <td><div class="remark">台灣歷史最悠久的機車雜誌，銷量分析權威</div></td>
+        </tr>
+
+        <tr>
+          <td>
+            <div class="media-name">小老婆汽機車資訊網</div>
+            <div class="media-type">論壇＋網路</div>
+          </td>
+          <td><span style="color:#888899;font-size:13px">論壇+網路</span></td>
+          <td><div class="fb-count" style="font-size:14px;color:#AAAABC">高</div></td>
+          <td><div class="feature-text">車友論壇、開箱分享、口碑傳播</div></td>
+          <td>
+            <div class="stars">
+              <span class="star filled">★</span>
+              <span class="star filled">★</span>
+              <span class="star filled">★</span>
+              <span class="star filled">★</span>
+              <span class="star">★</span>
+              <span class="star-score">4/5</span>
+            </div>
+          </td>
+          <td><div class="remark">草根影響力強，適合口碑行銷</div></td>
+        </tr>
+
+        <tr>
+          <td>
+            <div class="media-name">7Car 小七車觀點</div>
+            <div class="media-type">網路媒體</div>
+          </td>
+          <td><span style="color:#888899;font-size:13px">網路</span></td>
+          <td><div class="fb-count" style="font-size:14px;color:#AAAABC">中</div></td>
+          <td><div class="feature-text">汽機車並行、即時新聞、新車上市</div></td>
+          <td>
+            <div class="stars">
+              <span class="star filled">★</span>
+              <span class="star filled">★</span>
+              <span class="star filled">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star-score">3/5</span>
+            </div>
+          </td>
+          <td><div class="remark">新聞速度快，但機車深度較淺</div></td>
+        </tr>
+
+        <tr>
+          <td>
+            <div class="media-name">車映多媒體 Bikein</div>
+            <div class="media-type">網路＋影音</div>
+          </td>
+          <td><span style="color:#888899;font-size:13px">網路+影音</span></td>
+          <td><div class="fb-count" style="font-size:14px;color:#AAAABC">中</div></td>
+          <td><div class="feature-text">熱情取向、多元影音、試車報告</div></td>
+          <td>
+            <div class="stars">
+              <span class="star filled">★</span>
+              <span class="star filled">★</span>
+              <span class="star filled">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star-score">3/5</span>
+            </div>
+          </td>
+          <td><div class="remark">影音製作活潑，適合年輕族群</div></td>
+        </tr>
+
+        <tr>
+          <td>
+            <div class="media-name">好機車</div>
+            <div class="media-type">YT 頻道</div>
+          </td>
+          <td><span style="color:#888899;font-size:13px">YouTube</span></td>
+          <td><div class="fb-count">0.6萬</div></td>
+          <td><div class="feature-text">搞笑 × 機車、娛樂取向</div></td>
+          <td>
+            <div class="stars">
+              <span class="star filled">★</span>
+              <span class="star filled">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star-score">2/5</span>
+            </div>
+          </td>
+          <td><div class="remark">娛樂性強但專業度低</div></td>
+        </tr>
+
+        <tr class="row-stopped">
+          <td>
+            <div class="media-name">兩輪誌 2WHEELS</div>
+            <div class="media-type">紙本（已停刊）</div>
+            <div class="badge-stopped">已停刊</div>
+          </td>
+          <td><span style="color:#555566;font-size:13px">紙本</span></td>
+          <td><div class="fb-count na">—</div></td>
+          <td><div class="feature-text">綜合誌、部品評比測試、白牌到重車</div></td>
+          <td>
+            <div class="stars">
+              <span class="star filled" style="color:#333344;text-shadow:none">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star-score">1/5</span>
+            </div>
+          </td>
+          <td><div class="remark">已停刊，曾開創評比文化</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── 分類摘要 ── -->
+  <div class="categories-section">
+    <div class="section-label">
+      <span>媒體分類摘要</span>
+    </div>
+
+    <div class="categories-grid">
+      <div class="category-card">
+        <div class="cat-title">傳統紙本雜誌</div>
+        <div class="cat-item">
+          <div class="cat-item-name">MotorWorld 摩托車雜誌</div>
+          <div class="cat-item-desc">仍在發行，年度銷量分析是業界參考標準</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-item-name">TOP RIDER 流行騎士</div>
+          <div class="cat-item-desc">專注重機市場，品牌忠誠度高</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-item-name" style="color:#555566">兩輪誌 2WHEELS</div>
+          <div class="cat-item-desc">已停刊，曾是唯一做部品評比的雜誌</div>
+        </div>
+      </div>
+
+      <div class="category-card">
+        <div class="cat-title">網路媒體（主戰場）</div>
+        <div class="cat-item">
+          <div class="cat-item-name">MOTO7</div>
+          <div class="cat-item-desc">台灣最具影響力的機車媒體，集測試、科普、賽事於一身</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-item-name">小老婆汽機車資訊網</div>
+          <div class="cat-item-desc">車友社群龍頭，口碑傳播效果強</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-item-name">7Car 小七車觀點</div>
+          <div class="cat-item-desc">新聞為主，適合快速曝光</div>
+        </div>
+      </div>
+
+      <div class="category-card">
+        <div class="cat-title">影音 / KOL</div>
+        <div class="cat-item">
+          <div class="cat-item-name">MOTO7 YouTube</div>
+          <div class="cat-item-desc">專業測試影片，觀看量穩定</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-item-name">車映 Bikein</div>
+          <div class="cat-item-desc">年輕、活潑風格，觸及新生代騎士</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-item-name">好機車</div>
+          <div class="cat-item-desc">純娛樂取向，專業合作效益有限</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 結論 ── -->
+  <div class="conclusion-section">
+    <div class="section-label">
+      <span>合作策略建議</span>
+    </div>
+
+    <div class="conclusion-box">
+      <div class="conclusion-label">Strategic Recommendation</div>
+      <div class="conclusion-text">
+        如果只選一家合作，選 <span class="highlight">MOTO7</span>。<br>
+        如果要深耕重機市場，加上 <span class="highlight">TOP RIDER</span>。<br>
+        如果要口碑擴散，<span class="highlight">小老婆</span>不能少。
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <div class="footer">
+    <div>
+      <div class="footer-brand">Shadow Performance</div>
+      <div class="footer-sub">Market Intelligence Report</div>
+    </div>
+    <div class="footer-right">
+      Taiwan · 2026<br>
+      Internal Use Only
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
