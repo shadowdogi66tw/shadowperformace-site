@@ -3,210 +3,321 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shadow Performance — 車種對應表 Vehicle Compatibility</title>
+<title>Shadow Performance — 車種對應表總覽</title>
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --orange: #EA5504;
-  --orange-glow: rgba(234, 85, 4, 0.25);
-  --bg: #0A0A0F;
-  --card-bg: #111118;
-  --white: #FFFFFF;
-  --gray: #999;
-  --dim: #666;
-  --border: #1E1E28;
-}
-body {
-  background: var(--bg);
-  color: var(--white);
-  font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-a { color: inherit; text-decoration: none; }
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-/* ─── Nav ─── */
-nav {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 20px 40px;
-  border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(12px);
-  position: sticky; top: 0; z-index: 100;
-  background: rgba(10,10,15,0.85);
-}
-nav .logo { height: 28px; opacity: 0.9; }
-nav .nav-text {
-  font-size: 12px; letter-spacing: 0.15em; color: var(--dim);
-  text-transform: uppercase;
-}
+  :root {
+    --orange: #EA5504;
+    --orange-dim: #ea550433;
+    --orange-glow: #ea550466;
+    --bg: #0a0a0a;
+    --bg2: #111111;
+    --bg3: #1a1a1a;
+    --card: #141414;
+    --border: #222222;
+    --text: #f0f0f0;
+    --text2: #aaaaaa;
+    --text3: #666666;
+  }
 
-/* ─── Hero ─── */
-.hero {
-  text-align: center;
-  padding: 80px 24px 40px;
-  position: relative;
-}
-.hero::before {
-  content: '';
-  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-  width: 400px; height: 400px;
-  background: radial-gradient(circle, var(--orange-glow) 0%, transparent 70%);
-  pointer-events: none;
-}
-.hero h1 {
-  font-size: 42px; font-weight: 900; letter-spacing: 0.08em;
-  position: relative;
-}
-.hero h1 span { color: var(--orange); }
-.hero .sub {
-  color: var(--gray); font-size: 16px; margin-top: 12px;
-  letter-spacing: 0.05em;
-}
-.hero .line {
-  width: 60px; height: 3px; background: var(--orange);
-  margin: 28px auto 0; border-radius: 2px;
-}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* ─── Products Grid ─── */
-.products {
-  max-width: 1100px; margin: 0 auto;
-  padding: 40px 24px 80px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 24px;
-}
-.card {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 32px 28px;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  display: flex; flex-direction: column;
-}
-.card::before {
-  content: '';
-  position: absolute; top: 0; left: 0;
-  width: 4px; height: 100%;
-  background: var(--orange);
-  transform: scaleY(0);
-  transform-origin: top;
-  transition: transform 0.3s ease;
-}
-.card:hover {
-  border-color: rgba(234, 85, 4, 0.3);
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 20px var(--orange-glow);
-}
-.card:hover::before { transform: scaleY(1); }
-.card .tag {
-  display: inline-block;
-  font-size: 11px; font-weight: 700;
-  letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--orange);
-  background: rgba(234, 85, 4, 0.1);
-  padding: 4px 10px; border-radius: 4px;
-  margin-bottom: 14px;
-  align-self: flex-start;
-}
-.card h2 {
-  font-size: 22px; font-weight: 800;
-  margin-bottom: 6px;
-  line-height: 1.3;
-}
-.card .zh { color: var(--gray); font-size: 14px; margin-bottom: 14px; }
-.card .desc {
-  color: var(--dim); font-size: 13px; line-height: 1.7;
-  flex: 1;
-  margin-bottom: 20px;
-}
-.card .enter {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 13px; font-weight: 600; color: var(--orange);
-  transition: gap 0.2s ease;
-}
-.card:hover .enter { gap: 10px; }
-.card .enter .arrow { font-size: 16px; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
 
-/* ─── Footer ─── */
-footer {
-  text-align: center; padding: 40px 24px;
-  border-top: 1px solid var(--border);
-  color: var(--dim); font-size: 13px;
-}
-footer a { color: var(--orange); }
+  .top-bar {
+    height: 4px;
+    background: linear-gradient(90deg, var(--orange), #ff7b2e, var(--orange));
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  }
 
-/* ─── Mobile ─── */
-@media (max-width: 640px) {
-  nav { padding: 16px 20px; }
-  .hero { padding: 50px 20px 30px; }
-  .hero h1 { font-size: 28px; }
-  .products { padding: 24px 16px 60px; grid-template-columns: 1fr; }
-}
+  nav {
+    position: fixed; top: 4px; left: 0; right: 0; z-index: 999;
+    background: rgba(10, 10, 10, 0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between; height: 60px;
+  }
+  nav .logo { height: 28px; opacity: 0.9; }
+  nav .nav-links { display: flex; gap: 24px; align-items: center; }
+  nav .nav-links a {
+    color: var(--text2); text-decoration: none; font-size: 13px;
+    font-weight: 500; letter-spacing: 0.5px; transition: color 0.2s;
+  }
+  nav .nav-links a:hover { color: var(--orange); }
+
+  .hero {
+    margin-top: 64px; padding: 100px 24px 80px;
+    position: relative; overflow: hidden;
+    background: linear-gradient(135deg, var(--bg) 0%, var(--bg2) 50%, var(--bg) 100%);
+    text-align: center;
+  }
+  .hero-stripes {
+    display: flex; gap: 4px; margin-bottom: 24px; justify-content: center;
+  }
+  .hero-stripes span {
+    width: 40px; height: 4px; background: var(--orange); border-radius: 2px; opacity: 0.3;
+  }
+  .hero-stripes span:first-child { opacity: 1; }
+  .hero-stripes span:nth-child(2) { opacity: 0.7; }
+  .hero-stripes span:nth-child(3) { opacity: 0.5; }
+
+  h1 {
+    font-size: 52px; font-weight: 800; line-height: 1.1;
+    letter-spacing: -1px; margin-bottom: 12px;
+  }
+  h1 .accent { color: var(--orange); }
+  .subtitle {
+    font-size: 16px; color: var(--text2); font-weight: 400;
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px;
+  }
+  .hero-desc {
+    font-size: 15px; color: var(--text3); max-width: 600px; margin: 0 auto 40px;
+  }
+
+  .stats-row {
+    display: flex; justify-content: center; gap: 24px; flex-wrap: wrap;
+  }
+  .stat {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 28px; min-width: 130px;
+  }
+  .stat .num {
+    font-size: 36px; font-weight: 800; color: var(--orange); line-height: 1;
+  }
+  .stat .label {
+    font-size: 12px; color: var(--text3); text-transform: uppercase;
+    letter-spacing: 1px; margin-top: 4px;
+  }
+
+  /* ── Product Grid ── */
+  .products {
+    max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px;
+  }
+  .section-title {
+    font-size: 14px; color: var(--text3); text-transform: uppercase;
+    letter-spacing: 2px; font-weight: 600; margin-bottom: 24px;
+    padding-left: 4px;
+  }
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+  }
+  .product-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .product-card:hover {
+    border-color: var(--orange);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(234, 85, 4, 0.15);
+  }
+
+  .card-image {
+    width: 100%; height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+  }
+
+  .card-body { padding: 20px 24px; }
+
+  .card-name {
+    font-size: 20px; font-weight: 700; margin-bottom: 4px;
+  }
+  .card-name-en {
+    font-size: 13px; color: var(--text3); letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+
+  .card-stats {
+    display: flex; gap: 16px; margin-bottom: 16px;
+  }
+  .card-stat {
+    display: flex; align-items: baseline; gap: 4px;
+  }
+  .card-stat .cs-num {
+    font-size: 22px; font-weight: 800; color: var(--orange);
+  }
+  .card-stat .cs-label {
+    font-size: 11px; color: var(--text3); text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .card-desc {
+    font-size: 13px; color: var(--text2); line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .card-cta {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 600; color: var(--orange);
+    letter-spacing: 0.5px;
+  }
+  .card-cta svg { transition: transform 0.2s; }
+  .product-card:hover .card-cta svg { transform: translateX(4px); }
+
+  footer {
+    text-align: center; padding: 40px 24px;
+    border-top: 1px solid var(--border);
+    color: var(--text3); font-size: 12px;
+    display: flex; justify-content: center; gap: 24px; flex-wrap: wrap;
+  }
+  footer a { color: var(--orange); text-decoration: none; }
+
+  @media (max-width: 768px) {
+    h1 { font-size: 36px; }
+    .hero { padding: 80px 16px 60px; }
+    .product-grid { grid-template-columns: 1fr; }
+    nav .nav-links { display: none; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .product-card { animation: fadeUp 0.4s ease forwards; }
+  .product-card:nth-child(2) { animation-delay: 0.05s; }
+  .product-card:nth-child(3) { animation-delay: 0.1s; }
+  .product-card:nth-child(4) { animation-delay: 0.15s; }
+  .product-card:nth-child(5) { animation-delay: 0.2s; }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--orange); }
 </style>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
+<div class="top-bar"></div>
+
 <nav>
-  <img class="logo" src="data:image/png;base64,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" alt="Shadow Performance">
-  <span class="nav-text">Vehicle Compatibility</span>
+  <img class="logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMkAAAAfCAMAAAB6fxkFAAAAaVBMVEUAAAD////pVQT////pVQT////pVQT////pVQT////pVQT////pVQT////pVQT////pVQT////pVQT////pVQT////pVQT////pVQT////98uz3vp7pVQT////pVQT////pVQT////pVQShvh4sAAAAIXRSTlMAEBAgIDAwQEBQUGBgcHCAgI+Pn5+vr7+/z8/Pz9/f7+/AFcCyAAADo0lEQVR42tWX23ajMAxFZUhirrUJEMMMwZj//8hZONgSxc2kTV/YT6IrJdblHCvgyJpOnmAl5hyOSjMvFDZmyhijUzgkcn5gu9IbC4cjMs4PJADk5oGCIzKvXAFAmBU4IhP25DcyuSQRvEeqlGpjGwoMXxO8JXl3upJCdqN90VvEZuG8hGcbvpxJNMwLDRDF58/LLm/djnF2wA85c1G6ampYKJfwDi8TNePcFeBceKF+9vHbvGPMCh/fvt8FXgpla9gvCbVKqRQAwx9yzvXzjg7zSpZ46J8/vv2NxlPBb2Jl38JXFFj7gJl/XyaozrfuseLWXU8YN/YUTC99rt1beaUqDp5buPanwMg1EbwEMysafkpH9pQB45zKvraxIKa9cgHKxxxgAOBiRw4LsfAos9ICxGWtNgh8bgEEPsRo2SBddZMkuZGdpTQPSs65+NT3i684ILRV1yRJGpw01psdPQNWmwAlCPMMDmeND96yWxxtgkQrRohwZKDy8nOrOqIZxj0CT+y+Qqecp8YRV4YU8R7IBPDD1tPswhvDHKADABNA4UDuabBVE12A5sheEw7fB5FjgYh33WMfQfAYfG2CH3hus7Z1RMj2dX+SyRwEPqijJUQnZehlvHVRTlekqnRRDVh9AqeWLdaT9mRPkUmSDcRDK1cwIUTrvvJZT8ato0ksi/t3rZTq0aK0C2M6zOkmwconSDNRNBPh9BINXhpwdXOC3lXj/oL3y2UITldYJpmgVx6OFM4T9WBDIjoZnDgCxkZArP0pIzlMt8xGy1GmrgBw7+hLeCB604vNsuvwjlF8JZM7NZrWHyicoOIu6gEFQTso6OBX9oWawRa5it3tbYrBf4nwxBuZZF4mKE8AICOlqP/UPsEKT0w7iBMlSoMoJ/cN2WSvEgvXL64NeOKtTK5eJtSicDDuLJzguQ93EDOptEGs7nqgRA1KhFXay4LV2mjBIAw9MZUJXTGx3BuLSoMerJmPth3ErumAm1EGsvkp7Drr/cyGGZ02TkQmdOjkn6BFlaWLBLWoPqWOTx+EIWwequBy25DhrEkNc0Aiud8LpgwCMrH8NUF6bULo3uywghVbdSCaBTemkahPkxq24DlN+6vkGuHFNGf0NhkTEHez457DuTV7araM8xaVf/oBo3lskBQQ4v4TlRkZVAVHQZLJKImhtziLB+E0oeKZxralqNajcLH3e2Hjs0aRW6HpHA5ElMkiWmOWi9J1IRaiPERH/gF7RzMLqhMdhgAAAABJRU5ErkJggg==" alt="Shadow Performance">
+  <div class="nav-links">
+    <a href="https://www.shadowmotor.com.tw" target="_blank">官方網站</a>
+    <a href="https://www.shadowmotor.com.tw/en/category/Electronic-Controllers.html" target="_blank">產品頁面</a>
+    <a href="https://www.shadowmotor.com.tw/en/Tech-Resources/" target="_blank">技術資源</a>
+  </div>
 </nav>
 
 <section class="hero">
-  <h1>車種對應表 <span>.</span></h1>
-  <p class="sub">Vehicle Compatibility Guides — 各產品適用車種查詢</p>
-  <div class="line"></div>
+  <div class="hero-stripes">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <h1>車種對應表<br><span class="accent">總覽</span></h1>
+  <p class="subtitle">Vehicle Compatibility Database</p>
+  <p class="hero-desc">Shadow Performance 完整產品車種對應資料庫，涵蓋五大產品線，支援即時搜尋與篩選。</p>
+  <div class="stats-row">
+    <div class="stat">
+      <div class="num">1,064</div>
+      <div class="label">車種主表</div>
+    </div>
+    <div class="stat">
+      <div class="num">5</div>
+      <div class="label">產品線</div>
+    </div>
+    <div class="stat">
+      <div class="num">62</div>
+      <div class="label">品牌</div>
+    </div>
+  </div>
 </section>
 
 <section class="products">
+  <div class="section-title">選擇產品查看車種對應表</div>
+  <div class="product-grid">
 
-  <a href="products/e-drive-4s.html" class="card">
-    <span class="tag">Electronic Controller</span>
-    <h2>E-Drive 4S</h2>
-    <p class="zh">油門控制器</p>
-    <p class="desc">四種駕馭模式，即插即用。涵蓋主流車廠線組對應，支援 Toyota、Honda、BMW、Benz、VW 等品牌。</p>
-    <span class="enter">查看車種對應表 <span class="arrow">→</span></span>
-  </a>
+    <a class="product-card" href="4s_compatibility.html">
+      <img class="card-image" src="https://cdn.ready-market.com.tw/0d9e0017/Templates/pic/m/Electronic-Throttle-Controller.jpg" alt="E-Drive 4S">
+      <div class="card-body">
+        <div class="card-name">E-Drive 4S 油門控制器</div>
+        <div class="card-name-en">E-Drive 4S Throttle Controller</div>
+        <div class="card-stats">
+          <div class="card-stat"><span class="cs-num">892</span><span class="cs-label">車種</span></div>
+          <div class="card-stat"><span class="cs-num">62</span><span class="cs-label">品牌</span></div>
+        </div>
+        <div class="card-desc">隨插即用的電子油門控制器，支援多段模式調整，涵蓋最廣泛的車種。</div>
+        <span class="card-cta">查看車種表 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span>
+      </div>
+    </a>
 
-  <a href="products/d-meter-2plus.html" class="card">
-    <span class="tag">OBD2 Display</span>
-    <h2>D-Meter 2 Plus</h2>
-    <p class="zh">OBD2 多功能顯示器</p>
-    <p class="desc">四合一即時數據顯示，支援 OBD2 標準協定車輛。完整品牌與年份對應清單。</p>
-    <span class="enter">查看車種對應表 <span class="arrow">→</span></span>
-  </a>
+    <a class="product-card" href="fdevo_compatibility.html">
+      <img class="card-image" src="https://cdn.ready-market.com.tw/0d9e0017/Templates/pic/m/FD%20EVO_Main_image_20250418.jpg" alt="FD-EVO">
+      <div class="card-body">
+        <div class="card-name">FD-EVO 多功能顯示器</div>
+        <div class="card-name-en">FD-EVO Multi-Function Display</div>
+        <div class="card-stats">
+          <div class="card-stat"><span class="cs-num">57</span><span class="cs-label">車種</span></div>
+          <div class="card-stat"><span class="cs-num">24</span><span class="cs-label">品牌</span></div>
+        </div>
+        <div class="card-desc">OBD2 多功能顯示器，支援基本資訊、機油溫度、變速箱油溫等即時數據顯示。</div>
+        <span class="card-cta">查看車種表 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span>
+      </div>
+    </a>
 
-  <a href="products/fd-evo.html" class="card">
-    <span class="tag">Multi-Function Display</span>
-    <h2>FD-EVO</h2>
-    <p class="zh">多功能顯示器</p>
-    <p class="desc">全彩 LCD 多功能儀表，支援進階 OBD2 PID 與即時監控。適用車種與協定對應表。</p>
-    <span class="enter">查看車種對應表 <span class="arrow">→</span></span>
-  </a>
+    <a class="product-card" href="dmeter2plus_compatibility.html">
+      <img class="card-image" src="https://cdn.ready-market.com.tw/0d9e0017/Templates/pic/m/D-METER%202%20PLUS_Main_image_20250418.jpg" alt="D-Meter 2Plus">
+      <div class="card-body">
+        <div class="card-name">D-Meter 2Plus OBD2 顯示器</div>
+        <div class="card-name-en">D-Meter 2Plus OBD2 Display</div>
+        <div class="card-stats">
+          <div class="card-stat"><span class="cs-num">149</span><span class="cs-label">車種</span></div>
+          <div class="card-stat"><span class="cs-num">37</span><span class="cs-label">品牌</span></div>
+        </div>
+        <div class="card-desc">進階 OBD2 數位顯示器，支援 12 項感測器數據即時監控，包含水溫、轉速、渦輪壓力等。</div>
+        <span class="card-cta">查看車種表 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span>
+      </div>
+    </a>
 
-  <a href="products/iboost2.html" class="card">
-    <span class="tag">Boost Controller</span>
-    <h2>I-BOOST 2</h2>
-    <p class="zh">渦輪增壓控制器</p>
-    <p class="desc">精準渦輪增壓控制，支援多段增壓模式。涵蓋 BMW、Subaru、Mitsubishi 等渦輪車款。</p>
-    <span class="enter">查看車種對應表 <span class="arrow">→</span></span>
-  </a>
+    <a class="product-card" href="iboost2_compatibility.html">
+      <img class="card-image" src="https://cdn.ready-market.com.tw/0d9e0017/Templates/pic/I_BOOST2_Image_EN_20241004.jpg" alt="IBOOST2">
+      <div class="card-body">
+        <div class="card-name">IBOOST2 渦輪控制器</div>
+        <div class="card-name-en">IBOOST2 Tuning Box</div>
+        <div class="card-stats">
+          <div class="card-stat"><span class="cs-num">51</span><span class="cs-label">車種</span></div>
+          <div class="card-stat"><span class="cs-num">17</span><span class="cs-label">品牌</span></div>
+        </div>
+        <div class="card-desc">渦輪增壓調校控制器，隨插即用提升渦輪響應與出力，支援多段增壓模式。</div>
+        <span class="card-cta">查看車種表 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span>
+      </div>
+    </a>
 
-  <a href="products/ebc-lite-mac.html" class="card">
-    <span class="tag">Installation Guide</span>
-    <h2>EBC-Lite</h2>
-    <p class="zh">增壓控制器 — MAC 電磁閥接線指南</p>
-    <p class="desc">售後 MAC 電磁閥接線教學，含套件內容、接線步驟與 YouTube 影片教學。</p>
-    <span class="enter">查看接線指南 <span class="arrow">→</span></span>
-  </a>
+    <a class="product-card" href="valve_compatibility.html">
+      <img class="card-image" src="https://cdn.ready-market.com.tw/0d9e0017/Templates/pic/ELECTRIC_EXHAUST_VALVE_CONTROLLER_Image_EN_20250117.jpg" alt="閥門控制器">
+      <div class="card-body">
+        <div class="card-name">閥門控制器</div>
+        <div class="card-name-en">Valve Controller (E-VALVE2 / X-FLAP)</div>
+        <div class="card-stats">
+          <div class="card-stat"><span class="cs-num">136</span><span class="cs-label">車種</span></div>
+          <div class="card-stat"><span class="cs-num">18</span><span class="cs-label">品牌</span></div>
+        </div>
+        <div class="card-desc">電子排氣閥門控制器，支援 E-VALVE2 和 X-FLAP 雙系列，精準控制排氣聲浪。</div>
+        <span class="card-cta">查看車種表 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span>
+      </div>
+    </a>
 
+  </div>
 </section>
 
 <footer>
-  <p>© 2026 Shadow Performance — Auto Jaw Co., Ltd. &nbsp;|&nbsp; <a href="https://www.shadowmotor.com.tw" target="_blank">shadowmotor.com.tw</a></p>
+  <span>&copy; 2026 Shadow Performance Electronics — AUTO JAW CO., LTD.</span>
+  <a href="https://www.shadowmotor.com.tw" target="_blank">www.shadowmotor.com.tw</a>
 </footer>
 
 </body>
