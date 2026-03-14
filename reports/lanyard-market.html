@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>識別證套 × 掛繩市場 BD 報告 | Shadow Performance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --orange: #EA5504;
+  --orange-glow: rgba(234,85,4,0.2);
+  --bg: #0A0A0F;
+  --card: #111118;
+  --white: #FFFFFF;
+  --gray: #AAAAAA;
+  --dim: #666666;
+  --border: #1E1E28;
+  --green: #22C55E;
+  --red: #EF4444;
+  --yellow: #F59E0B;
+  --blue: #3B82F6;
+}
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Noto Sans TC', -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.8;
+}
+a { color: var(--orange); text-decoration: none; }
+
+/* Nav */
+nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 40px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(10,10,15,0.9);
+  backdrop-filter: blur(12px);
+  position: sticky; top: 0; z-index: 100;
+}
+nav .logo { height: 28px; }
+nav .badge {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+  color: var(--orange); text-transform: uppercase;
+}
+
+/* Hero */
+.hero {
+  text-align: center; padding: 60px 24px 40px;
+  position: relative;
+}
+.hero::before {
+  content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 500px; height: 400px;
+  background: radial-gradient(circle, var(--orange-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero h1 { font-size: 36px; font-weight: 900; position: relative; }
+.hero h1 span { color: var(--orange); }
+.hero .sub { color: var(--gray); font-size: 14px; margin-top: 8px; }
+.hero .date { color: var(--dim); font-size: 12px; margin-top: 12px; letter-spacing: 0.1em; }
+.divider { width: 50px; height: 3px; background: var(--orange); margin: 24px auto; border-radius: 2px; }
+
+/* Content */
+.content { max-width: 900px; margin: 0 auto; padding: 0 24px 80px; }
+
+/* Section */
+.section { margin-bottom: 40px; }
+.section-title {
+  font-size: 20px; font-weight: 900; margin-bottom: 16px;
+  padding-left: 14px; border-left: 4px solid var(--orange);
+  line-height: 1.4;
+}
+
+/* Cards */
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 24px; margin-bottom: 16px;
+}
+.card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--white); }
+.card p, .card li { color: var(--gray); font-size: 14px; line-height: 1.8; }
+.card ul { padding-left: 20px; }
+.card li { margin-bottom: 4px; }
+
+/* Stats row */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
+.stat {
+  background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+  padding: 24px; text-align: center;
+}
+.stat .number { font-size: 32px; font-weight: 900; color: var(--orange); }
+.stat .label { font-size: 12px; color: var(--gray); margin-top: 4px; letter-spacing: 0.05em; }
+
+/* Tag */
+.tag {
+  display: inline-block; font-size: 11px; font-weight: 700;
+  padding: 3px 10px; border-radius: 4px; margin-right: 6px; margin-bottom: 6px;
+}
+.tag-green { background: rgba(34,197,94,0.15); color: var(--green); }
+.tag-red { background: rgba(239,68,68,0.15); color: var(--red); }
+.tag-yellow { background: rgba(245,158,11,0.15); color: var(--yellow); }
+.tag-blue { background: rgba(59,130,246,0.15); color: var(--blue); }
+
+/* Competitor table */
+.table-wrap { overflow-x: auto; margin-bottom: 16px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { background: rgba(234,85,4,0.1); color: var(--orange); font-weight: 700; text-align: left; padding: 10px 14px; border-bottom: 2px solid var(--border); }
+td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--gray); }
+tr:hover td { background: rgba(255,255,255,0.02); }
+
+/* Highlight box */
+.highlight {
+  background: rgba(234,85,4,0.08); border: 1px solid rgba(234,85,4,0.25);
+  border-radius: 10px; padding: 24px; margin-bottom: 16px;
+}
+.highlight h3 { color: var(--orange); margin-bottom: 8px; }
+
+/* Footer */
+footer {
+  text-align: center; padding: 40px 24px; border-top: 1px solid var(--border);
+  color: var(--dim); font-size: 12px;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  nav { padding: 16px 20px; }
+  .hero { padding: 40px 20px 30px; }
+  .hero h1 { font-size: 26px; }
+  .stats { grid-template-columns: 1fr 1fr; }
+  .stat .number { font-size: 24px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../"><img class="logo" src="data:image/png;base64,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" alt="Shadow Performance"></a>
+  <span class="badge">BD Market Report</span>
+</nav>
+
+<section class="hero">
+  <h1>識別證套 × 掛繩<span>市場報告</span></h1>
+  <p class="sub">Lanyard & ID Card Holder — Market Analysis</p>
+  <p class="date">2026.03.14 | Prepared by Dogi</p>
+  <div class="divider"></div>
+</section>
+
+<div class="content">
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat">
+      <div class="number">$25億</div>
+      <div class="label">2024 全球市場規模（USD）</div>
+    </div>
+    <div class="stat">
+      <div class="number">$38-52億</div>
+      <div class="label">2033 預測規模（USD）</div>
+    </div>
+    <div class="stat">
+      <div class="number">5.1-5.5%</div>
+      <div class="label">年複合成長率 CAGR</div>
+    </div>
+    <div class="stat">
+      <div class="number">$0.05-0.18</div>
+      <div class="label">中國批發單價 USD/條</div>
+    </div>
+  </div>
+
+  <!-- 產品分類 -->
+  <div class="section">
+    <h2 class="section-title">產品分類與市場結構</h2>
+    <div class="card">
+      <h3>① 企業識別 — B2B 大宗訂單</h3>
+      <p>員工證套 + 掛繩組合，企業統一採購。最大宗市場，穩定回購週期。客戶包括科技公司、金融機構、醫療院所、政府機關。</p>
+    </div>
+    <div class="card">
+      <h3>② 活動贈品 — 展會/研討會/演唱會</h3>
+      <p>客製化印刷為核心需求，量大但單價低。季節性明顯（展會旺季集中 Q2、Q4）。品牌曝光為主要購買動機。</p>
+    </div>
+    <div class="card">
+      <h3>③ 消費零售 — 設計款/真皮款</h3>
+      <p>Pinkoi、Creema、蝦皮上的設計師品牌。單價 NT$200-800，毛利高但量小。手工皮革、客製壓字為賣點。</p>
+    </div>
+  </div>
+
+  <!-- 買家分析 -->
+  <div class="section">
+    <h2 class="section-title">主要買家</h2>
+    <div class="table-wrap">
+      <table>
+        <tr><th>買家類型</th><th>需求特性</th><th>訂單規模</th><th>回購率</th></tr>
+        <tr><td>企業（員工證/門禁卡）</td><td>統一規格、品牌印刷</td><td>500-10,000+</td><td>⭐⭐⭐⭐⭐</td></tr>
+        <tr><td>展覽/活動公司</td><td>快速交期、客製設計</td><td>1,000-50,000</td><td>⭐⭐⭐</td></tr>
+        <tr><td>學校/醫療機構</td><td>安全扣具、耐用</td><td>200-5,000</td><td>⭐⭐⭐⭐</td></tr>
+        <tr><td>政府機關</td><td>標案、規格嚴格</td><td>1,000-20,000</td><td>⭐⭐⭐⭐</td></tr>
+        <tr><td>禮贈品公司（轉售）</td><td>多樣化、快速報價</td><td>不定</td><td>⭐⭐⭐⭐</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 競爭格局 -->
+  <div class="section">
+    <h2 class="section-title">競爭格局</h2>
+
+    <div class="card">
+      <h3>🇹🇼 台灣主要廠商</h3>
+      <ul>
+        <li><strong>DoveFly 台灣識別證帶</strong> — MIT 工廠，20+ 年經驗，熱轉印技術，可打樣對色，PANTONE 校色</li>
+        <li><strong>上上禾 Innovative Designs</strong> — 專業客製，小量可接，外銷導向，20+ 年</li>
+        <li><strong>禮品世界 / SYFGift</strong> — 禮贈品通路商，品項齊全，批發導向</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>🇨🇳 中國主要廠商（最大威脅）</h3>
+      <ul>
+        <li><strong>深圳環宇 Huanyu</strong> — 500+ 台設備（瑞士/義大利/台灣進口），產能碾壓</li>
+        <li><strong>福建大千 Dachion</strong> — 環保掛繩先驅（竹纖維、玉米纖維）</li>
+        <li>1688 / Made-in-China 上大量供應商，批發價 <strong>US$0.05-0.18/條</strong></li>
+        <li>台灣 MIT 無法在價格上競爭</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 趨勢 -->
+  <div class="section">
+    <h2 class="section-title">2025-2026 關鍵趨勢</h2>
+    <div class="card">
+      <p>
+        <span class="tag tag-green">環保材質</span>
+        <span class="tag tag-blue">智慧功能</span>
+        <span class="tag tag-yellow">安全設計</span>
+        <span class="tag tag-red">客製升級</span>
+      </p>
+      <ul style="margin-top: 12px;">
+        <li><strong>環保材質</strong> — 回收 PET、竹纖維、有機棉。歐美客戶開始強制要求，可溢價 20-40%</li>
+        <li><strong>智慧功能</strong> — RFID / NFC 內建，結合門禁系統。企業端需求快速成長</li>
+        <li><strong>安全設計</strong> — Breakaway 防勒扣具，醫療與兒童場域強制規範</li>
+        <li><strong>客製化升級</strong> — 從單色印刷到全彩熱昇華，設計感大幅提升</li>
+        <li><strong>手機掛繩</strong> — 近年爆款品類，擴展傳統掛繩市場邊界</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 市場本質 -->
+  <div class="section">
+    <h2 class="section-title">市場本質</h2>
+    <div class="highlight">
+      <h3>低技術門檻 × 高度價格競爭</h3>
+      <p style="color: var(--gray);">產品本身的差異化有限。核心壁壘不在產品，在於——</p>
+      <ul style="color: var(--gray); margin-top: 8px;">
+        <li><strong>客戶關係</strong>：企業採購人員的信任與黏著度</li>
+        <li><strong>交期速度</strong>：急單能力是台灣廠的核心優勢</li>
+        <li><strong>小量客製彈性</strong>：中國大廠不想接的 500 條以下訂單</li>
+        <li><strong>通路掌握</strong>：禮贈品公司、文具通路、電商平台</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 機會與風險 -->
+  <div class="section">
+    <h2 class="section-title">機會 vs 風險</h2>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <div class="card" style="border-left: 3px solid var(--green);">
+        <h3 style="color: var(--green);">✅ 機會</h3>
+        <ul>
+          <li>MIT + 快速交期 + 小量客製 = 活路</li>
+          <li>設計款證件套溢價空間大（NT$200-800）</li>
+          <li>ESG 趨勢 → 環保材質可賣更高價</li>
+          <li>手機掛繩擴展產品線</li>
+          <li>醫療/兒童安全掛繩 = 藍海</li>
+        </ul>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--red);">
+        <h3 style="color: var(--red);">⚠️ 風險</h3>
+        <ul>
+          <li>中國產能過剩，價格持續下探</li>
+          <li>同質化嚴重，容易被替換</li>
+          <li>企業標案利潤薄</li>
+          <li>非剛需，景氣差首先被砍預算</li>
+          <li>電商低價衝擊實體通路</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 建議 -->
+  <div class="section">
+    <h2 class="section-title">BD 建議方向</h2>
+    <div class="highlight">
+      <h3>台灣廠商的生存策略</h3>
+      <ul style="color: var(--gray); margin-top: 8px;">
+        <li><strong>不打價格戰</strong> — 跟中國比價必輸，改打「服務 + 速度 + 品質」</li>
+        <li><strong>走高值化</strong> — 環保材質、RFID 功能、設計師聯名</li>
+        <li><strong>綁定通路</strong> — 成為禮贈品公司的固定供應商，穩定出貨</li>
+        <li><strong>產品線延伸</strong> — 手機掛繩、客製化周邊（杯套掛繩、水壺掛繩）</li>
+        <li><strong>線上品牌化</strong> — Pinkoi / 蝦皮經營設計師品牌，拉高毛利</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>BD Market Report — Prepared by Dogi | 2026.03.14</p>
+  <p style="margin-top: 8px;">© Shadow Performance — Auto Jaw Co., Ltd.</p>
+</footer>
+
+</body>
+</html>
