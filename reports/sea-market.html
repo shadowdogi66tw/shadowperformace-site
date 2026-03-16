@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shadow Performance — 東南亞市場拓展報告</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --orange: #EA5504;
+  --orange-glow: rgba(234,85,4,0.2);
+  --bg: #0A0A0F;
+  --card: #111118;
+  --white: #FFFFFF;
+  --gray: #AAAAAA;
+  --dim: #666;
+  --border: #1E1E28;
+  --green: #22C55E;
+  --red: #EF4444;
+  --yellow: #F59E0B;
+  --blue: #3B82F6;
+  --teal: #14B8A6;
+}
+body { background: var(--bg); color: var(--white); font-family: 'Noto Sans TC', sans-serif; font-size: 15px; line-height: 1.8; }
+a { color: var(--orange); text-decoration: none; }
+nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; border-bottom: 1px solid var(--border); background: rgba(10,10,15,0.9); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; }
+nav .badge { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--orange); text-transform: uppercase; }
+nav .logo-text { font-size: 16px; font-weight: 900; letter-spacing: 0.05em; }
+.hero { text-align: center; padding: 60px 24px 40px; position: relative; }
+.hero::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 500px; height: 400px; background: radial-gradient(circle, var(--orange-glow) 0%, transparent 70%); pointer-events: none; }
+.hero h1 { font-size: 34px; font-weight: 900; position: relative; }
+.hero h1 span { color: var(--orange); }
+.hero .sub { color: var(--gray); font-size: 14px; margin-top: 8px; }
+.hero .date { color: var(--dim); font-size: 12px; margin-top: 12px; letter-spacing: 0.1em; }
+.divider { width: 50px; height: 3px; background: var(--orange); margin: 24px auto; border-radius: 2px; }
+.content { max-width: 960px; margin: 0 auto; padding: 0 24px 80px; }
+.section { margin-bottom: 48px; }
+.section-title { font-size: 20px; font-weight: 900; margin-bottom: 16px; padding-left: 14px; border-left: 4px solid var(--orange); line-height: 1.4; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 24px; margin-bottom: 16px; }
+.card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.card p, .card li { color: var(--gray); font-size: 14px; line-height: 1.8; }
+.card ul, .card ol { padding-left: 20px; }
+.card li { margin-bottom: 4px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 32px; }
+.stat { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; text-align: center; }
+.stat .number { font-size: 28px; font-weight: 900; color: var(--orange); }
+.stat .label { font-size: 11px; color: var(--gray); margin-top: 4px; letter-spacing: 0.05em; }
+.tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 4px; margin-right: 6px; margin-bottom: 6px; }
+.tag-green { background: rgba(34,197,94,0.15); color: var(--green); }
+.tag-red { background: rgba(239,68,68,0.15); color: var(--red); }
+.tag-yellow { background: rgba(245,158,11,0.15); color: var(--yellow); }
+.tag-blue { background: rgba(59,130,246,0.15); color: var(--blue); }
+.tag-teal { background: rgba(20,184,166,0.15); color: var(--teal); }
+.table-wrap { overflow-x: auto; margin-bottom: 16px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { background: rgba(234,85,4,0.1); color: var(--orange); font-weight: 700; text-align: left; padding: 10px 14px; border-bottom: 2px solid var(--border); white-space: nowrap; }
+td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--gray); }
+tr:hover td { background: rgba(255,255,255,0.02); }
+.highlight { background: rgba(234,85,4,0.08); border: 1px solid rgba(234,85,4,0.25); border-radius: 10px; padding: 24px; margin-bottom: 16px; }
+.highlight h3 { color: var(--orange); margin-bottom: 8px; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+footer { text-align: center; padding: 40px 24px; border-top: 1px solid var(--border); color: var(--dim); font-size: 12px; }
+@media (max-width: 640px) {
+  nav { padding: 16px 20px; }
+  .hero h1 { font-size: 24px; }
+  .stats { grid-template-columns: 1fr 1fr; }
+  .two-col { grid-template-columns: 1fr; }
+  .stat .number { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="logo-text">SHADOW PERFORMANCE</span>
+  <span class="badge">Market Expansion Report</span>
+</nav>
+
+<section class="hero">
+  <h1>東南亞市場<span>拓展報告</span></h1>
+  <p class="sub">Southeast Asia Automotive Aftermarket — Expansion Strategy</p>
+  <p class="date">2026.03.16 | Prepared by Dogi for Steven</p>
+  <div class="divider"></div>
+</section>
+
+<div class="content">
+
+  <div class="stats">
+    <div class="stat"><div class="number">$288億</div><div class="label">2025 ASEAN 售後市場（USD）</div></div>
+    <div class="stat"><div class="number">$639億</div><div class="label">2035 預估規模（USD）</div></div>
+    <div class="stat"><div class="number">8.3-9.8%</div><div class="label">年複合成長率 CAGR</div></div>
+    <div class="stat"><div class="number">$10億</div><div class="label">ASEAN 渦輪增壓器市場</div></div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">為什麼是東南亞？</h2>
+    <div class="card">
+      <ul>
+        <li><strong>全球第五大汽車子市場</strong>：ASEAN 十國年銷量超過 300 萬輛，且持續成長</li>
+        <li><strong>改裝文化成熟</strong>：泰國是東南亞改裝重鎮，Bangkok Auto Salon 是亞洲最大改裝車展之一</li>
+        <li><strong>柴油渦輪皮卡天堂</strong>：Toyota Hilux、Ford Ranger、Isuzu D-Max 是暢銷車款，原廠就帶渦輪，改裝需求天然存在</li>
+        <li><strong>ASEAN FTA 關稅優勢</strong>：台灣雖非 ASEAN 成員，但可透過泰國或馬來西亞設立據點享受區域內零關稅</li>
+        <li><strong>電商基礎完善</strong>：Shopee、Lazada 覆蓋全區域，線上賣零件已是常態</li>
+        <li><strong>渦輪增壓器市場獨立成長</strong>：ASEAN 渦輪市場 2025 年約 $10 億，預計 2035 年達 $21 億，CAGR 7.8%</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">五大核心市場比較</h2>
+    <div class="table-wrap">
+      <table>
+        <tr><th>國家</th><th>改裝文化</th><th>主力車型</th><th>市場特性</th><th>進入難度</th></tr>
+        <tr>
+          <td>🇹🇭 <strong>泰國</strong></td>
+          <td>⭐⭐⭐⭐⭐</td>
+          <td>Hilux、Ranger、Civic、Swift</td>
+          <td>改裝重鎮，本土品牌 ECU Shop 強勢，展會多，經銷體系成熟</td>
+          <td>中等</td>
+        </tr>
+        <tr>
+          <td>🇮🇩 <strong>印尼</strong></td>
+          <td>⭐⭐⭐⭐</td>
+          <td>Avanza、Fortuner、Pajero Sport</td>
+          <td>最大市場（2.7 億人口），但物流複雜（島嶼國家），價格敏感</td>
+          <td>較高</td>
+        </tr>
+        <tr>
+          <td>🇲🇾 <strong>馬來西亞</strong></td>
+          <td>⭐⭐⭐⭐</td>
+          <td>Civic、City、Vios、Myvi</td>
+          <td>歐系改裝風氣強，ECU tuning 活躍，英語溝通方便</td>
+          <td>較低</td>
+        </tr>
+        <tr>
+          <td>🇵🇭 <strong>菲律賓</strong></td>
+          <td>⭐⭐⭐</td>
+          <td>Hilux、Ranger、Vios</td>
+          <td>皮卡改裝需求高，英語市場，價格敏感但願意花錢在改裝</td>
+          <td>較低</td>
+        </tr>
+        <tr>
+          <td>🇻🇳 <strong>越南</strong></td>
+          <td>⭐⭐</td>
+          <td>機車為主，汽車成長中</td>
+          <td>汽車改裝剛起步，但成長快。以機車改裝為主流</td>
+          <td>較高</td>
+        </tr>
+      </table>
+    </div>
+    <div class="highlight">
+      <h3>🎯 建議優先順序：泰國 → 馬來西亞 → 菲律賓</h3>
+      <p style="color:var(--gray);">泰國是改裝文化最成熟、展會最多、經銷商最活躍的市場，適合作為東南亞的第一站。馬來西亞英語環境方便溝通且歐系改裝風氣強，菲律賓皮卡改裝需求大且語言門檻低。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">他們都改什麼？</h2>
+    <div class="two-col">
+      <div class="card">
+        <h3>🔥 皮卡 / 柴油車（泰、菲主力）</h3>
+        <ul>
+          <li><strong>ECU Remap / Piggyback ECU</strong> — 柴油動力提升首選</li>
+          <li><strong>Throttle Controller</strong> — 油門加速器，Shadow 直接競品市場</li>
+          <li><strong>Boost Gauge / EGT Gauge</strong> — 渦輪壓力和排溫監控</li>
+          <li><strong>DPF / EGR Delete</strong> — 柴油環保裝置移除（法規灰色地帶）</li>
+          <li><strong>Suspension Lift + Body Kit</strong> — 外觀改裝</li>
+          <li><strong>渦輪升級 / 中冷器</strong> — 硬派改裝</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🏎️ 轎車 / 性能車（馬來西亞、泰國）</h3>
+        <ul>
+          <li><strong>ECU Tuning</strong> — BootMod3、COBB 等平台活躍</li>
+          <li><strong>OBD2 Display / HUD</strong> — 即時數據顯示</li>
+          <li><strong>Boost Controller</strong> — 渦輪車必備</li>
+          <li><strong>進排氣系統</strong> — 最基礎的性能改裝</li>
+          <li><strong>Coilover / 避震器</strong> — 操控升級</li>
+          <li><strong>Blow-off Valve / Wastegate</strong> — 渦輪週邊</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <h3>📊 Shadow 產品的機會定位</h3>
+      <p>
+        <span class="tag tag-green">高機會</span> <strong>E-Drive 4S 油門控制器</strong> — ECU Shop 的 Boost Speed 已證明這個品類在泰國有巨大市場，Shadow 可直接切入<br><br>
+        <span class="tag tag-green">高機會</span> <strong>D-Meter 2 Plus OBD2 顯示器</strong> — 柴油皮卡車主的渦輪壓力和水溫監控是剛需<br><br>
+        <span class="tag tag-yellow">中機會</span> <strong>I-BOOST 2 渦輪控制器</strong> — 偏硬派改裝，客群較小但單價高<br><br>
+        <span class="tag tag-yellow">中機會</span> <strong>FD-EVO 多功能顯示器</strong> — 性能車市場，搭配馬來西亞推廣<br><br>
+        <span class="tag tag-yellow">中機會</span> <strong>閥門控制器</strong> — 排氣閥門在東南亞改裝也有需求<br><br>
+        <span class="tag tag-blue">長線</span> <strong>EBC-Lite 增壓控制器</strong> — 搭配渦輪升級套件推廣
+      </p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">主要競品分析</h2>
+    <div class="table-wrap">
+      <table>
+        <tr><th>品牌</th><th>國家</th><th>主力產品</th><th>價格帶 (USD)</th><th>通路</th></tr>
+        <tr>
+          <td><strong>ECU Shop</strong></td>
+          <td>🇹🇭 泰國</td>
+          <td>Boost Speed Next 油門控制器、Piggyback ECU</td>
+          <td>$120-280</td>
+          <td>Lazada、經銷商、改裝店，已外銷紐澳菲</td>
+        </tr>
+        <tr>
+          <td><strong>RaceChip</strong></td>
+          <td>🇩🇪 德國</td>
+          <td>Piggyback ECU、XLR 油門控制器</td>
+          <td>$150-500</td>
+          <td>官網、Amazon、經銷商</td>
+        </tr>
+        <tr>
+          <td><strong>中國白牌</strong></td>
+          <td>🇨🇳 中國</td>
+          <td>OBD2 HUD、油門控制器、渦輪錶</td>
+          <td>$15-60</td>
+          <td>Shopee、Lazada、1688 批發</td>
+        </tr>
+        <tr>
+          <td><strong>Defi / GReddy</strong></td>
+          <td>🇯🇵 日本</td>
+          <td>賽車錶、渦輪錶、排溫錶</td>
+          <td>$100-300</td>
+          <td>改裝店、專業通路</td>
+        </tr>
+      </table>
+    </div>
+    <div class="highlight">
+      <h3>Shadow 的定位空間</h3>
+      <p style="color:var(--gray);">中國白牌品質不穩但價格殺到底；日系品牌品質好但價格高且通路封閉；ECU Shop 是泰國本土品牌有在地優勢。Shadow 的切入點：<strong>「比中國品質好、比日系便宜、跟 ECU Shop 正面競爭」</strong>——主打 MIT 品質 + 完整車種對應表 + 品牌質感。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">主要銷售平台</h2>
+    <div class="two-col">
+      <div class="card">
+        <h3>🛒 電商平台（B2C）</h3>
+        <ul>
+          <li><strong>Shopee</strong> — 東南亞最大，泰國站月訪 4,000 萬+，適合零售+品牌建立</li>
+          <li><strong>Lazada</strong> — 阿里系，泰馬印越菲星六國，有 LazGlobal 跨境賣家計畫</li>
+          <li><strong>TikTok Shop</strong> — 印尼和泰國爆發中，改裝前後對比影片轉換率高</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🏭 B2B / 經銷通路</h3>
+        <ul>
+          <li><strong>Alibaba.com</strong> — Shadow 現有平台，東南亞買家已習慣在此找供應商</li>
+          <li><strong>Bangkok Auto Salon</strong> — ASEAN 最大改裝車展（每年 7 月），參展找經銷商</li>
+          <li><strong>Automotive Manufacturing Expo</strong> — BITEC 曼谷，零件製造展</li>
+          <li><strong>在地改裝店 / 經銷商</strong> — 最終要靠實體通路落地</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">價格分布（東南亞市場實際調查）</h2>
+    <div class="table-wrap">
+      <table>
+        <tr><th>產品類別</th><th>中國白牌</th><th>泰國本土</th><th>日系品牌</th><th>Shadow 建議定價</th></tr>
+        <tr><td>油門控制器</td><td>$20-50</td><td>$120-200</td><td>—</td><td><strong>$80-150</strong></td></tr>
+        <tr><td>OBD2 顯示器</td><td>$15-40</td><td>$60-100</td><td>$150-250</td><td><strong>$70-120</strong></td></tr>
+        <tr><td>渦輪增壓錶</td><td>$15-30</td><td>$50-80</td><td>$100-300</td><td><strong>$60-100</strong></td></tr>
+        <tr><td>增壓控制器</td><td>$30-60</td><td>—</td><td>$200-400</td><td><strong>$120-200</strong></td></tr>
+        <tr><td>排氣閥門控制器</td><td>$25-50</td><td>—</td><td>—</td><td><strong>$60-100</strong></td></tr>
+      </table>
+    </div>
+    <p style="color:var(--dim);font-size:13px;">* 價格為 USD，基於 Shopee/Lazada 泰國、馬來西亞、菲律賓站實際售價調查（2026.03）</p>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">建議進入策略</h2>
+
+    <div class="card" style="border-left:3px solid var(--orange);">
+      <h3>Phase 1：線上試水（0-6 個月）</h3>
+      <ul>
+        <li>在 <strong>Shopee 泰國站 + Lazada 泰國站</strong>開店，先賣 E-Drive 4S 和 D-Meter 2 Plus</li>
+        <li>產品頁面做<strong>泰文+英文雙語</strong>（泰國消費者偏好泰文說明）</li>
+        <li>用 TikTok 短影音做改裝示範——皮卡裝油門控制器的前後對比最有說服力</li>
+        <li>價格策略：比 ECU Shop 便宜 10-20%，用 MIT 品質做差異化</li>
+        <li>阿里巴巴頁面同步優化，承接 B2B 詢盤</li>
+      </ul>
+    </div>
+
+    <div class="card" style="border-left:3px solid var(--yellow);">
+      <h3>Phase 2：找經銷商（6-12 個月）</h3>
+      <ul>
+        <li>參加 <strong>Bangkok Auto Salon</strong>（每年 7 月），這是最直接找經銷商的管道</li>
+        <li>參加 <strong>Automotive Manufacturing Expo</strong>（BITEC 曼谷）</li>
+        <li>透過 Phase 1 的電商銷售數據驗證哪些產品有需求，帶數據跟經銷商談</li>
+        <li>目標：泰國 2-3 家、馬來西亞 1-2 家改裝店或經銷商</li>
+      </ul>
+    </div>
+
+    <div class="card" style="border-left:3px solid var(--green);">
+      <h3>Phase 3：深耕擴張（12-24 個月）</h3>
+      <ul>
+        <li>根據 Phase 1-2 的市場反饋，調整產品線和定價</li>
+        <li>建立東南亞專屬車種對應表（Hilux、Ranger、D-Max、Fortuner 等）</li>
+        <li>考慮在泰國設小型倉庫或委託第三方物流（3PL），縮短交期</li>
+        <li>擴展到菲律賓、印尼市場</li>
+        <li>發展 OEM/ODM 合作機會</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">風險與注意事項</h2>
+    <div class="two-col">
+      <div class="card" style="border-left:3px solid var(--red);">
+        <h3>⚠️ 風險</h3>
+        <ul>
+          <li>ECU Shop 在泰國有強大的本土優勢（130+ 員工、自有製造、完整經銷網）</li>
+          <li>中國白牌用價格戰搶低端市場，$15 就能買到 OBD2 顯示器</li>
+          <li>各國改裝法規不同（泰國相對寬鬆，馬來西亞較嚴格）</li>
+          <li>關稅：台灣到泰國汽車零件關稅約 10-30%，不享 ASEAN 內部零關稅</li>
+          <li>物流成本：單件國際運費可能壓縮利潤</li>
+        </ul>
+      </div>
+      <div class="card" style="border-left:3px solid var(--teal);">
+        <h3>💡 豆吉的補充建議</h3>
+        <ul>
+          <li><strong>柴油皮卡是最大切入口</strong>：東南亞不像台灣以汽油車為主，柴油渦輪皮卡才是改裝主力。建議優先確認 Shadow 產品的柴油車對應性</li>
+          <li><strong>影片比文字有用 10 倍</strong>：東南亞消費者對 YouTube / TikTok 安裝教學和前後對比影片反應非常好</li>
+          <li><strong>泰文翻譯是必要投資</strong>：泰國消費者偏好泰文產品說明和客服，英文不夠</li>
+          <li><strong>車種對應表是殺手鐧</strong>：Shadow 已經有完整車種對應表，翻譯成英文/泰文就是現成的銷售工具，這是白牌做不到的</li>
+          <li><strong>可以找泰山探路</strong>：如果他有東南亞的人脈，先做非正式的市場探路</li>
+          <li><strong>考慮「台灣精品」認證</strong>：在東南亞市場，MIT + 台灣精品標章是有效的品質背書</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">下一步行動清單</h2>
+    <div class="highlight">
+      <ol style="color:var(--gray);padding-left:20px;line-height:2.2;">
+        <li>確認 Shadow 產品對柴油皮卡（Hilux / Ranger / D-Max）的對應狀況</li>
+        <li>選定第一批上架產品（建議 E-Drive 4S + D-Meter 2 Plus）</li>
+        <li>註冊 Shopee 泰國站 + Lazada 泰國站賣家帳號</li>
+        <li>製作英文 + 泰文產品頁面和安裝影片</li>
+        <li>調查 Bangkok Auto Salon 2026 參展資訊和費用</li>
+        <li>評估透過泰山或其他管道做市場探路</li>
+        <li>建立東南亞專屬定價策略和利潤模型</li>
+      </ol>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>Southeast Asia Market Expansion Report — Prepared by Dogi | 2026.03.16</p>
+  <p style="margin-top:8px;">&copy; Shadow Performance &mdash; Auto Jaw Co., Ltd.</p>
+</footer>
+
+</body>
+</html>
